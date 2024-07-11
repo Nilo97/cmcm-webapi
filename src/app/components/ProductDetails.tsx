@@ -8,12 +8,7 @@ import {
   Text,
   Stack,
 } from "@chakra-ui/react";
-
-interface Product {
-  name: string;
-  description: string;
-  price: number;
-}
+import { Product } from "../types";
 
 interface ProductDetailsModalProps {
   isOpen: boolean;
@@ -32,7 +27,7 @@ const ProductDetailsModal: React.FC<ProductDetailsModalProps> = ({
       <ModalContent>
         <ModalHeader>Detalhes do Produto</ModalHeader>
         <ModalCloseButton />
-        <ModalBody>
+        <ModalBody mb="2">
           {product && (
             <Stack spacing="4">
               <Text>
@@ -42,7 +37,20 @@ const ProductDetailsModal: React.FC<ProductDetailsModalProps> = ({
                 <strong>Descrição:</strong> {product.description}
               </Text>
               <Text>
-                <strong>Preço:</strong> {product.price}
+                <strong>Code:</strong> {product.code}
+              </Text>
+              <Text>
+                <strong>Categoria:</strong> {product.categoryName}
+              </Text>
+              <Text>
+                <strong>Quantidade:</strong> {product.quantity}
+              </Text>
+              <Text>
+                <strong>Criado Por:</strong> Faruque Braimo
+              </Text>
+
+              <Text>
+                <strong>Criado aos:</strong> 20/08/2024
               </Text>
             </Stack>
           )}

@@ -1,5 +1,6 @@
 "use client";
-import { useState } from "react";
+
+import React, { useState, useEffect } from "react";
 import {
   Container,
   Heading,
@@ -15,59 +16,87 @@ import {
   Flex,
   FormLabel,
   Input as ChakraInput,
-  Text,
-  Box,
+  useToast,
 } from "@chakra-ui/react";
 import ProductTable from "../components/ProductTable";
 import { AddIcon, DownloadIcon } from "@chakra-ui/icons";
-import { useRouter } from 'next/navigation'
+import { useRouter } from "next/navigation";
+import { fetchProducts, deleteProduct } from "../actions/product";
+import { Product } from "../types";
 
-interface Product {
-  id: number;
-  name: string;
-  description: string;
-  price: number;
-  qtd: number;
-}
-
-const produtos: Product[] = [
-  {
-    id: 1,
-    name: "Produto 1",
-    description: "Descrição do Produto 1",
-    price: 50.0,
-    qtd: 5,
-  },
-  {
-    id: 2,
-    name: "Produto 2",
-    description: "Descrição do Produto 2",
-    price: 75.0,
-    qtd: 150,
-  },
-  {
-    id: 3,
-    name: "Produto 3",
-    description: "Descrição do Produto 3",
-    price: 100.0,
-    qtd: 50,
-  },
-];
+const PAGE_SIZE = 7;
 
 const ProdutosPage: React.FC = () => {
-  const [products, setProducts] = useState<Product[]>(produtos);
+  const [products, setProducts] = useState<Product[]>([]);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const router = useRouter()
+  const toast = useToast();
+  const router = useRouter();
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [totalPages, setTotalPages] = useState<number>(1);
 
-  const handleSearch = (value: string) => {
-    // Implementar lógica de pesquisa aqui
-    console.log("Pesquisando por:", value);
+  useEffect(() => {
+    fetchAllProducts(currentPage);
+  }, [currentPage, searchQuery]);
+
+  const fetchAllProducts = async (page: number) => {
+    setLoading(true);
+    try {
+      const data = await fetchProducts(PAGE_SIZE, page, searchQuery);
+
+      if ("error" in data) {
+        throw new Error(data.error);
+      }
+      setProducts(data.products);
+      setTotalPages(data.totalPages);
+    } catch (error) {
+      console.error("Error fetching products:", error);
+      toast({
+        title: "Erro ao buscar produtos",
+        description: "Ocorreu um erro ao buscar os produtos.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleDelete = (productId: number) => {
-    // Implementar lógica de exclusão aqui
-    console.log("Excluir produto com ID:", productId);
+  const handleSearch = (value: string) => {
+    setSearchQuery(value);
+    setCurrentPage(1); // Reset to the first page on new search
+  };
+
+  const handleDelete = async (productId: number) => {
+    setLoading(true);
+    try {
+      const response = await deleteProduct(productId);
+      if ("error" in response) {
+        throw new Error(response.error);
+      }
+      toast({
+        title: "Produto Deletado",
+        description: "O produto foi deletado com sucesso.",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+      });
+      fetchAllProducts(currentPage); // Fetch products again after successful deletion
+    } catch (error) {
+      console.error("Error deleting product:", error);
+      toast({
+        title: "Erro ao deletar produto",
+        description: "Ocorreu um erro ao deletar o produto.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleEdit = (product: Product) => {
@@ -78,6 +107,10 @@ const ProdutosPage: React.FC = () => {
   const handleCloseModal = () => {
     setSelectedProduct(null);
     onClose();
+  };
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
   };
 
   return (
@@ -105,7 +138,7 @@ const ProdutosPage: React.FC = () => {
             size="sm"
             colorScheme="pink"
             leftIcon={<DownloadIcon />}
-            onClick={() => console.log("Exportar clicado")}
+            onClick={() => console.log("Export clicked")}
           >
             Exportar
           </Button>
@@ -116,6 +149,10 @@ const ProdutosPage: React.FC = () => {
         onDelete={handleDelete}
         onEdit={handleEdit}
         onSearch={handleSearch}
+        loading={loading}
+        totalPages={totalPages}
+        currentPage={currentPage}
+        onPageChange={handlePageChange}
       />
 
       <Modal isOpen={isOpen} onClose={handleCloseModal}>
