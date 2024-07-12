@@ -1,11 +1,12 @@
 export interface Product {
-  id: number;
+  id: string;
   name: string;
-  code: number;
+  code: string;
   description: string;
   price: number;
   quantity: number;
   categoryName: string;
+  categoryId: string;
 }
 
 export interface PaginatedProducts {

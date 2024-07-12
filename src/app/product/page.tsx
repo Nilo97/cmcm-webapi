@@ -17,11 +17,18 @@ import {
   FormLabel,
   Input as ChakraInput,
   useToast,
+  Spinner,
 } from "@chakra-ui/react";
+import { FaUpload } from "react-icons/fa6";
+
 import ProductTable from "../components/ProductTable";
 import { AddIcon, DownloadIcon } from "@chakra-ui/icons";
 import { useRouter } from "next/navigation";
-import { fetchProducts, deleteProduct } from "../actions/product";
+import {
+  fetchProducts,
+  deleteProduct,
+  uploadProducts,
+} from "../actions/product";
 import { Product } from "../types";
 
 const PAGE_SIZE = 7;
@@ -30,10 +37,11 @@ const ProdutosPage: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
+  const [uploading, setUploading] = useState<boolean>(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
   const router = useRouter();
-  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [currentPage, setCurrentPage] = useState<number>(0);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [totalPages, setTotalPages] = useState<number>(1);
 
@@ -67,10 +75,10 @@ const ProdutosPage: React.FC = () => {
 
   const handleSearch = (value: string) => {
     setSearchQuery(value);
-    setCurrentPage(1); // Reset to the first page on new search
+    setCurrentPage(0);
   };
 
-  const handleDelete = async (productId: number) => {
+  const handleDelete = async (productId: string) => {
     setLoading(true);
     try {
       const response = await deleteProduct(productId);
@@ -84,7 +92,7 @@ const ProdutosPage: React.FC = () => {
         duration: 5000,
         isClosable: true,
       });
-      fetchAllProducts(currentPage); // Fetch products again after successful deletion
+      fetchAllProducts(currentPage);
     } catch (error) {
       console.error("Error deleting product:", error);
       toast({
@@ -100,8 +108,8 @@ const ProdutosPage: React.FC = () => {
   };
 
   const handleEdit = (product: Product) => {
+    router.push(`/product/upsert?id=${product.id}`);
     setSelectedProduct(product);
-    onOpen();
   };
 
   const handleCloseModal = () => {
@@ -111,6 +119,40 @@ const ProdutosPage: React.FC = () => {
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
+  };
+
+  const handleImport = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (!event.target.files?.length) return;
+
+    const file = event.target.files[0];
+    setUploading(true);
+    try {
+      const response = await uploadProducts(file);
+
+      if ("error" in response) {
+        throw new Error(response.error);
+      }
+
+      toast({
+        title: "Importação bem-sucedida",
+        description: "Os produtos foram importados com sucesso.",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+      });
+      fetchAllProducts(currentPage);
+    } catch (error) {
+      console.error("Error importing file:", error);
+      toast({
+        title: "Erro na importação",
+        description: "Ocorreu um erro ao importar o arquivo.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+    } finally {
+      setUploading(false);
+    }
   };
 
   return (
@@ -130,9 +172,28 @@ const ProdutosPage: React.FC = () => {
             mr="2"
             size="sm"
             leftIcon={<AddIcon />}
-            onClick={() => router.push("/product/register")}
+            onClick={() => router.push("/product/upsert")}
           >
             Novo Produto
+          </Button>
+          <Button
+            as="label"
+            htmlFor="file-upload"
+            size="sm"
+            mr="2"
+            colorScheme="green"
+            leftIcon={<FaUpload />}
+            isLoading={uploading}
+            loadingText="Importando..."
+          >
+            Importar
+            <input
+              type="file"
+              id="file-upload"
+              hidden
+              onChange={handleImport}
+              accept=".xlsx, .xls"
+            />
           </Button>
           <Button
             size="sm"
@@ -154,20 +215,6 @@ const ProdutosPage: React.FC = () => {
         currentPage={currentPage}
         onPageChange={handlePageChange}
       />
-
-      <Modal isOpen={isOpen} onClose={handleCloseModal}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Editar Produto</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <FormControl>
-              <FormLabel>Nome do Produto</FormLabel>
-              <ChakraInput type="text" />
-            </FormControl>
-          </ModalBody>
-        </ModalContent>
-      </Modal>
     </Container>
   );
 };

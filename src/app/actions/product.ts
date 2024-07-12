@@ -38,6 +38,31 @@ async function fetchProducts(
   }
 }
 
+async function getProductById(
+  id: String
+): Promise<{ product: Product } | { error: string }> {
+  try {
+    const url = `${BASE_URL}/api/products/${id}`;
+    const response = await fetch(url, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data?.message || "Failed to fetch products");
+    }
+
+    return { product: data };
+  } catch (error: any) {
+    console.error("Error fetching products:", error);
+    return { error: error.message || "Failed to fetch products" };
+  }
+}
+
 async function createProduct(productData: any) {
   try {
     const response = await fetch(`${BASE_URL}/api/products`, {
@@ -63,8 +88,8 @@ async function createProduct(productData: any) {
 }
 
 async function updateProduct(
-  productId: number,
-  productData: Partial<Product>
+  productId: string,
+  productData: any
 ): Promise<Product | { error: string }> {
   try {
     const response = await fetch(`${BASE_URL}/api/products/${productId}`, {
@@ -90,7 +115,7 @@ async function updateProduct(
 }
 
 async function deleteProduct(
-  productId: number
+  productId: string
 ): Promise<{ success: boolean } | { error: string }> {
   try {
     const response = await fetch(`${BASE_URL}/api/products/${productId}`, {
@@ -113,4 +138,38 @@ async function deleteProduct(
   }
 }
 
-export { fetchProducts, createProduct, updateProduct, deleteProduct };
+async function uploadProducts(
+  file: File
+): Promise<{ success: boolean } | { error: string }> {
+  const formData = new FormData();
+  formData.append("file", file);
+
+  try {
+    const response = await fetch(`${BASE_URL}/api/products/upload`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      body: formData,
+    });
+
+    if (!response.ok) {
+      const data = await response.json();
+      throw new Error(data?.message || "Failed to upload products");
+    }
+
+    return { success: true };
+  } catch (error: any) {
+    console.error("Error uploading products:", error);
+    return { error: error.message || "Failed to upload products" };
+  }
+}
+
+export {
+  fetchProducts,
+  createProduct,
+  updateProduct,
+  deleteProduct,
+  uploadProducts,
+  getProductById,
+};

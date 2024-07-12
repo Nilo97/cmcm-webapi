@@ -8,7 +8,15 @@ import {
   ViewIcon,
   InfoIcon,
   CalendarIcon,
+  DragHandleIcon,
 } from "@chakra-ui/icons";
+import {
+  FaPeopleCarryBox,
+  FaHouseChimneyWindow,
+  FaListOl,
+  FaBasketShopping,
+  FaBoxesPacking,
+} from "react-icons/fa6";
 
 import { Box, Flex, HStack, Link, Text, VStack } from "@chakra-ui/react";
 
@@ -41,7 +49,7 @@ const Sidebar = () => {
           py="1"
         >
           <HStack spacing="2">
-            <ViewIcon />
+            <FaHouseChimneyWindow />
             <Text>Dashboard</Text>
           </HStack>
         </Link>
@@ -57,7 +65,7 @@ const Sidebar = () => {
           py="1"
         >
           <HStack spacing="2">
-            <AtSignIcon />
+            <FaBasketShopping />
             <Text>Produtos</Text>
           </HStack>
         </Link>
@@ -73,7 +81,7 @@ const Sidebar = () => {
           py="1"
         >
           <HStack spacing="2">
-            <InfoIcon />
+            <FaListOl />
             <Text>Categorias</Text>
           </HStack>
         </Link>
@@ -89,7 +97,7 @@ const Sidebar = () => {
           py="1"
         >
           <HStack spacing="2">
-            <CalendarIcon />
+            <FaPeopleCarryBox />
             <Text>Fornecedores</Text>
           </HStack>
         </Link>
@@ -105,7 +113,7 @@ const Sidebar = () => {
           py="1"
         >
           <HStack spacing="2">
-            <CalendarIcon />
+            <FaBoxesPacking />
             <Text>Stock</Text>
           </HStack>
         </Link>

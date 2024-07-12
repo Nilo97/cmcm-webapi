@@ -22,14 +22,16 @@ import {
   AlertDialogContent,
   AlertDialogOverlay,
   Spinner,
+  Highlight,
 } from "@chakra-ui/react";
 import { EditIcon, DeleteIcon, SearchIcon, ViewIcon } from "@chakra-ui/icons";
 import ProductDetailsModal from "./ProductDetails";
 import { Product } from "../types";
+import { limitText } from "../actions/util";
 
 interface ProductTableProps {
   products: Product[];
-  onDelete: (productId: number) => void;
+  onDelete: (productId: string) => void;
   onEdit: (product: Product) => void;
   onSearch: (value: string) => void;
   loading: boolean;
@@ -44,16 +46,18 @@ const ProductTable: React.FC<ProductTableProps> = ({
   onEdit,
   onSearch,
   loading,
-  totalPages = 1,
-  currentPage = 1,
+  totalPages = 0,
+  currentPage = 0,
   onPageChange,
 }) => {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [query, setQuery] = useState<string>("");
+
   const [deleteConfirmationOpen, setDeleteConfirmationOpen] =
     useState<boolean>(false);
   const cancelRef = useRef<HTMLButtonElement>(null);
-  const [productIdToDelete, setProductIdToDelete] = useState<number | null>(
+  const [productIdToDelete, setProductIdToDelete] = useState<string | null>(
     null
   );
 
@@ -67,7 +71,7 @@ const ProductTable: React.FC<ProductTableProps> = ({
     setIsModalOpen(false);
   };
 
-  const handleDelete = (productId: number) => {
+  const handleDelete = (productId: string) => {
     setProductIdToDelete(productId);
     setDeleteConfirmationOpen(true);
   };
@@ -91,12 +95,17 @@ const ProductTable: React.FC<ProductTableProps> = ({
     }
   };
 
+  const handleQuery = (e: any) => {
+    setQuery(e.target.value);
+    onSearch(e.target.value);
+  };
+
   const renderPagination = () => {
     if (totalPages <= 1) return null;
 
-    const pagesToShow = 5; // Number of pages to show around the current page
-    const startPage = Math.max(1, currentPage - Math.floor(pagesToShow / 2));
-    const endPage = Math.min(totalPages, startPage + pagesToShow - 1);
+    const pagesToShow = 5; // Número de páginas para mostrar ao redor da página atual
+    const startPage = Math.max(0, currentPage - Math.floor(pagesToShow / 2));
+    const endPage = Math.min(totalPages - 1, startPage + pagesToShow - 1);
 
     const pages = [...Array(endPage - startPage + 1).keys()].map(
       (index) => startPage + index
@@ -104,12 +113,13 @@ const ProductTable: React.FC<ProductTableProps> = ({
 
     return (
       <Flex justify="center" mt="4">
-        <Stack direction="row" spacing="2">
+        <Stack direction={{ base: "column", md: "row" }} spacing="2">
           {currentPage > 1 && (
             <Button
               variant="outline"
-              onClick={() => handlePageChange(1)}
+              onClick={() => handlePageChange(0)}
               colorScheme="teal"
+              size="sm"
             >
               Primeira
             </Button>
@@ -119,6 +129,9 @@ const ProductTable: React.FC<ProductTableProps> = ({
               variant="outline"
               onClick={() => handlePageChange(currentPage - 1)}
               colorScheme="teal"
+              size="sm"
+              ml={{ base: 0, md: 2 }}
+              mt={{ base: 2, md: 0 }}
             >
               Anterior
             </Button>
@@ -130,8 +143,10 @@ const ProductTable: React.FC<ProductTableProps> = ({
               variant={currentPage === page ? "solid" : "outline"}
               onClick={() => handlePageChange(page)}
               colorScheme={currentPage === page ? "teal" : undefined}
+              mt={{ base: 2, md: 0 }}
+              mx={{ base: 1, md: 2 }}
             >
-              {page}
+              {page + 1}
             </Button>
           ))}
           {currentPage < totalPages && (
@@ -140,6 +155,8 @@ const ProductTable: React.FC<ProductTableProps> = ({
               size="sm"
               onClick={() => handlePageChange(currentPage + 1)}
               colorScheme="teal"
+              mt={{ base: 2, md: 0 }}
+              mr={{ base: 0, md: 2 }}
             >
               Próxima
             </Button>
@@ -150,6 +167,7 @@ const ProductTable: React.FC<ProductTableProps> = ({
               variant="outline"
               onClick={() => handlePageChange(totalPages)}
               colorScheme="teal"
+              mt={{ base: 2, md: 0 }}
             >
               Última
             </Button>
@@ -167,10 +185,10 @@ const ProductTable: React.FC<ProductTableProps> = ({
             <SearchIcon color="gray.300" />
           </InputLeftElement>
           <Input
-            placeholder="Pesquisar produto..."
-            onChange={(e) => onSearch(e.target.value)}
+            placeholder="Pesquisar produto (Nome, Código, Descrição)... "
+            onChange={(e) => handleQuery(e)}
             onKeyDown={(e: any) => {
-              e.key === "Enter" ? onSearch(e.target.value) : null;
+              e.key === "Enter" ? handleQuery(e) : null;
             }}
             variant="filled"
           />
@@ -203,15 +221,36 @@ const ProductTable: React.FC<ProductTableProps> = ({
               <Tbody>
                 {products.map((product) => (
                   <Tr key={product.id}>
-                    <Td>{product.code}</Td>
-                    <Td>{product.name}</Td>
-                    <Td>{product.description}</Td>
+                    <Td>
+                      <Highlight
+                        query={query}
+                        styles={{ px: "1", py: "1", bg: "orange.100" }}
+                      >
+                        {product.code}
+                      </Highlight>
+                    </Td>
+                    <Td>
+                      <Highlight
+                        query={query}
+                        styles={{ px: "1", py: "1", bg: "orange.100" }}
+                      >
+                        {limitText(product.name, 70)}
+                      </Highlight>
+                    </Td>
+                    <Td>
+                      <Highlight
+                        query={query}
+                        styles={{ px: "1", py: "1", bg: "orange.100" }}
+                      >
+                        {limitText(product.description, 20)}
+                      </Highlight>
+                    </Td>
                     <Td>{product.categoryName}</Td>
                     <Td>{product.price}</Td>
                     <Td>{product.quantity}</Td>
                     <Td>
                       <Button
-                        size="sm"
+                        size="xs"
                         leftIcon={<ViewIcon />}
                         onClick={() => handleViewDetails(product)}
                       >
@@ -219,14 +258,14 @@ const ProductTable: React.FC<ProductTableProps> = ({
                       </Button>
                       <Button
                         ml="2"
-                        size="sm"
+                        size="xs"
                         leftIcon={<EditIcon />}
                         onClick={() => onEdit(product)}
                       >
                         Editar
                       </Button>
                       <Button
-                        size="sm"
+                        size="xs"
                         colorScheme="red"
                         leftIcon={<DeleteIcon />}
                         ml="2"
