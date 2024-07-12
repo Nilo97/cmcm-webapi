@@ -23,7 +23,9 @@ import { Box, Flex, HStack, Link, Text, VStack } from "@chakra-ui/react";
 const Sidebar = () => {
   const pathname = usePathname();
 
-  const isActive = (path: any) => path === pathname;
+  const isActive = (path: any) => pathname !== '/' && path.startsWith( pathname);
+  const isBaseActive = (path: any) => path === pathname;
+
 
   return (
     <Box
@@ -42,8 +44,8 @@ const Sidebar = () => {
           href="/"
           fontSize="md"
           fontWeight="bold"
-          color={isActive("/") ? "teal.400" : "black"}
-          bg={isActive("/") ? "teal.50" : undefined}
+          color={isBaseActive("/") ? "teal.400" : "black"}
+          bg={isBaseActive("/") ? "teal.50" : undefined}
           rounded="sm"
           px="3"
           py="1"
@@ -72,10 +74,10 @@ const Sidebar = () => {
         <Link
           as={NextLink}
           w="100%"
-          href="/categorie"
+          href="/category"
           fontSize="md"
-          color={isActive("/categorie") ? "teal.400" : "black"}
-          bg={isActive("/categorie") ? "teal.50" : undefined}
+          color={isActive("/category") ? "teal.400" : "black"}
+          bg={isActive("/category") ? "teal.50" : undefined}
           rounded="sm"
           px="3"
           py="1"

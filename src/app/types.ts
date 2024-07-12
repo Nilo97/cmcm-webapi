@@ -9,6 +9,13 @@ export interface Product {
   categoryId: string;
 }
 
+export interface Category {
+  id: string;
+  name: string;
+  description: string;
+}
+
+
 export interface PaginatedProducts {
   totalPages: number;
   totalElements: number;
