@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Splashscreen FSTOCK</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body,
+      html {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #f8f9fa;
+        overflow: hidden;
+        font-family: "Inter", sans-serif;
+      }
+
+      .splash-screen {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #343a40;
+        color: #ffffff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        z-index: 1000;
+        transition: opacity 0.5s ease-in-out;
+      }
+
+      .logo-container {
+        text-align: center;
+      }
+
+      .logo-placeholder {
+        width: 100px;
+        height: 100px;
+        background-color: #ffffff;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 2rem;
+        color: #343a40;
+        font-weight: bold;
+      }
+
+      .title {
+        font-size: 2.5rem;
+        margin: 1rem 0 0.5rem 0;
+        font-weight: 700;
+      }
+
+      .subtitle {
+        font-size: 1.2rem;
+        font-weight: 400;
+      }
+
+      .main-content {
+        display: none;
+      }
+
+      body.loaded .splash-screen {
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      body.loaded .main-content {
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="splash-screen" id="splash-screen">
+      <div class="logo-container">
+        <div class="logo-placeholder">FS</div>
+        <h1 class="title">FStock</h1>
+        <p class="subtitle">Sua solução definitiva para gestão de estoque</p>
+      </div>
+    </div>
+  </body>
+</html>

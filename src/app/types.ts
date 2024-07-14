@@ -15,6 +15,13 @@ export interface Category {
   description: string;
 }
 
+export interface Supplier {
+  id: string;
+  name: string;
+  contactInfo: string;
+}
+
+
 
 export interface PaginatedProducts {
   totalPages: number;
