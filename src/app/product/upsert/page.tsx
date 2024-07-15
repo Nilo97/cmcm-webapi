@@ -5,7 +5,6 @@ import {
   Box,
   Button,
   FormControl,
-  FormLabel,
   Input,
   Textarea,
   Select,
@@ -13,16 +12,26 @@ import {
   HStack,
   FormErrorMessage,
   useToast,
+  FormLabel,
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
-import { useRouter } from "next/navigation"; // Corrected import
+import { useRouter } from "next/navigation";
 import { fetchCategories } from "@/app/actions/categories";
 import {
   getProductById,
   createProduct,
   updateProduct,
-} from "@/app/actions/product"; // Import getProductById and updateProduct
+} from "@/app/actions/product";
 import { useSearchParams } from "next/navigation";
+import {
+  FaBarcode,
+  FaTag,
+  FaClipboard,
+  FaMoneyBillWave,
+  FaListOl,
+  FaBoxOpen,
+} from "react-icons/fa6";
+import { FaCalendarAlt, FaCheckCircle } from "react-icons/fa";
 
 interface Category {
   id: number;
@@ -36,6 +45,9 @@ interface ProductFormInputs {
   price: number;
   category: string;
   code: string;
+  initialQuantity: number;
+  expirationDate: string;
+  perishable: boolean;
 }
 
 const ProductRegistrationForm: React.FC = () => {
@@ -72,6 +84,9 @@ const ProductRegistrationForm: React.FC = () => {
       setValue("description", data.product.description);
       setValue("price", data.product.price);
       setValue("category", data.product.categoryId);
+      setValue("initialQuantity", data.product.initialQuantity);
+      setValue("expirationDate", data.product.expirationDate);
+      setValue("perishable", data.product.perishable);
     } catch (error) {
       console.error("Error loading product:", error);
       toast({
@@ -105,7 +120,16 @@ const ProductRegistrationForm: React.FC = () => {
 
   const onSubmit = async (values: ProductFormInputs) => {
     try {
-      const { name, code, description, price, category } = values;
+      const {
+        name,
+        code,
+        description,
+        price,
+        category,
+        initialQuantity,
+        expirationDate,
+        perishable,
+      } = values;
 
       const categoryId = category;
 
@@ -116,6 +140,9 @@ const ProductRegistrationForm: React.FC = () => {
           description,
           price,
           categoryId,
+          initialQuantity,
+          expirationDate,
+          perishable,
         });
 
         if ("error" in response) {
@@ -136,6 +163,9 @@ const ProductRegistrationForm: React.FC = () => {
           description,
           price,
           categoryId,
+          initialQuantity,
+          expirationDate,
+          perishable,
         });
 
         if ("error" in response) {
@@ -182,7 +212,9 @@ const ProductRegistrationForm: React.FC = () => {
           <VStack spacing="6" align="stretch">
             <HStack spacing="6" justify="space-between" alignItems="flex-start">
               <FormControl isInvalid={!!errors.code} flex="1 0 45%">
-                <FormLabel htmlFor="code">Código do Produto</FormLabel>
+                <FormLabel htmlFor="code" display="flex" alignItems="center">
+                  <FaBarcode style={{ marginRight: "8px" }} /> Código do Produto
+                </FormLabel>
                 <Input
                   id="code"
                   size="lg"
@@ -197,7 +229,9 @@ const ProductRegistrationForm: React.FC = () => {
               </FormControl>
 
               <FormControl isInvalid={!!errors.name} flex="1 0 45%">
-                <FormLabel htmlFor="name">Nome do Produto</FormLabel>
+                <FormLabel htmlFor="name" display="flex" alignItems="center">
+                  <FaTag style={{ marginRight: "8px" }} /> Nome do Produto
+                </FormLabel>
                 <Input
                   id="name"
                   size="lg"
@@ -213,7 +247,13 @@ const ProductRegistrationForm: React.FC = () => {
             </HStack>
 
             <FormControl isInvalid={!!errors.description}>
-              <FormLabel htmlFor="description">Descrição</FormLabel>
+              <FormLabel
+                htmlFor="description"
+                display="flex"
+                alignItems="center"
+              >
+                <FaClipboard style={{ marginRight: "8px" }} /> Descrição
+              </FormLabel>
               <Textarea
                 id="description"
                 size="lg"
@@ -229,7 +269,9 @@ const ProductRegistrationForm: React.FC = () => {
 
             <HStack spacing="6" justify="space-between" alignItems="flex-start">
               <FormControl isInvalid={!!errors.price} flex="1 0 45%">
-                <FormLabel htmlFor="price">Preço</FormLabel>
+                <FormLabel htmlFor="price" display="flex" alignItems="center">
+                  <FaMoneyBillWave style={{ marginRight: "8px" }} /> Preço
+                </FormLabel>
                 <Input
                   variant="outline"
                   id="price"
@@ -251,7 +293,13 @@ const ProductRegistrationForm: React.FC = () => {
               </FormControl>
 
               <FormControl isInvalid={!!errors.category} flex="1 0 45%">
-                <FormLabel htmlFor="category">Categoria</FormLabel>
+                <FormLabel
+                  htmlFor="category"
+                  display="flex"
+                  alignItems="center"
+                >
+                  <FaListOl style={{ marginRight: "8px" }} /> Categoria
+                </FormLabel>
                 <Select
                   variant="outline"
                   id="category"
@@ -273,12 +321,59 @@ const ProductRegistrationForm: React.FC = () => {
               </FormControl>
             </HStack>
 
+            <HStack spacing="6" justify="space-between" alignItems="flex-start">
+              <FormControl isInvalid={!!errors.initialQuantity} flex="1 0 45%">
+                <FormLabel
+                  htmlFor="initialQuantity"
+                  display="flex"
+                  alignItems="center"
+                >
+                  <FaBoxOpen style={{ marginRight: "8px" }} /> Quantidade
+                  Inicial
+                </FormLabel>
+                <Input
+                  variant="outline"
+                  id="initialQuantity"
+                  size="lg"
+                  type="number"
+                  placeholder="Quantidade Inicial"
+                  {...register("initialQuantity", {
+                    required: "Quantidade Inicial é obrigatória",
+                    min: {
+                      value: 0,
+                      message: "A quantidade deve ser maior ou igual a 0",
+                    },
+                  })}
+                />
+                <FormErrorMessage>
+                  {errors.initialQuantity && errors.initialQuantity.message}
+                </FormErrorMessage>
+              </FormControl>
+
+              <FormControl flex="1 0 45%">
+                <FormLabel
+                  htmlFor="expirationDate"
+                  display="flex"
+                  alignItems="center"
+                >
+                  <FaCalendarAlt style={{ marginRight: "8px" }} /> Data de
+                  Validade
+                </FormLabel>
+                <Input
+                  id="expirationDate"
+                  size="lg"
+                  type="date"
+                  {...register("expirationDate")}
+                />
+              </FormControl>
+            </HStack>
+
             <Box mt="8" mx="auto" p="4">
               <Button
                 type="submit"
                 size="lg"
                 colorScheme="teal"
-                w="full" // Make the button full width
+                w="full"
                 isLoading={isSubmitting}
               >
                 {isSubmitting

@@ -7,6 +7,9 @@ export interface Product {
   quantity: number;
   categoryName: string;
   categoryId: string;
+  initialQuantity: number;
+  expirationDate: string;
+  perishable: boolean;
 }
 
 export interface Category {
