@@ -1,12 +1,8 @@
 import { parseCookies } from "nookies";
-import { Product } from "../types";
+import { BatchResponse, Product } from "../types";
 
-const BASE_URL = "http://localhost:8083"; // Replace with your actual API base URL
-
-// const { ["falcon.token"]: token } = parseCookies();
-
-const token =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJmYWxjb24iLCJzdWIiOiJhcm9uZSIsImV4cCI6MTcyODU4NzcyOH0.IkAv7it8BLqCK-mSSfQyxiSM539He7Xs7fcqz9iVlmc";
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
+const { ["token"]: token } = parseCookies();
 
 async function fetchProducts(
   size: number,
@@ -38,8 +34,62 @@ async function fetchProducts(
   }
 }
 
+async function fetchProductDetails(
+  productId: string | null,
+  batchPage: number = 1,
+  batchSize: number = 5
+): Promise<
+  { batches: BatchResponse[]; totalPages: number } | { error: string }
+> {
+  try {
+    const url = `${BASE_URL}/api/products/batches/${productId}?page=${batchPage}&size=${batchSize}`;
+    const response = await fetch(url, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data?.message || "Failed to fetch product details");
+    }
+
+    return { batches: data.content, totalPages: data.totalPages };
+  } catch (error: any) {
+    console.error("Error fetching product details:", error);
+    return { error: error.message || "Failed to fetch product details" };
+  }
+}
+
+async function fetchProductSale(
+  code: string | null
+): Promise<{ data: Product } | { error: string }> {
+  try {
+    const url = `${BASE_URL}/api/products/sale/${code}`;
+    const response = await fetch(url, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data?.message || "Failed to get product");
+    }
+
+    return { data: data };
+  } catch (error: any) {
+    console.error("Error fetching product details:", error);
+    return { error: error.message || "Failed to get product" };
+  }
+}
+
 async function getProductById(
-  id: String
+  id: string | null
 ): Promise<{ product: Product } | { error: string }> {
   try {
     const url = `${BASE_URL}/api/products/${id}`;
@@ -80,6 +130,29 @@ async function createProduct(productData: any) {
       return data;
     } else {
       return { error: data?.message || "Failed to create product." };
+    }
+  } catch (error) {
+    console.error("Error creating product:", error);
+    return { error: "Failed to create product." };
+  }
+}
+
+async function createBatch(batch: any) {
+  try {
+    const response = await fetch(`${BASE_URL}/api/products/entries`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(batch),
+    });
+
+    if (!response.ok) {
+      const data = await response.json();
+      return { error: data?.message || "Failed to create product." };
+    } else {
+      return { data: "" };
     }
   } catch (error) {
     console.error("Error creating product:", error);
@@ -172,4 +245,7 @@ export {
   deleteProduct,
   uploadProducts,
   getProductById,
+  fetchProductDetails,
+  createBatch,
+  fetchProductSale,
 };

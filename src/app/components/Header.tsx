@@ -22,8 +22,11 @@ import {
 import { BellIcon, HamburgerIcon } from "@chakra-ui/icons";
 import { useState } from "react";
 import Sidebar from "./sidebar";
+import { useRouter } from "next/navigation";
 
 const Header = () => {
+  const router = useRouter();
+
   const [notifications, setNotifications] = useState([
     "Notification 1",
     "Notification 2",
@@ -56,7 +59,12 @@ const Header = () => {
             display={{ base: "inline-flex", md: "none" }}
             onClick={onOpen}
           />
-          <Text fontSize="2xl" fontWeight="bold">
+          <Text
+            fontSize="2xl"
+            fontWeight="bold"
+            cursor="pointer"
+            onClick={() => router.push("/options")}
+          >
             FStock
           </Text>
         </HStack>

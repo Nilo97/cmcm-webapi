@@ -6,13 +6,6 @@ import {
   Heading,
   Button,
   useDisclosure,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalCloseButton,
-  ModalBody,
-  FormControl,
   Flex,
   FormLabel,
   Input as ChakraInput,
@@ -21,15 +14,11 @@ import {
 } from "@chakra-ui/react";
 import { FaUpload } from "react-icons/fa6";
 
-import ProductTable from "../components/ProductTable";
 import { AddIcon, DownloadIcon } from "@chakra-ui/icons";
 import { useRouter } from "next/navigation";
-import {
-  fetchProducts,
-  deleteProduct,
-  uploadProducts,
-} from "../actions/product";
-import { Product } from "../types";
+import { fetchProducts, deleteProduct, uploadProducts } from "@/app/actions/product";
+import ProductTable from "@/app/components/ProductTable";
+import { Product } from "@/app/types";
 
 const PAGE_SIZE = 7;
 
@@ -73,6 +62,10 @@ const ProdutosPage: React.FC = () => {
     }
   };
 
+  const handleViewDetails = (product: Product) => {
+    router.push(`/dashboard/product/details?id=${product.id}`);
+  };
+
   const handleSearch = (value: string) => {
     setSearchQuery(value);
     setCurrentPage(0);
@@ -108,7 +101,7 @@ const ProdutosPage: React.FC = () => {
   };
 
   const handleEdit = (product: Product) => {
-    router.push(`/product/upsert?id=${product.id}`);
+    router.push(`/dashboard/product/upsert?id=${product.id}`);
     setSelectedProduct(product);
   };
 
@@ -163,7 +156,12 @@ const ProdutosPage: React.FC = () => {
         align="center"
         mb="4"
       >
-        <Heading as="h1" size="lg" mb={{ base: 4, md: 0 }}>
+        <Heading
+          as="h1"
+          size="lg"
+          mb={{ base: 4, md: 0 }}
+          textShadow="1px 1px #ccc"
+        >
           Lista de Produtos
         </Heading>
         <Flex>
@@ -172,7 +170,7 @@ const ProdutosPage: React.FC = () => {
             mr="2"
             size="sm"
             leftIcon={<AddIcon />}
-            onClick={() => router.push("/product/upsert")}
+            onClick={() => router.push("/dashboard/product/upsert")}
           >
             Novo Produto
           </Button>
@@ -214,6 +212,7 @@ const ProdutosPage: React.FC = () => {
         totalPages={totalPages}
         currentPage={currentPage}
         onPageChange={handlePageChange}
+        onDetails={handleViewDetails}
       />
     </Container>
   );

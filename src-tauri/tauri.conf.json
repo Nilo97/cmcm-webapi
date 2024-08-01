@@ -64,9 +64,7 @@
       {
         "width": 600,
         "height": 600,
-        "decorations": false,
-        "url": "splashscreen.html",
-        "label": "splashscreen"
+        "decorations": false
       }
     ]
   }

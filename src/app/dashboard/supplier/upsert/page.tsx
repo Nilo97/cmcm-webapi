@@ -103,7 +103,7 @@ const SupplierRegistrationForm: React.FC = () => {
         });
       }
 
-      router.push("/supplier");
+      router.push("/dashboard/supplier");
     } catch (error) {
       console.error("Error creating/updating supplier:", error);
       toast({

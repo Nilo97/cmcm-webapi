@@ -105,7 +105,7 @@ const CategoryRegistrationForm: React.FC = () => {
         });
       }
 
-      router.push("/category");
+      router.push("/dashboard/category");
     } catch (error) {
       console.error("Error creating/updating category:", error);
       toast({

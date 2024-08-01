@@ -25,7 +25,6 @@ import {
   Highlight,
 } from "@chakra-ui/react";
 import { EditIcon, DeleteIcon, SearchIcon, ViewIcon } from "@chakra-ui/icons";
-import ProductDetailsModal from "./ProductDetails";
 import { Product } from "../types";
 import { limitText } from "../actions/util";
 
@@ -33,6 +32,7 @@ interface ProductTableProps {
   products: Product[];
   onDelete: (productId: string) => void;
   onEdit: (product: Product) => void;
+  onDetails: (product: Product) => void;
   onSearch: (value: string) => void;
   loading: boolean;
   totalPages?: number;
@@ -49,6 +49,7 @@ const ProductTable: React.FC<ProductTableProps> = ({
   totalPages = 0,
   currentPage = 0,
   onPageChange,
+  onDetails,
 }) => {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -62,8 +63,7 @@ const ProductTable: React.FC<ProductTableProps> = ({
   );
 
   const handleViewDetails = (product: Product) => {
-    setSelectedProduct(product);
-    setIsModalOpen(true);
+    onDetails(product);
   };
 
   const handleCloseModal = () => {
@@ -254,7 +254,7 @@ const ProductTable: React.FC<ProductTableProps> = ({
                         leftIcon={<ViewIcon />}
                         onClick={() => handleViewDetails(product)}
                       >
-                        Ver
+                        Gerir
                       </Button>
                       <Button
                         ml="2"
@@ -282,11 +282,6 @@ const ProductTable: React.FC<ProductTableProps> = ({
           {renderPagination()}
         </>
       )}
-      <ProductDetailsModal
-        isOpen={isModalOpen}
-        onClose={handleCloseModal}
-        product={selectedProduct}
-      />
 
       <AlertDialog
         isOpen={deleteConfirmationOpen}

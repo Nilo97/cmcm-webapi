@@ -2,30 +2,43 @@
 
 import { usePathname } from "next/navigation";
 import NextLink from "next/link";
-import {
-  BellIcon,
-  AtSignIcon,
-  ViewIcon,
-  InfoIcon,
-  CalendarIcon,
-  DragHandleIcon,
-} from "@chakra-ui/icons";
+import { Box, Flex, HStack, Link, Text, VStack } from "@chakra-ui/react";
 import {
   FaPeopleCarryBox,
   FaHouseChimneyWindow,
   FaListOl,
   FaBasketShopping,
-  FaBoxesPacking,
 } from "react-icons/fa6";
 
-import { Box, Flex, HStack, Link, Text, VStack } from "@chakra-ui/react";
+const links = [
+  {
+    href: "/dashboard",
+    label: "Dashboard",
+    icon: FaHouseChimneyWindow,
+  },
+  {
+    href: "/dashboard/product",
+    label: "Produtos",
+    icon: FaBasketShopping,
+  },
+  {
+    href: "/dashboard/category",
+    label: "Categorias",
+    icon: FaListOl,
+  },
+  {
+    href: "/dashboard/supplier",
+    label: "Fornecedores",
+    icon: FaPeopleCarryBox,
+  },
+];
 
 const Sidebar = () => {
   const pathname = usePathname();
 
-  const isActive = (path: any) => pathname !== '/' && path.startsWith( pathname);
+  const isActive = (path: any) =>
+    pathname !== "/dashboard" && pathname.startsWith(path);
   const isBaseActive = (path: any) => path === pathname;
-
 
   return (
     <Box
@@ -38,89 +51,28 @@ const Sidebar = () => {
       color="black"
     >
       <VStack align="start" spacing="4" w="100%">
-        <Link
-          as={NextLink}
-          w="100%"
-          href="/"
-          fontSize="md"
-          fontWeight="bold"
-          color={isBaseActive("/") ? "teal.400" : "black"}
-          bg={isBaseActive("/") ? "teal.50" : undefined}
-          rounded="sm"
-          px="3"
-          py="1"
-        >
-          <HStack spacing="2">
-            <FaHouseChimneyWindow />
-            <Text>Dashboard</Text>
-          </HStack>
-        </Link>
-        <Link
-          as={NextLink}
-          w="100%"
-          href="/product"
-          fontSize="md"
-          color={isActive("/product") ? "teal.400" : "black"}
-          bg={isActive("/product") ? "teal.50" : undefined}
-          rounded="sm"
-          px="3"
-          py="1"
-        >
-          <HStack spacing="2">
-            <FaBasketShopping />
-            <Text>Produtos</Text>
-          </HStack>
-        </Link>
-        <Link
-          as={NextLink}
-          w="100%"
-          href="/category"
-          fontSize="md"
-          color={isActive("/category") ? "teal.400" : "black"}
-          bg={isActive("/category") ? "teal.50" : undefined}
-          rounded="sm"
-          px="3"
-          py="1"
-        >
-          <HStack spacing="2">
-            <FaListOl />
-            <Text>Categorias</Text>
-          </HStack>
-        </Link>
-        <Link
-          as={NextLink}
-          w="100%"
-          href="/supplier"
-          fontSize="md"
-          color={isActive("/supplier") ? "teal.400" : "black"}
-          bg={isActive("/supplier") ? "teal.50" : undefined}
-          rounded="sm"
-          px="3"
-          py="1"
-        >
-          <HStack spacing="2">
-            <FaPeopleCarryBox />
-            <Text>Fornecedores</Text>
-          </HStack>
-        </Link>
-        <Link
-          as={NextLink}
-          w="100%"
-          href="/stock"
-          fontSize="md"
-          color={isActive("/stock") ? "teal.400" : "black"}
-          bg={isActive("/stock") ? "teal.50" : undefined}
-          rounded="sm"
-          px="3"
-          py="1"
-        >
-          <HStack spacing="2">
-            <FaBoxesPacking />
-            <Text>Stock</Text>
-          </HStack>
-        </Link>
+        {links.map(({ href, label, icon: Icon }) => (
+          <Link
+            key={href}
+            as={NextLink}
+            w="100%"
+            href={href}
+            fontWeight="bold"
+            color={isBaseActive(href) ? "teal.400" : "black"}
+            bg={isBaseActive(href) ? "teal.50" : undefined}
+            rounded="sm"
+            px="3"
+            py="1"
+          >
+            <HStack spacing="2">
+              <Icon />
+              <Text>{label}</Text>
+            </HStack>
+          </Link>
+        ))}
       </VStack>
     </Box>
   );
 };
+
 export default Sidebar;

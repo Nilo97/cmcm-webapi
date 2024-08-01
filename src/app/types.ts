@@ -1,3 +1,11 @@
+export interface BatchResponse {
+  supplierName: string;
+  entryDate: string; 
+  expirationDate: string; 
+  quantity: number;
+  price: number; 
+}
+
 export interface Product {
   id: string;
   name: string;
@@ -8,6 +16,7 @@ export interface Product {
   categoryName: string;
   categoryId: string;
   initialQuantity: number;
+  minimumQuantity: number;
   expirationDate: string;
   perishable: boolean;
 }
@@ -23,6 +32,12 @@ export interface Supplier {
   name: string;
   contactInfo: string;
 }
+
+export type GeneralStats = {
+  products: number;
+  categories: number;
+  suppliers: number;
+};
 
 
 
@@ -53,4 +68,15 @@ export interface PaginatedProducts {
   first: boolean;
   last: boolean;
   empty: boolean;
+}
+
+export interface YearMonthStatCountResponse {
+  year: number;
+  month: number;
+  count: number;
+}
+
+export interface StatsResponse {
+  entries: YearMonthStatCountResponse[];
+  sales: YearMonthStatCountResponse[];
 }

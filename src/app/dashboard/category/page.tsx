@@ -12,21 +12,19 @@ import {
 } from "@chakra-ui/react";
 import { FaUpload } from "react-icons/fa6";
 
-import SupplierTable from "../components/SupplierTable";
 import { AddIcon, DownloadIcon } from "@chakra-ui/icons";
 import { useRouter } from "next/navigation";
 import {
-  fetchSuppliers,
-  deleteSupplier,
-  uploadSuppliers,
-  fetchPaginatedSuppliers,
-} from "../actions/suppliers";
-import { Supplier } from "../types";
+  fetchPaginatedCategories,
+  deleteCategory,
+} from "@/app/actions/categories";
+import CategoryTable from "@/app/components/CategoryTable";
+import { Category } from "@/app/types";
 
 const PAGE_SIZE = 7;
 
-const SuppliersPage: React.FC = () => {
-  const [suppliers, setSuppliers] = useState<Supplier[]>([]);
+const CategoriasPage: React.FC = () => {
+  const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [uploading, setUploading] = useState<boolean>(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -37,24 +35,24 @@ const SuppliersPage: React.FC = () => {
   const [totalPages, setTotalPages] = useState<number>(1);
 
   useEffect(() => {
-    fetchAllSuppliers(currentPage);
+    fetchAllCategories(currentPage);
   }, [currentPage, searchQuery]);
 
-  const fetchAllSuppliers = async (page: number) => {
+  const fetchAllCategories = async (page: number) => {
     setLoading(true);
     try {
-      const data = await fetchPaginatedSuppliers(PAGE_SIZE, page, searchQuery);
+      const data = await fetchPaginatedCategories(PAGE_SIZE, page, searchQuery);
 
       if ("error" in data) {
         throw new Error(data.error);
       }
-      setSuppliers(data.suppliers);
+      setCategories(data.categories);
       setTotalPages(data.totalPages);
     } catch (error) {
-      console.error("Erro ao buscar fornecedores:", error);
+      console.error("Error fetching categories:", error);
       toast({
-        title: "Erro ao buscar fornecedores",
-        description: "Ocorreu um erro ao buscar os fornecedores.",
+        title: "Erro ao buscar categorias",
+        description: "Ocorreu um erro ao buscar as categorias.",
         status: "error",
         duration: 5000,
         isClosable: true,
@@ -69,26 +67,26 @@ const SuppliersPage: React.FC = () => {
     setCurrentPage(0);
   };
 
-  const handleDelete = async (supplierId: string) => {
+  const handleDelete = async (categoryId: string) => {
     setLoading(true);
     try {
-      const response = await deleteSupplier(supplierId);
+      const response = await deleteCategory(categoryId);
       if ("error" in response) {
         throw new Error(response.error);
       }
       toast({
-        title: "Fornecedor Deletado",
-        description: "O fornecedor foi deletado com sucesso.",
+        title: "Categoria Deletada",
+        description: "A categoria foi deletada com sucesso.",
         status: "success",
         duration: 5000,
         isClosable: true,
       });
-      fetchAllSuppliers(currentPage);
+      fetchAllCategories(currentPage);
     } catch (error) {
-      console.error("Erro ao deletar fornecedor:", error);
+      console.error("Error deleting category:", error);
       toast({
-        title: "Erro ao deletar fornecedor",
-        description: "Ocorreu um erro ao deletar o fornecedor.",
+        title: "Erro ao deletar categoria",
+        description: "Ocorreu um erro ao deletar a categoria.",
         status: "error",
         duration: 5000,
         isClosable: true,
@@ -98,8 +96,8 @@ const SuppliersPage: React.FC = () => {
     }
   };
 
-  const handleEdit = (supplier: Supplier) => {
-    router.push(`/supplier/upsert?id=${supplier.id}`);
+  const handleEdit = (category: Category) => {
+    router.push(`/dashboard/category/upsert?id=${category.id}`);
   };
 
   const handlePageChange = (page: number) => {
@@ -114,8 +112,13 @@ const SuppliersPage: React.FC = () => {
         align="center"
         mb="4"
       >
-        <Heading as="h1" size="lg" mb={{ base: 4, md: 0 }}>
-          Lista de Fornecedores
+        <Heading
+          as="h1"
+          size="lg"
+          mb={{ base: 4, md: 0 }}
+          textShadow="1px 1px #ccc"
+        >
+          Lista de Categorias
         </Heading>
         <Flex>
           <Button
@@ -123,23 +126,23 @@ const SuppliersPage: React.FC = () => {
             mr="2"
             size="sm"
             leftIcon={<AddIcon />}
-            onClick={() => router.push("/supplier/upsert")}
+            onClick={() => router.push("/dashboard/category/upsert")}
           >
-            Novo Fornecedor
+            Nova Categoria
           </Button>
 
           <Button
             size="sm"
             colorScheme="pink"
             leftIcon={<DownloadIcon />}
-            onClick={() => console.log("Exportar clicado")}
+            onClick={() => console.log("Export clicked")}
           >
             Exportar
           </Button>
         </Flex>
       </Flex>
-      <SupplierTable
-        suppliers={suppliers}
+      <CategoryTable
+        categories={categories}
         onDelete={handleDelete}
         onEdit={handleEdit}
         onSearch={handleSearch}
@@ -152,4 +155,4 @@ const SuppliersPage: React.FC = () => {
   );
 };
 
-export default SuppliersPage;
+export default CategoriasPage;

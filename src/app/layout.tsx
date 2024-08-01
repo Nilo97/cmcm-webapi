@@ -19,17 +19,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={fonts.inter.className}>
-        <Providers>
-          <Flex direction="column" minH="100vh">
-            <Header />
-            <Flex mt="16">
-              <DesktopSidebar />
-              <Box ml={{ base: 0, md: "250px" }} p="6" w="full">
-                <Suspense>{children}</Suspense>
-              </Box>
-            </Flex>
-          </Flex>
-        </Providers>
+          <Providers>
+            <Suspense>{children}</Suspense>
+          </Providers>
       </body>
     </html>
   );

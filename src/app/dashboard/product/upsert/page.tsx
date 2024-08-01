@@ -48,6 +48,7 @@ interface ProductFormInputs {
   initialQuantity: number;
   expirationDate: string;
   perishable: boolean;
+  minimumQuantity: number;
 }
 
 const ProductRegistrationForm: React.FC = () => {
@@ -87,6 +88,7 @@ const ProductRegistrationForm: React.FC = () => {
       setValue("initialQuantity", data.product.initialQuantity);
       setValue("expirationDate", data.product.expirationDate);
       setValue("perishable", data.product.perishable);
+      setValue("minimumQuantity", data.product.minimumQuantity);
     } catch (error) {
       console.error("Error loading product:", error);
       toast({
@@ -129,6 +131,7 @@ const ProductRegistrationForm: React.FC = () => {
         initialQuantity,
         expirationDate,
         perishable,
+        minimumQuantity,
       } = values;
 
       const categoryId = category;
@@ -141,6 +144,7 @@ const ProductRegistrationForm: React.FC = () => {
           price,
           categoryId,
           initialQuantity,
+          minimumQuantity,
           expirationDate,
           perishable,
         });
@@ -165,6 +169,7 @@ const ProductRegistrationForm: React.FC = () => {
           categoryId,
           initialQuantity,
           expirationDate,
+          minimumQuantity,
           perishable,
         });
 
@@ -181,12 +186,13 @@ const ProductRegistrationForm: React.FC = () => {
         });
       }
 
-      router.push("/product");
+      router.push("/dashboard/product");
     } catch (error) {
       console.error("Error creating/updating product:", error);
       toast({
         title: "Erro ao salvar produto",
-        description: "Ocorreu um erro ao tentar salvar o produto.",
+        description:
+          error instanceof Error ? error.message : "Erro desconhecido",
         status: "error",
         duration: 5000,
         isClosable: true,
@@ -196,18 +202,11 @@ const ProductRegistrationForm: React.FC = () => {
 
   return (
     <>
-      <Button mt="4" size="lg" onClick={() => router.back()}>
+      <Button mt="1" size="md" onClick={() => router.back()}>
         Voltar
       </Button>
 
-      <Box
-        mt="8"
-        mx={{ base: "auto", md: "20" }}
-        p="4"
-        borderWidth="1px"
-        borderRadius="lg"
-        boxShadow="lg"
-      >
+      <Box mt="2" mx={{ base: "auto", md: "20" }} p="2">
         <form onSubmit={handleSubmit(onSubmit)}>
           <VStack spacing="6" align="stretch">
             <HStack spacing="6" justify="space-between" alignItems="flex-start">
@@ -350,6 +349,36 @@ const ProductRegistrationForm: React.FC = () => {
                 </FormErrorMessage>
               </FormControl>
 
+              <FormControl isInvalid={!!errors.minimumQuantity} flex="1 0 45%">
+                <FormLabel
+                  htmlFor="minimumQuantity"
+                  display="flex"
+                  alignItems="center"
+                >
+                  <FaBoxOpen style={{ marginRight: "8px" }} /> Quantidade Mínima
+                  no stock
+                </FormLabel>
+                <Input
+                  variant="outline"
+                  id="minimumQuantity"
+                  size="lg"
+                  type="number"
+                  placeholder="Quantidade Mínima Inicial"
+                  {...register("minimumQuantity", {
+                    required: "Quantidade  Mínima é obrigatória",
+                    min: {
+                      value: 0,
+                      message: "A quantidade deve ser maior ou igual a 0",
+                    },
+                  })}
+                />
+                <FormErrorMessage>
+                  {errors.minimumQuantity && errors.minimumQuantity.message}
+                </FormErrorMessage>
+              </FormControl>
+            </HStack>
+
+            <HStack spacing="6" justify="space-between" alignItems="flex-start">
               <FormControl flex="1 0 45%">
                 <FormLabel
                   htmlFor="expirationDate"
@@ -367,8 +396,7 @@ const ProductRegistrationForm: React.FC = () => {
                 />
               </FormControl>
             </HStack>
-
-            <Box mt="8" mx="auto" p="4">
+            <Box mx="auto">
               <Button
                 type="submit"
                 size="lg"

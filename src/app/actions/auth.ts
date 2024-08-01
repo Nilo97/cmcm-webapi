@@ -1,8 +1,8 @@
-const BASE_URL = "http://localhost:8083"; // To be provided as env var.
+const BASE_URL =  process.env.NEXT_PUBLIC_BASE_URL; 
 
 async function signIn({ username, password }: any) {
   try {
-    const res = await fetch(`${BASE_URL}/falcon/auth/signIn`, {
+    const res = await fetch(`${BASE_URL}/auth/signIn`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -25,7 +25,7 @@ async function signIn({ username, password }: any) {
 
 async function signUp({ username, password }: any) {
   try {
-    const res = await fetch(`${BASE_URL}/falcon/auth/signUp`, {
+    const res = await fetch(`${BASE_URL}/auth/signUp`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

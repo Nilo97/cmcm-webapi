@@ -1,11 +1,8 @@
 import { parseCookies } from "nookies";
 import { Supplier } from "../types";
 
-const BASE_URL = "http://localhost:8083"; // Substitua pelo URL base da sua API
-// const { ["falcon.token"]: token } = parseCookies();
-
-const token =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJmYWxjb24iLCJzdWIiOiJhcm9uZSIsImV4cCI6MTcyODU4NzcyOH0.IkAv7it8BLqCK-mSSfQyxiSM539He7Xs7fcqz9iVlmc";
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
+const { ["token"]: token } = parseCookies();
 
 async function fetchSuppliers() {
   try {
