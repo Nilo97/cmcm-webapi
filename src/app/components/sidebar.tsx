@@ -1,14 +1,23 @@
 "use client";
-
 import { usePathname } from "next/navigation";
 import NextLink from "next/link";
-import { Box, Flex, HStack, Link, Text, VStack } from "@chakra-ui/react";
+import {
+  Box,
+  Flex,
+  HStack,
+  Link,
+  Text,
+  VStack,
+  Divider,
+  Spacer,
+} from "@chakra-ui/react";
 import {
   FaPeopleCarryBox,
   FaHouseChimneyWindow,
   FaListOl,
   FaBasketShopping,
 } from "react-icons/fa6";
+import { FaCog } from "react-icons/fa";
 
 const links = [
   {
@@ -49,6 +58,8 @@ const Sidebar = () => {
       px="4"
       py="6"
       color="black"
+      display="flex"
+      flexDirection="column"
     >
       <VStack align="start" spacing="4" w="100%">
         {links.map(({ href, label, icon: Icon }) => (
@@ -71,6 +82,26 @@ const Sidebar = () => {
           </Link>
         ))}
       </VStack>
+      <Spacer />
+
+      <Flex mb="12">
+        <Link
+          as={NextLink}
+          href="/dashboard/settings"
+          bg={isBaseActive("/dashboard/settings") ? "teal.50" : "gray.50"}
+          fontWeight="bold"
+          color="black"
+          rounded="sm"
+          px="3"
+          py="1"
+          w="100%"
+        >
+          <HStack spacing="2">
+            <FaCog />
+            <Text>Definições</Text>
+          </HStack>
+        </Link>
+      </Flex>
     </Box>
   );
 };

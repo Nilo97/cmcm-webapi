@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import {
   Box,
   Flex,
@@ -20,12 +21,13 @@ import {
   DrawerBody,
 } from "@chakra-ui/react";
 import { BellIcon, HamburgerIcon } from "@chakra-ui/icons";
-import { useState } from "react";
 import Sidebar from "./sidebar";
 import { useRouter } from "next/navigation";
+import { parseCookies, destroyCookie } from "nookies";
 
 const Header = () => {
   const router = useRouter();
+  const [username, setUsername] = useState("");
 
   const [notifications, setNotifications] = useState([
     "Notification 1",
@@ -33,7 +35,22 @@ const Header = () => {
     "Notification 3",
   ]);
 
+  const { ["user"]: user } = parseCookies();
+
+  useEffect(() => {
+    setUsername(user);
+  }, [user]);
+
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const handleLogout = () => {
+    destroyCookie({}, "token", { path: "/" });
+    destroyCookie({}, "user", { path: "/" });
+    destroyCookie({}, "companyId", { path: "/" });
+    destroyCookie({}, "email", { path: "/" });
+
+    router.push("/");
+  };
 
   return (
     <>
@@ -88,11 +105,11 @@ const Header = () => {
           </Menu>
           <Menu>
             <MenuButton>
-              <Avatar size="sm" name="John Doe" />
+              <Avatar size="sm" name={username} />
             </MenuButton>
             <MenuList>
               <MenuItem>Manage Account</MenuItem>
-              <MenuItem>Logout</MenuItem>
+              <MenuItem onClick={handleLogout}>Logout</MenuItem>
             </MenuList>
           </Menu>
         </HStack>

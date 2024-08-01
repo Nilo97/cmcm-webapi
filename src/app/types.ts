@@ -1,9 +1,9 @@
 export interface BatchResponse {
   supplierName: string;
-  entryDate: string; 
-  expirationDate: string; 
+  entryDate: string;
+  expirationDate: string;
   quantity: number;
-  price: number; 
+  price: number;
 }
 
 export interface Product {
@@ -21,6 +21,20 @@ export interface Product {
   perishable: boolean;
 }
 
+export interface Company {
+  id: string;
+  name: string;
+  address: string;
+  email: string;
+  phone: number;
+  NUIT: number;
+  plan: string;
+  invoice: string | null;
+  quotation: string | null;
+  logo: string | null;
+  users: User[];
+}
+
 export interface Category {
   id: string;
   name: string;
@@ -33,13 +47,19 @@ export interface Supplier {
   contactInfo: string;
 }
 
+export interface User {
+  id: string;
+  name: string;
+  contactInfo: string;
+  username: string;
+  email: string;
+}
+
 export type GeneralStats = {
   products: number;
   categories: number;
   suppliers: number;
 };
-
-
 
 export interface PaginatedProducts {
   totalPages: number;
@@ -79,4 +99,19 @@ export interface YearMonthStatCountResponse {
 export interface StatsResponse {
   entries: YearMonthStatCountResponse[];
   sales: YearMonthStatCountResponse[];
+}
+
+export type Plan = "OFFLINE" | "ONLINE" | "COMPLETE";
+
+export interface CompanyResponse {
+  id: string;
+  logo: string;
+  name: string;
+  address: string;
+  email: string;
+  phone: number;
+  NUIT: number;
+  plan: Plan;
+  invoice: string;
+  quotation: string;
 }

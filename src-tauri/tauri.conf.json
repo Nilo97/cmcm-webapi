@@ -7,7 +7,7 @@
     "distDir": "../out"
   },
   "package": {
-    "productName": "fstock-desktop-app",
+    "productName": "fstock-web-app",
     "version": "0.1.0"
   },
   "tauri": {
@@ -29,7 +29,7 @@
         "icons/icon.icns",
         "icons/icon.ico"
       ],
-      "identifier": "com.faruque.braimo",
+      "identifier": "com.tauri.dev",
       "longDescription": "",
       "macOS": {
         "entitlements": null,
@@ -58,13 +58,8 @@
         "fullscreen": false,
         "height": 600,
         "resizable": true,
-        "title": "FStock",
+        "title": "Fstock",
         "width": 800
-      },
-      {
-        "width": 600,
-        "height": 600,
-        "decorations": false
       }
     ]
   }

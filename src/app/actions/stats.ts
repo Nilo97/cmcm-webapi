@@ -14,7 +14,7 @@ async function fetchStats(): Promise<GeneralStats | { error: string }> {
     });
 
     if (!response.ok) {
-      throw new Error("Failed to fetch stats");
+      throw new Error("Erro ao carregar Estatísticas");
     }
 
     const data: GeneralStats = await response.json();
@@ -37,7 +37,7 @@ async function findTop5ProductsWithMinQuantity(): Promise<
     });
 
     if (!response.ok) {
-      throw new Error("Failed to fetch stats");
+      throw new Error("Erro ao carregar Estatísticas");
     }
 
     const data: Product[] = await response.json();
@@ -60,14 +60,14 @@ async function fetchYearMonthStats(): Promise<
     });
 
     if (!response.ok) {
-      throw new Error("Failed to fetch stats");
+      throw new Error("Erro ao carregar Estatísticas");
     }
 
     const data: StatsResponse = await response.json();
     return data;
   } catch (error: any) {
     console.error("Error fetching stats:", error);
-    return { error: error.message || "Failed to fetch stats" };
+    return { error: error.message || "Erro ao carregar Estatísticas" };
   }
 }
 
