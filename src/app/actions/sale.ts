@@ -7,6 +7,7 @@ const { ["token"]: token } = parseCookies();
 
 async function createSale(sales: any) {
   try {
+    console.log(sales)
     const response = await fetch(`${BASE_URL}/api/sales`, {
       method: "POST",
       headers: {

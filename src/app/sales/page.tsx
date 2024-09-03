@@ -39,7 +39,6 @@ const SalesPage = () => {
 
   const toast = useToast();
 
-  // Update discount when cart changes
   useEffect(() => {
     if (cart.length === 0) {
       setDiscount(0);
@@ -47,22 +46,23 @@ const SalesPage = () => {
   }, [cart]);
 
   const handleAddToCart = () => {
-    if (!selectedProduct) {
+    console.log(selectedProduct)
+    if (!selectedProduct || !selectedProduct.productId) {
       toast({
-        title: "Selecione um produto.",
-        description: "Escolha um produto antes de adicionar ao carrinho.",
+        title: "Produto inválido.",
+        description: "O produto não possui um ID válido.",
         status: "warning",
         duration: 5000,
         isClosable: true,
       });
       return;
     }
-
-    const productInCart = cart.find((item) => item.id === selectedProduct.id);
+  
+    const productInCart = cart.find((item) => item.id === selectedProduct.productId);
     if (productInCart) {
       setCart(
         cart.map((item) =>
-          item.id === selectedProduct.id
+          item.id === selectedProduct.productId
             ? { ...item, quantity: item.quantity + quantity }
             : item
         )
@@ -70,19 +70,20 @@ const SalesPage = () => {
     } else {
       setCart([...cart, { ...selectedProduct, quantity }]);
     }
-
+  
     setQuantity(1);
     setSelectedProduct(null);
   };
+  
 
   const handleRemoveFromCart = (id: string) => {
-    setCart(cart.filter((item) => item.id !== id));
+    setCart(cart.filter((item) => item.productId !== id));
   };
 
   const handleQuantityChange = (id: string, newQuantity: number) => {
     setCart(
       cart.map((item) =>
-        item.id === id ? { ...item, quantity: newQuantity } : item
+        item.productId === id ? { ...item, quantity: newQuantity } : item
       )
     );
   };
@@ -91,6 +92,7 @@ const SalesPage = () => {
     const result = await fetchProductSale(searchTerm);
     if ("data" in result) {
       setSelectedProduct(result.data);
+      console.log(result.data)
     } else {
       toast({
         title: "Produto não encontrado.",
@@ -132,7 +134,8 @@ const SalesPage = () => {
     setIsLoading(true);
 
     const saleItems = cart.map((item) => ({
-      productId: item.id,
+      productId: item.productId,
+      batchId: item?.batchId,
       quantity: item.quantity,
     }));
 
@@ -191,13 +194,7 @@ const SalesPage = () => {
               <FormControl flex="1">
                 <Box flex="2" m={{ base: "1rem 0", md: "0 10rem" }}>
                   <Flex align="center">
-                    <InputGroup size={{ base: "sm", md: "md" }}>
-                      <InputLeftElement pointerEvents="none">
-                        <SearchIcon color="gray.300" />
-                      </InputLeftElement>
-                      <Input
-                        placeholder="Digite o código do produto"
-                        onChange={(e) => {
+                      onChange={(e) => {
                           setSearchTerm(e.target.value);
                         }}
                         onKeyDown={(e) => {
@@ -216,7 +213,13 @@ const SalesPage = () => {
                         >
                           Pesquisar
                         </Button>
-                      </InputRightAddon>
+                      </InputRigh<InputGroup size={{ base: "sm", md: "md" }}>
+                      <InputLeftElement pointerEvents="none">
+                        <SearchIcon color="gray.300" />
+                      </InputLeftElement>
+                      <Input
+                        placeholder="Digite o código do produto"
+                      tAddon>
                     </InputGroup>
                   </Flex>
                 </Box>
@@ -315,7 +318,7 @@ const SalesPage = () => {
                   </Thead>
                   <Tbody>
                     {cart.map((item) => (
-                      <Tr key={item.id}>
+                      <Tr key={item.productId}>
                         <Td>{item.name}</Td>
                         <Td>{item.price.toFixed(2)} MT</Td>
                         <Td>
@@ -325,7 +328,7 @@ const SalesPage = () => {
                             value={item.quantity}
                             onChange={(e) =>
                               handleQuantityChange(
-                                item.id,
+                                item.productId,
                                 Number(e.target.value)
                               )
                             }
@@ -335,7 +338,7 @@ const SalesPage = () => {
                           <Button
                             colorScheme="red"
                             size="sm"
-                            onClick={() => handleRemoveFromCart(item.id)}
+                            onClick={() => handleRemoveFromCart(item.productId)}
                           >
                             Remover
                           </Button>
