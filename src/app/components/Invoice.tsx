@@ -33,14 +33,20 @@ const Invoice = ({ pdfBlob }: { pdfBlob: Blob | null }) => {
       toast({ title: "Nenhum PDF disponível.", status: "error" });
     }
   };
+  const fileName = (): string => {
+    const randomText = Math.random().toString(36).substring(2, 10);
+    const today = new Date().toISOString().split("T")[0];
+    return `recibo_${randomText}_${today}.pdf`;
+  };
 
   const handleDownload = () => {
     if (pdfBlob) {
       const url = URL.createObjectURL(pdfBlob);
       const link = document.createElement("a");
       link.href = url;
-      link.download = "fatura.pdf";
+      link.download = fileName();
       link.click();
+      URL.revokeObjectURL(url);
     } else {
       toast({ title: "Nenhum PDF disponível.", status: "error" });
     }
@@ -49,7 +55,7 @@ const Invoice = ({ pdfBlob }: { pdfBlob: Blob | null }) => {
   const handleEmail = async () => {
     if (pdfBlob) {
       const formData = new FormData();
-      formData.append("file", pdfBlob, "fatura.pdf");
+      formData.append("file", pdfBlob, fileName());
       // Enviar a requisição para o backend para enviar o e-mail
       try {
         const response = await fetch("/api/send-email", {
