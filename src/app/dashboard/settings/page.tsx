@@ -6,9 +6,10 @@ import { Company } from "@/app/types";
 import { getCompanyById } from "@/app/actions/companies";
 import { parseCookies } from "nookies";
 
-const CompanyPage: React.FC<{ companyId: string }> = () => {
+const CompanyPage: React.FC = () => {
   const [company, setCompany] = useState<Company | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const cookies = parseCookies();
   const { ["companyId"]: companyId } = parseCookies();
 
   useEffect(() => {
@@ -21,7 +22,11 @@ const CompanyPage: React.FC<{ companyId: string }> = () => {
       }
     };
 
-    fetchCompany();
+    if (companyId) {
+      fetchCompany();
+    } else {
+      setError("Company ID not found in cookies");
+    }
   }, [companyId]);
 
   if (error) {
