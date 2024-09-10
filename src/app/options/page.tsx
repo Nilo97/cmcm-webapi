@@ -13,22 +13,31 @@ import {
   Icon,
   useColorMode,
   useBreakpointValue,
-  HStack,
-  Divider,
+
 } from "@chakra-ui/react";
 import {
   FaStore,
   FaWarehouse,
   FaMoneyCheckAlt,
   FaFileInvoice,
+  FaSignOutAlt, // Ícone de logout
 } from "react-icons/fa";
 import { useRouter } from "next/navigation";
-import DropzoneComponent from "../components/DropzoneComponent ";
+import { parseCookies, destroyCookie } from "nookies";
 
 const StockManagementPage = () => {
   const { colorMode, toggleColorMode } = useColorMode();
   const router = useRouter();
   const buttonSize = useBreakpointValue({ base: "md", md: "lg" });
+
+  const handleLogout = () => {
+    destroyCookie({}, "token", { path: "/" });
+    destroyCookie({}, "user", { path: "/" });
+    destroyCookie({}, "companyId", { path: "/" });
+    destroyCookie({}, "email", { path: "/" });
+
+    router.push("/");
+  };
 
   return (
     <Flex
@@ -37,7 +46,24 @@ const StockManagementPage = () => {
       bg={colorMode === "light" ? "gray.50" : "gray.900"}
       p={4}
       justify="center"
+      position="relative"
     >
+      <Button
+        position="absolute"
+        top={4}
+        right={4}
+        colorScheme="red"
+        variant="solid"
+        size="sm"
+        onClick={handleLogout}
+        leftIcon={<Icon as={FaSignOutAlt} />}
+        borderRadius="full"
+        boxShadow="md"
+        _hover={{ bg: "red.600", color: "white" }}
+      >
+        Sair
+      </Button>
+
       <Center flex="1" py={8}>
         <VStack spacing={12} align="center">
           <Heading

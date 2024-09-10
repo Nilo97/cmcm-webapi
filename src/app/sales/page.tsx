@@ -24,6 +24,13 @@ import {
   Td,
   useBreakpointValue,
   useColorModeValue,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalHeader,
+  ModalOverlay,
+  useDisclosure,
 } from "@chakra-ui/react";
 import { fetchProductSale } from "../actions/product";
 import { SearchIcon } from "@chakra-ui/icons";
@@ -38,6 +45,7 @@ import {
 } from "react-icons/fa6";
 import Select from "react-select";
 import { formatCurrency } from "../actions/util";
+import Invoice from "../components/Invoice";
 
 const SalesPage = () => {
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
@@ -46,8 +54,12 @@ const SalesPage = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [discount, setDiscount] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [pdfBlob, setPdfBlob] = useState<Blob | null>(null);
+
   const router = useRouter();
   const [selectedPayment, setSelectedPayment] = useState<any>(null);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
   const paymentOptions = [
     {
       value: "CASH",
@@ -242,6 +254,10 @@ const SalesPage = () => {
         isClosable: true,
       });
     } else {
+      if (result.data) {
+        setPdfBlob(result.data);
+      }
+
       toast({
         title: "Venda concluída!",
         description: "Os Artigos foram vendidos com sucesso.",
@@ -251,7 +267,8 @@ const SalesPage = () => {
       });
       setCart([]);
       setDiscount(0);
-      setSelectedPayment(null); // Reset selected payment
+      setSelectedPayment(null);
+      onOpen();
     }
   };
 
@@ -483,6 +500,17 @@ const SalesPage = () => {
           </Button>
         </HStack>
       </Box>
+
+      <Modal isOpen={isOpen} onClose={onClose} size="lg">
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Recibo</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            {pdfBlob ? <Invoice pdfBlob={pdfBlob} /> : <p>Carregando...</p>}
+          </ModalBody>
+        </ModalContent>
+      </Modal>
     </>
   );
 };
