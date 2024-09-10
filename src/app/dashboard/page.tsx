@@ -130,16 +130,15 @@ const Dashboard = () => {
 
   return (
     <>
-      <Heading mb="6">Dashboard</Heading>
       <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing="6">
         <Box p="6" bg="white" shadow="sm" borderRadius="md">
           <Flex align="center" mb="4">
             <FaBasketShopping style={{ marginRight: "8px" }} />
             <Heading as="h3" size="md">
-              Produtos
+              Artigos
             </Heading>
           </Flex>
-          <Text>Total de Produtos: {stats?.products ?? "N/A"}</Text>
+          <Text>Total de Artigos: {stats?.products ?? "N/A"}</Text>
         </Box>
         <Box p="6" bg="white" shadow="sm" borderRadius="md">
           <Flex align="center" mb="4">
@@ -203,7 +202,7 @@ const Dashboard = () => {
 
         <Box p="6" bg="white" shadow="sm" borderRadius="md">
           <Heading as="h3" size="md" mb="4">
-            Produtos com Menos Quantidades (5)
+            Artigos com Menos Quantidades (5)
           </Heading>
           <ResponsiveContainer width="100%" height={350}>
             <BarChart data={chartData}>

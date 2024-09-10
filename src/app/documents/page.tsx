@@ -17,16 +17,16 @@ import {
   Divider,
 } from "@chakra-ui/react";
 import {
-  FaStore,
-  FaWarehouse,
-  FaMoneyCheckAlt,
   FaFileInvoice,
+  FaReceipt,
+  FaQuoteRight,
+  FaPrint,
+  FaDownload,
 } from "react-icons/fa";
 import { useRouter } from "next/navigation";
-import DropzoneComponent from "../components/DropzoneComponent ";
 
-const StockManagementPage = () => {
-  const { colorMode, toggleColorMode } = useColorMode();
+const DocumentEmissionPage = () => {
+  const { colorMode } = useColorMode();
   const router = useRouter();
   const buttonSize = useBreakpointValue({ base: "md", md: "lg" });
 
@@ -47,7 +47,7 @@ const StockManagementPage = () => {
             fontWeight="bold"
             textShadow="1px 1px 2px rgba(0, 0, 0, 0.2)"
           >
-            O que vai querer hoje?
+            Emissão de Documentos
           </Heading>
           <Stack
             direction={{ base: "column", md: "row" }}
@@ -59,39 +59,26 @@ const StockManagementPage = () => {
               size={buttonSize}
               colorScheme="teal"
               variant="solid"
-              leftIcon={<Icon as={FaStore} boxSize={6} />}
-              onClick={() => router.push("/sales")}
-              borderRadius="full"
+              leftIcon={<Icon as={FaQuoteRight} boxSize={6} />}
+              onClick={() => router.push("/quotation")}
+              borderRadius="md"
               boxShadow="lg"
               _hover={{ bg: "teal.600", shadow: "md" }}
             >
-              Vender Artigos
-            </Button>
-
-            <Button
-              size={buttonSize}
-              colorScheme="orange"
-              variant="solid"
-              leftIcon={<Icon as={FaWarehouse} boxSize={6} />}
-              onClick={() => router.push("/dashboard")}
-              borderRadius="full"
-              boxShadow="lg"
-              _hover={{ bg: "orange.600", shadow: "md" }}
-            >
-              Gerir Stock
+              Cotação
             </Button>
 
             <Button
               size={buttonSize}
               colorScheme="blue"
               variant="solid"
-              leftIcon={<Icon as={FaMoneyCheckAlt} boxSize={6} />}
-              onClick={() => router.push("/cashflow")}
-              borderRadius="full"
+              leftIcon={<Icon as={FaReceipt} boxSize={6} />}
+              onClick={() => router.push("/receipt")}
+              borderRadius="md"
               boxShadow="lg"
               _hover={{ bg: "blue.600", shadow: "md" }}
             >
-              Ver Caixa
+              Recibo
             </Button>
 
             <Button
@@ -99,18 +86,46 @@ const StockManagementPage = () => {
               colorScheme="purple"
               variant="solid"
               leftIcon={<Icon as={FaFileInvoice} boxSize={6} />}
-              onClick={() => router.push("/documents")}
-              borderRadius="full"
+              onClick={() => router.push("/invoice")}
+              borderRadius="md"
               boxShadow="lg"
               _hover={{ bg: "purple.600", shadow: "md" }}
             >
-              Emitir Documentos
+              Fatura
+            </Button>
+
+            <Button
+              size={buttonSize}
+              colorScheme="orange"
+              variant="solid"
+              leftIcon={<Icon as={FaPrint} boxSize={6} />}
+              onClick={() => router.push("/print")}
+              borderRadius="md"
+              boxShadow="lg"
+              _hover={{ bg: "orange.600", shadow: "md" }}
+            >
+              Imprimir
+            </Button>
+
+            <Button
+              size={buttonSize}
+              colorScheme="green"
+              variant="solid"
+              leftIcon={<Icon as={FaDownload} boxSize={6} />}
+              onClick={() => router.push("/download")}
+              borderRadius="md"
+              boxShadow="lg"
+              _hover={{ bg: "green.600", shadow: "md" }}
+            >
+              Download
             </Button>
           </Stack>
+          <Divider />
+          <Text color={colorMode === "light" ? "gray.600" : "gray.400"}>
+            Selecione a opção desejada para emitir o documento correspondente.
+          </Text>
         </VStack>
-        {/* <DropzoneComponent /> */}
       </Center>
-
       <Box
         bg={colorMode === "light" ? "gray.200" : "gray.800"}
         py={4}
@@ -127,4 +142,4 @@ const StockManagementPage = () => {
   );
 };
 
-export default StockManagementPage;
+export default DocumentEmissionPage;

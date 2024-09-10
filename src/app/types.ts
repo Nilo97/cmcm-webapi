@@ -4,6 +4,7 @@ export interface BatchResponse {
   expirationDate: string;
   quantity: number;
   price: number;
+  associatedCosts: number;
 }
 
 export interface Product {
@@ -19,6 +20,7 @@ export interface Product {
   minimumQuantity: number;
   expirationDate: string;
   perishable: boolean;
+  image?: string;
 }
 
 export interface Company {
@@ -115,3 +117,20 @@ export interface CompanyResponse {
   invoice: string;
   quotation: string;
 }
+
+export enum CashFlowStatus {
+  OPENED,
+  CLOSED,
+}
+
+export interface CashFlowResponse {
+  id: string;
+  openingBalance: number;
+  totalAmount: number;
+  openingTime: string;
+  closingTime: string;
+  userName: string;
+  status: string;
+}
+
+

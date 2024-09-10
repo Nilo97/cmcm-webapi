@@ -25,6 +25,7 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { useSearchParams } from "next/navigation";
+import Image from "next/image";
 
 import RegisterBatchForm from "@/app/components/BatchForm";
 import {
@@ -34,6 +35,8 @@ import {
 } from "@/app/actions/product";
 import { Product, BatchResponse } from "@/app/types";
 import { useRouter } from "next/navigation";
+import { formatCurrency, formatDate } from "@/app/actions/util";
+import generic from "../../../../../public/generic.jpg";
 
 const ProductDetailsPage = () => {
   const [product, setProduct] = useState<Product | null>(null);
@@ -136,7 +139,7 @@ const ProductDetailsPage = () => {
   }
 
   if (!product) {
-    return <Text>Produto não encontrado.</Text>;
+    return <Text>Artigo não encontrado.</Text>;
   }
 
   const renderPagination = () => {
@@ -242,39 +245,62 @@ const ProductDetailsPage = () => {
             <VStack spacing="4" align="start">
               <Heading
                 as="h1"
-                size="xl"
+                size="md"
                 fontWeight="bold"
                 textShadow="1px 1px rgba(0, 0, 0, 0.2)"
                 color="teal.600"
               >
-                Detalhes do Produto
+                Detalhes do Artigo
               </Heading>
               <Grid
-                templateColumns={{ base: "1fr", md: "repeat(2, 1fr)" }}
+                templateColumns={{ base: "1fr", md: "repeat(3, 1fr)" }}
                 gap="6"
                 w="full"
               >
                 <GridItem>
-                  <Box p="4">
-                    <Text fontSize="lg" mb="2" fontWeight="semibold">
+                  <Image
+                    src={product.image || generic}
+                    alt={product.name}
+                    objectFit="cover"
+                    width="300"
+                    height="200"
+                    style={{
+                      objectFit: "cover",
+                      borderRadius: "0.375rem", // equivalente ao 'md' em Chakra UI
+                      boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)", // equivalente ao 'md' shadow
+                      cursor: "pointer",
+                      transition: "transform 0.3s ease",
+                    }}
+                    onMouseOver={(e) =>
+                      (e.currentTarget.style.transform = "scale(1.05)")
+                    }
+                    onMouseOut={(e) =>
+                      (e.currentTarget.style.transform = "scale(1)")
+                    }
+                  />
+                </GridItem>
+
+                <GridItem>
+                  <Box>
+                    <Text fontSize="md" mb="2" fontWeight="semibold">
                       Código:
                       <Text as="span" fontWeight="normal" ml="2">
                         {product.code}
                       </Text>
                     </Text>
-                    <Text fontSize="lg" mb="2" fontWeight="semibold">
+                    <Text fontSize="md" mb="2" fontWeight="semibold">
                       Nome:
                       <Text as="span" fontWeight="normal" ml="2">
                         {product.name}
                       </Text>
                     </Text>
-                    <Text fontSize="lg" mb="2" fontWeight="semibold">
+                    <Text fontSize="md" mb="2" fontWeight="semibold">
                       Descrição:
                       <Text as="span" fontWeight="normal" ml="2">
                         {product.description || "Não disponível"}
                       </Text>
                     </Text>
-                    <Text fontSize="lg" mb="2" fontWeight="semibold">
+                    <Text fontSize="md" mb="2" fontWeight="semibold">
                       Categoria:
                       <Text as="span" fontWeight="normal" ml="2">
                         {product.categoryName}
@@ -284,20 +310,26 @@ const ProductDetailsPage = () => {
                 </GridItem>
                 <GridItem>
                   <Box>
-                    <Text fontSize="lg" mb="2" fontWeight="semibold">
+                    <Text fontSize="md" mb="2" fontWeight="semibold">
+                      Preço de venda:
+                      <Text as="span" fontWeight="normal" ml="2">
+                        {formatCurrency(product.price)}
+                      </Text>
+                    </Text>
+                    <Text fontSize="md" mb="2" fontWeight="semibold">
                       Quantidade:
                       <Text as="span" fontWeight="normal" ml="2">
                         {product.quantity}
                       </Text>
                     </Text>
-                    <Text fontSize="lg" mb="2" fontWeight="semibold">
+                    <Text fontSize="md" mb="2" fontWeight="semibold">
                       Quantidade Mínima:
                       <Text as="span" fontWeight="normal" ml="2">
                         {product.minimumQuantity}
                       </Text>
                     </Text>
-                    <Text fontSize="lg" mb="2" fontWeight="semibold">
-                    Perissável:
+                    <Text fontSize="md" mb="2" fontWeight="semibold">
+                      Perissável:
                       <Text as="span" fontWeight="normal" ml="2">
                         {product.perishable ? "SIM" : "NÃO"}
                       </Text>
@@ -321,7 +353,7 @@ const ProductDetailsPage = () => {
             Lotes
           </Heading>
           <TableContainer mt="4">
-            <Table variant="simple">
+            <Table variant="simple" size="sm">
               <Thead>
                 <Tr>
                   <Th>Fornecedor</Th>
@@ -329,18 +361,32 @@ const ProductDetailsPage = () => {
                   <Th>Data de Validade</Th>
                   <Th>Quantidade</Th>
                   <Th>Preço de Compra</Th>
+                  <Th>Lucro por Unidade</Th>
+                  <Th>Lucro Total</Th>
+                  <Th>Margem de Lucro</Th>
                 </Tr>
               </Thead>
               <Tbody>
-                {batch.map((batchItem, index) => (
-                  <Tr key={index}>
-                    <Td>{batchItem.supplierName}</Td>
-                    <Td>{batchItem.entryDate}</Td>
-                    <Td>{batchItem.expirationDate}</Td>
-                    <Td>{batchItem.quantity}</Td>
-                    <Td>{batchItem.price.toFixed(2)}</Td>
-                  </Tr>
-                ))}
+                {batch.map((batchItem, index) => {
+                  const purchasePricePerUnit =
+                    (batchItem.price + batchItem.associatedCosts) /
+                    batchItem.quantity; // Calcula o preço de compra por unidade incluindo logística
+                  const profitPerUnit = product.price - purchasePricePerUnit; // Calcula o lucro por unidade
+                  const totalProfit = profitPerUnit * batchItem.quantity; // Calcula o lucro total
+                  const profitMargin = (profitPerUnit / product.price) * 100;
+                  return (
+                    <Tr key={index}>
+                      <Td>{batchItem.supplierName}</Td>
+                      <Td>{formatDate(batchItem.entryDate)}</Td>
+                      <Td>{formatDate(batchItem.expirationDate)}</Td>
+                      <Td>{batchItem.quantity}</Td>
+                      <Td>{formatCurrency(batchItem.price)} </Td>
+                      <Td>{formatCurrency(profitPerUnit)} </Td>
+                      <Td>{formatCurrency(totalProfit)} </Td>
+                      <Td>{profitMargin.toFixed(2)}%</Td>
+                    </Tr>
+                  );
+                })}
               </Tbody>
             </Table>
           </TableContainer>

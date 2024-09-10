@@ -1,8 +1,13 @@
-import { Inter, Roboto, Rubik } from "next/font/google";
+import { Inter, Roboto, Rubik, Poppins } from "next/font/google";
 
 const rubik = Rubik({
   subsets: ["latin"],
   variable: "--font-rubik",
+});
+
+const poppins = Poppins({
+  subsets: ["latin"],
+  weight: "400",
 });
 
 const inter = Inter({ subsets: ["latin"] });
@@ -14,6 +19,7 @@ const roboto = Roboto({
 
 export const fonts = {
   rubik,
+  poppins,
   roboto,
   inter,
 };

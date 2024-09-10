@@ -8,7 +8,6 @@ import {
   Link,
   Text,
   VStack,
-  Divider,
   Spacer,
 } from "@chakra-ui/react";
 import {
@@ -16,18 +15,21 @@ import {
   FaHouseChimneyWindow,
   FaListOl,
   FaBasketShopping,
+  FaChartLine,
+  FaMoneyBillWave,
+  FaReceipt,
 } from "react-icons/fa6";
-import { FaCog } from "react-icons/fa";
+import { FaClipboardList, FaCog, FaFileAlt } from "react-icons/fa";
 
 const links = [
   {
     href: "/dashboard",
-    label: "Dashboard",
+    label: "Geral",
     icon: FaHouseChimneyWindow,
   },
   {
     href: "/dashboard/product",
-    label: "Produtos",
+    label: "Artigos",
     icon: FaBasketShopping,
   },
   {
@@ -40,14 +42,43 @@ const links = [
     label: "Fornecedores",
     icon: FaPeopleCarryBox,
   },
+  {
+    href: "/dashboard/cashflow",
+    label: "Fluxo de Caixa",
+    icon: FaMoneyBillWave,
+  },
+  {
+    href: "/dashboard/orders",
+    label: "Pedidos",
+    icon: FaClipboardList,
+  },
+  {
+    href: "/dashboard/documents",
+    label: "Documentos",
+    icon: FaFileAlt,
+  },
+  {
+    href: "/dashboard/expenses",
+    label: "Despesas",
+    icon: FaReceipt,
+  },
+  {
+    href: "/dashboard/statistics",
+    label: "Relatórios e Estatísticas",
+    icon: FaChartLine,
+  },
 ];
 
 const Sidebar = () => {
   const pathname = usePathname();
 
-  const isActive = (path: any) =>
-    pathname !== "/dashboard" && pathname.startsWith(path);
-  const isBaseActive = (path: any) => path === pathname;
+  // Função para verificar se o link está ativo
+  const isActive = (path: string) => {
+    if (path === "/dashboard") {
+      return pathname === path;
+    }
+    return pathname.startsWith(path) && pathname !== "/dashboard";
+  };
 
   return (
     <Box
@@ -69,14 +100,18 @@ const Sidebar = () => {
             w="100%"
             href={href}
             fontWeight="bold"
-            color={isBaseActive(href) ? "teal.400" : "black"}
-            bg={isBaseActive(href) ? "teal.50" : undefined}
+            color={isActive(href) ? "teal.400" : "black"}
+            bg={isActive(href) ? "teal.50" : "transparent"}
             rounded="sm"
             px="3"
             py="1"
+            _hover={{
+              textDecoration: "none",
+              bg: isActive(href) ? "teal.100" : "gray.100",
+            }}
           >
             <HStack spacing="2">
-              <Icon />
+              <Icon color={isActive(href) ? "teal.400" : "gray.500"} />
               <Text>{label}</Text>
             </HStack>
           </Link>
@@ -88,16 +123,24 @@ const Sidebar = () => {
         <Link
           as={NextLink}
           href="/dashboard/settings"
-          bg={isBaseActive("/dashboard/settings") ? "teal.50" : "gray.50"}
+          bg={pathname === "/dashboard/settings" ? "teal.50" : "gray.50"}
           fontWeight="bold"
           color="black"
           rounded="sm"
           px="3"
           py="1"
           w="100%"
+          _hover={{
+            textDecoration: "none",
+            bg: pathname === "/dashboard/settings" ? "teal.100" : "gray.100",
+          }}
         >
           <HStack spacing="2">
-            <FaCog />
+            <FaCog
+              color={
+                pathname === "/dashboard/settings" ? "teal.400" : "gray.500"
+              }
+            />
             <Text>Definições</Text>
           </HStack>
         </Link>

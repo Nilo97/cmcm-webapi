@@ -45,6 +45,7 @@ const RegisterBatchForm: React.FC<RegisterBatchFormProps> = ({
           expirationDate: "",
           quantity: "",
           price: "",
+          associatedCosts: "", // Novo campo
         },
       ],
     },
@@ -172,6 +173,22 @@ const RegisterBatchForm: React.FC<RegisterBatchFormProps> = ({
                         </Text>
                       )}
                     </FormControl>
+                    <FormControl>
+                      <FormLabel>Custo de Logística</FormLabel>
+                      <Input
+                        type="number"
+                        placeholder="50.0"
+                        step="0.01"
+                        {...register(`batchList.${index}.associatedCosts`, {
+                          required: "Custo de Logística é obrigatório",
+                        })}
+                      />
+                      {errors.batchList?.[index]?.associatedCosts && (
+                        <Text color="red.500">
+                          {errors.batchList[index].associatedCosts.message}
+                        </Text>
+                      )}
+                    </FormControl>
 
                     <Box mt="9">
                       <IconButton
@@ -198,6 +215,7 @@ const RegisterBatchForm: React.FC<RegisterBatchFormProps> = ({
                   expirationDate: "",
                   quantity: "",
                   price: "",
+                  associatedCosts: "",
                 })
               }
               colorScheme="green"

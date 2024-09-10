@@ -16,7 +16,11 @@ import { FaUpload } from "react-icons/fa6";
 
 import { AddIcon, DownloadIcon } from "@chakra-ui/icons";
 import { useRouter } from "next/navigation";
-import { fetchProducts, deleteProduct, uploadProducts } from "@/app/actions/product";
+import {
+  fetchProducts,
+  deleteProduct,
+  uploadProducts,
+} from "@/app/actions/product";
 import ProductTable from "@/app/components/ProductTable";
 import { Product } from "@/app/types";
 
@@ -51,8 +55,8 @@ const ProdutosPage: React.FC = () => {
     } catch (error) {
       console.error("Error fetching products:", error);
       toast({
-        title: "Erro ao buscar produtos",
-        description: "Ocorreu um erro ao buscar os produtos.",
+        title: "Erro ao buscar Artigos",
+        description: "Ocorreu um erro ao buscar os Artigos.",
         status: "error",
         duration: 5000,
         isClosable: true,
@@ -79,8 +83,8 @@ const ProdutosPage: React.FC = () => {
         throw new Error(response.error);
       }
       toast({
-        title: "Produto Deletado",
-        description: "O produto foi deletado com sucesso.",
+        title: "Artigo Deletado",
+        description: "O Artigo foi deletado com sucesso.",
         status: "success",
         duration: 5000,
         isClosable: true,
@@ -89,8 +93,8 @@ const ProdutosPage: React.FC = () => {
     } catch (error) {
       console.error("Error deleting product:", error);
       toast({
-        title: "Erro ao deletar produto",
-        description: "Ocorreu um erro ao deletar o produto.",
+        title: "Erro ao deletar Artigo",
+        description: "Ocorreu um erro ao deletar o Artigo.",
         status: "error",
         duration: 5000,
         isClosable: true,
@@ -128,7 +132,7 @@ const ProdutosPage: React.FC = () => {
 
       toast({
         title: "Importação bem-sucedida",
-        description: "Os produtos foram importados com sucesso.",
+        description: "Os Artigos foram importados com sucesso.",
         status: "success",
         duration: 5000,
         isClosable: true,
@@ -161,8 +165,9 @@ const ProdutosPage: React.FC = () => {
           size="lg"
           mb={{ base: 4, md: 0 }}
           textShadow="1px 1px #ccc"
+          color="teal.400"
         >
-          Lista de Produtos
+          Lista de Artigos
         </Heading>
         <Flex>
           <Button
@@ -172,7 +177,7 @@ const ProdutosPage: React.FC = () => {
             leftIcon={<AddIcon />}
             onClick={() => router.push("/dashboard/product/upsert")}
           >
-            Novo Produto
+            Novo Artigo
           </Button>
           <Button
             as="label"

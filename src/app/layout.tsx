@@ -7,7 +7,7 @@ import DesktopSidebar from "./components/DesktopSidebar";
 import { Suspense } from "react";
 
 export const metadata: Metadata = {
-  title: "FStock",
+  title: "Minventa",
   description: "Stock Management System",
 };
 
@@ -18,10 +18,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={fonts.inter.className}>
-          <Providers>
-            <Suspense>{children}</Suspense>
-          </Providers>
+      <body className={fonts.poppins.className}>
+        <Providers>
+          <Suspense>{children}</Suspense>
+        </Providers>
       </body>
     </html>
   );

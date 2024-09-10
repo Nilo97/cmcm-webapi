@@ -4,26 +4,6 @@ import { Category } from "../types";
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 const { ["token"]: token } = parseCookies();
 
-async function fetchCategories() {
-  try {
-    const response = await fetch(`${BASE_URL}/api/categories`, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error("Failed to fetch categories");
-    }
-
-    const data = await response.json();
-    return data;
-  } catch (error: any) {
-    console.error("Error fetching categories:", error);
-    return { error: error.message };
-  }
-}
 
 async function fetchPaginatedCategories(
   size: number,
@@ -54,6 +34,30 @@ async function fetchPaginatedCategories(
     return { error: error.message || "Failed to fetch categories" };
   }
 }
+
+
+async function fetchCategories() {
+  try {
+    const response = await fetch(`${BASE_URL}/api/categories`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch categories");
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error: any) {
+    console.error("Error fetching categories:", error);
+    return { error: error.message };
+  }
+}
+
+
 async function getCategoryById(
   id: String
 ): Promise<{ category: Category } | { error: string }> {

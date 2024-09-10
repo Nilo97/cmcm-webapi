@@ -22,11 +22,22 @@ import {
   Tr,
   Th,
   Td,
+  useBreakpointValue,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import { fetchProductSale } from "../actions/product";
 import { SearchIcon } from "@chakra-ui/icons";
 import { createSale } from "../actions/sale";
 import { useRouter } from "next/navigation";
+import { FaMobileAlt, FaMoneyCheckAlt } from "react-icons/fa";
+import {
+  FaMoneyBillWave,
+  FaCreditCard,
+  FaMoneyBillTransfer,
+  FaRegCreditCard,
+} from "react-icons/fa6";
+import Select from "react-select";
+import { formatCurrency } from "../actions/util";
 
 const SalesPage = () => {
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
@@ -36,9 +47,71 @@ const SalesPage = () => {
   const [discount, setDiscount] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
+  const [selectedPayment, setSelectedPayment] = useState<any>(null);
+  const paymentOptions = [
+    {
+      value: "CASH",
+      label: "Dinheiro",
+      icon: <FaMoneyBillWave color="green" />,
+    },
+    { value: "MPESA", label: "M-Pesa", icon: <FaMobileAlt color="red" /> },
+    {
+      value: "EMOLA",
+      label: "eMola",
+      icon: <FaMoneyCheckAlt color="orange" />,
+    },
+    { value: "CARD", label: "Cartão", icon: <FaCreditCard color="purple" /> },
+    {
+      value: "BANK_TRANSFER",
+      label: "Transferência Bancária",
+      icon: <FaMoneyBillTransfer color="teal" />,
+    },
+    {
+      value: "MKESH",
+      label: "Mkesh",
+      icon: <FaRegCreditCard color="yellow" />,
+    },
+    {
+      value: "CHEQUE",
+      label: "Cheque",
+      icon: <FaRegCreditCard color="gray" />,
+    },
+  ];
 
   const toast = useToast();
 
+  const customStyles = {
+    control: (base: any) => ({
+      ...base,
+      padding: "2px 6px",
+      borderColor: useColorModeValue("gray.50", "gray.50"),
+      boxShadow: "none",
+      "&:hover": { borderColor: useColorModeValue("gray.50", "gray.50") },
+    }),
+    option: (base: any) => ({
+      ...base,
+      display: "flex",
+      alignItems: "center",
+    }),
+    singleValue: (base: any) => ({
+      ...base,
+      display: "flex",
+      alignItems: "center",
+    }),
+  };
+
+  const formatOptionLabel = ({
+    label,
+    icon,
+  }: {
+    label: string;
+    icon: JSX.Element;
+  }) => (
+    <Flex align="center">
+      {icon}
+      <Text ml={2}>{label}</Text>
+    </Flex>
+  );
   useEffect(() => {
     if (cart.length === 0) {
       setDiscount(0);
@@ -46,19 +119,21 @@ const SalesPage = () => {
   }, [cart]);
 
   const handleAddToCart = () => {
-    console.log(selectedProduct)
+    console.log(selectedProduct);
     if (!selectedProduct || !selectedProduct.productId) {
       toast({
-        title: "Produto inválido.",
-        description: "O produto não possui um ID válido.",
+        title: "Artigo inválido.",
+        description: "O Artigo não possui um ID válido.",
         status: "warning",
         duration: 5000,
         isClosable: true,
       });
       return;
     }
-  
-    const productInCart = cart.find((item) => item.id === selectedProduct.productId);
+
+    const productInCart = cart.find(
+      (item) => item.id === selectedProduct.productId
+    );
     if (productInCart) {
       setCart(
         cart.map((item) =>
@@ -70,11 +145,10 @@ const SalesPage = () => {
     } else {
       setCart([...cart, { ...selectedProduct, quantity }]);
     }
-  
+
     setQuantity(1);
     setSelectedProduct(null);
   };
-  
 
   const handleRemoveFromCart = (id: string) => {
     setCart(cart.filter((item) => item.productId !== id));
@@ -92,10 +166,10 @@ const SalesPage = () => {
     const result = await fetchProductSale(searchTerm);
     if ("data" in result) {
       setSelectedProduct(result.data);
-      console.log(result.data)
+      console.log(result.data);
     } else {
       toast({
-        title: "Produto não encontrado.",
+        title: "Artigo não encontrado.",
         description: result.error || "Erro desconhecido",
         status: "error",
         duration: 5000,
@@ -131,6 +205,16 @@ const SalesPage = () => {
       });
       return;
     }
+    if (!selectedPayment) {
+      toast({
+        title: "Método de pagamento não selecionado",
+        description: "Por favor, selecione um método de pagamento.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+      return;
+    }
     setIsLoading(true);
 
     const saleItems = cart.map((item) => ({
@@ -143,6 +227,7 @@ const SalesPage = () => {
       discount: discount,
       saleItems: saleItems,
       totalAmount: discountedTotal,
+      paymentMethod: selectedPayment?.value,
     };
 
     const result = await createSale(data);
@@ -159,13 +244,14 @@ const SalesPage = () => {
     } else {
       toast({
         title: "Venda concluída!",
-        description: "Os produtos foram vendidos com sucesso.",
+        description: "Os Artigos foram vendidos com sucesso.",
         status: "success",
         duration: 5000,
         isClosable: true,
       });
       setCart([]);
       setDiscount(0);
+      setSelectedPayment(null); // Reset selected payment
     }
   };
 
@@ -194,9 +280,16 @@ const SalesPage = () => {
               <FormControl flex="1">
                 <Box flex="2" m={{ base: "1rem 0", md: "0 10rem" }}>
                   <Flex align="center">
-                      onChange={(e) => {
-                          setSearchTerm(e.target.value);
-                        }}
+                    <InputGroup
+                      size={useBreakpointValue({ base: "sm", md: "md" })}
+                    >
+                      <InputLeftElement pointerEvents="none">
+                        <SearchIcon color="gray.300" />
+                      </InputLeftElement>
+                      <Input
+                        placeholder="Digite o código do Artigo"
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
                         onKeyDown={(e) => {
                           if (e.key === "Enter") {
                             handleSearch();
@@ -213,13 +306,7 @@ const SalesPage = () => {
                         >
                           Pesquisar
                         </Button>
-                      </InputRigh<InputGroup size={{ base: "sm", md: "md" }}>
-                      <InputLeftElement pointerEvents="none">
-                        <SearchIcon color="gray.300" />
-                      </InputLeftElement>
-                      <Input
-                        placeholder="Digite o código do produto"
-                      tAddon>
+                      </InputRightAddon>
                     </InputGroup>
                   </Flex>
                 </Box>
@@ -233,7 +320,7 @@ const SalesPage = () => {
                     {selectedProduct.name}
                   </Text>
                   <Text flex="1">
-                    Preço: {selectedProduct.price.toFixed(2)} MT
+                    Preço: {formatCurrency(selectedProduct.price)}
                   </Text>
                   <FormControl flex="1">
                     <FormLabel>Quantidade</FormLabel>
@@ -266,8 +353,9 @@ const SalesPage = () => {
               borderTop="2px"
               borderColor="teal.500"
               align="center"
+              justify="space-between" // Distribui os itens ao longo do eixo principal
             >
-              <FormControl flex="1" maxW="250px">
+              <FormControl maxW="250px">
                 <FormLabel>Desconto</FormLabel>
                 <Input
                   type="number"
@@ -276,18 +364,28 @@ const SalesPage = () => {
                   disabled={cart.length === 0}
                   onChange={handleDiscountChange}
                   placeholder="Digite o valor do desconto"
-                  size="sm"
                 />
               </FormControl>
-              <Flex flex="1" justify="center"></Flex>
+
+              <Box width="40%" mt="6">
+                <Select
+                  options={paymentOptions}
+                  formatOptionLabel={formatOptionLabel}
+                  value={selectedPayment}
+                  onChange={setSelectedPayment}
+                  styles={customStyles}
+                  placeholder="Escolha o método de pagamento"
+                />
+              </Box>
+
               <Text
                 fontSize="2xl"
                 fontWeight="bold"
                 color="red.400"
-                flex="1"
                 textAlign="right"
+                mt="3"
               >
-                Total : {discountedTotal.toFixed(2)} MT
+                Total: {formatCurrency(discountedTotal)}
               </Text>
             </Flex>
 
@@ -310,7 +408,7 @@ const SalesPage = () => {
                 <Table variant="simple" size="sm">
                   <Thead>
                     <Tr>
-                      <Th>Produto</Th>
+                      <Th>Artigo</Th>
                       <Th>Preço</Th>
                       <Th>Quantidade</Th>
                       <Th>Remover</Th>
@@ -320,7 +418,7 @@ const SalesPage = () => {
                     {cart.map((item) => (
                       <Tr key={item.productId}>
                         <Td>{item.name}</Td>
-                        <Td>{item.price.toFixed(2)} MT</Td>
+                        <Td>{formatCurrency(item.price)}</Td>
                         <Td>
                           <Input
                             type="number"
@@ -381,7 +479,7 @@ const SalesPage = () => {
             disabled={isLoading}
             onClick={() => router.push(`/options`)}
           >
-            Cancelar
+            Sair
           </Button>
         </HStack>
       </Box>

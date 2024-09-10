@@ -26,7 +26,7 @@ import {
 } from "@chakra-ui/react";
 import { EditIcon, DeleteIcon, SearchIcon, ViewIcon } from "@chakra-ui/icons";
 import { Product } from "../types";
-import { limitText } from "../actions/util";
+import { formatCurrency, limitText } from "../actions/util";
 
 interface ProductTableProps {
   products: Product[];
@@ -185,7 +185,7 @@ const ProductTable: React.FC<ProductTableProps> = ({
             <SearchIcon color="gray.300" />
           </InputLeftElement>
           <Input
-            placeholder="Pesquisar produto (Nome, Código, Descrição)... "
+            placeholder="Pesquisar Artigo (Nome, Código, Descrição)... "
             onChange={(e) => handleQuery(e)}
             onKeyDown={(e: any) => {
               e.key === "Enter" ? handleQuery(e) : null;
@@ -206,7 +206,7 @@ const ProductTable: React.FC<ProductTableProps> = ({
               fontSize={{ base: "xs", md: "sm" }}
               size="sm"
             >
-              <TableCaption>Provided by Job Savana</TableCaption>
+              <TableCaption>Provided by Mosprey Innovations</TableCaption>
               <Thead>
                 <Tr>
                   <Th>Código</Th>
@@ -246,7 +246,7 @@ const ProductTable: React.FC<ProductTableProps> = ({
                       </Highlight>
                     </Td>
                     <Td>{product.categoryName}</Td>
-                    <Td>{product.price}</Td>
+                    <Td> {formatCurrency(product.price)}</Td>
                     <Td>{product.quantity}</Td>
                     <Td>
                       <Button
@@ -295,7 +295,7 @@ const ProductTable: React.FC<ProductTableProps> = ({
             </AlertDialogHeader>
 
             <AlertDialogBody>
-              Tem certeza que deseja excluir este produto?
+              Tem certeza que deseja excluir este Artigo?
             </AlertDialogBody>
 
             <AlertDialogFooter>

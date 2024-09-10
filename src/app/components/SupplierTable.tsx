@@ -51,7 +51,9 @@ const SupplierTable: React.FC<SupplierTableProps> = ({
   currentPage = 0,
   onPageChange,
 }) => {
-  const [selectedSupplier, setSelectedSupplier] = useState<Supplier | null>(null);
+  const [selectedSupplier, setSelectedSupplier] = useState<Supplier | null>(
+    null
+  );
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [query, setQuery] = useState<string>("");
 
@@ -207,7 +209,7 @@ const SupplierTable: React.FC<SupplierTableProps> = ({
               fontSize={{ base: "xs", md: "sm" }}
               size="sm"
             >
-              <TableCaption>Provided by Job Savana</TableCaption>
+              <TableCaption>Provided by Mosprey Innovations</TableCaption>
               <Thead>
                 <Tr>
                   <Th>Nome</Th>

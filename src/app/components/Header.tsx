@@ -82,7 +82,7 @@ const Header = () => {
             cursor="pointer"
             onClick={() => router.push("/options")}
           >
-            FStock
+            Minventa
           </Text>
         </HStack>
         <HStack spacing="4">
@@ -119,7 +119,7 @@ const Header = () => {
         <DrawerOverlay />
         <DrawerContent>
           <DrawerCloseButton />
-          <DrawerHeader>FStock Menu</DrawerHeader>
+          <DrawerHeader>Miventa Menu</DrawerHeader>
           <DrawerBody>
             <Sidebar />
           </DrawerBody>

@@ -207,7 +207,7 @@ const CategoryTable: React.FC<CategoryTableProps> = ({
               fontSize={{ base: "xs", md: "sm" }}
               size="sm"
             >
-              <TableCaption>Provided by Job Savana</TableCaption>
+              <TableCaption>Provided by Mosprey Innovations</TableCaption>
               <Thead>
                 <Tr>
                   <Th>Nome</Th>
