@@ -32,10 +32,12 @@ const LoginForm = () => {
   } = useForm();
 
   const onSubmit = async (data: any) => {
-    setIsLoading(true);
-    login(data);
-
-    setIsLoading(false);
+    try {
+      setIsLoading(true);
+      await login(data); 
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const onError = () => {
