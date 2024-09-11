@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import {
   Box,
@@ -13,10 +13,8 @@ import {
   Text,
   useToast,
 } from "@chakra-ui/react";
-import { signIn } from "./actions/auth";
 import { useRouter } from "next/navigation";
 import { AuthContext } from "./context/AuthContext";
-import { invoke } from "@tauri-apps/api";
 
 const LoginForm = () => {
   const router = useRouter();
@@ -34,7 +32,11 @@ const LoginForm = () => {
   const onSubmit = async (data: any) => {
     try {
       setIsLoading(true);
-      await login(data); 
+
+      await login({
+        email: data.email,
+        password: data.password,
+      });
     } finally {
       setIsLoading(false);
     }
@@ -64,17 +66,22 @@ const LoginForm = () => {
         </Text>
         <form onSubmit={handleSubmit(onSubmit, onError)}>
           <VStack spacing={4} align="stretch">
-            <FormControl isInvalid={!!errors.username}>
-              <FormLabel>Utilizador</FormLabel>
+            <FormControl isInvalid={!!errors.email}>
+              <FormLabel>Email</FormLabel>
               <Input
-                placeholder="Digite seu Utilizador"
-                {...register("username", {
+                type="email"
+                placeholder="Digite seu email"
+                {...register("email", {
                   required: "Email é obrigatório",
+                  pattern: {
+                    value: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
+                    message: "Email inválido",
+                  },
                 })}
               />
-              {errors.username && (
+              {errors.email && (
                 <Text color="red.500" mt={2}>
-                  {errors.username.message as string}
+                  {errors.email.message as string}
                 </Text>
               )}
             </FormControl>

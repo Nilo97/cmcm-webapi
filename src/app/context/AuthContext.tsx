@@ -6,7 +6,7 @@ import { useToast } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 
 type RegistrationRequest = {
-  username: string;
+  email: string;
   password: string;
 };
 
@@ -23,9 +23,9 @@ export function AuthProvider({ children }: any) {
   const toast = useToast();
   const router = useRouter();
 
-  async function login({ username, password }: RegistrationRequest) {
-    const { token, error, user, email, companyId }: any = await signIn({
-      username,
+  async function login({ email, password }: RegistrationRequest) {
+    const { token, error, user, companyId }: any = await signIn({
+      email,
       password,
     });
 
@@ -39,24 +39,21 @@ export function AuthProvider({ children }: any) {
         isClosable: true,
         position: "top",
       });
-
-    } 
-    
-    else {
+    } else {
       setCookie(undefined, "token", token, {
         maxAge: 60 * 60 * 24 * 365,
       });
 
       setCookie(undefined, "user", user, {
-        maxAge: 60 * 60 * 24 * 365, 
+        maxAge: 60 * 60 * 24 * 365,
       });
 
       setCookie(undefined, "email", email, {
-        maxAge: 60 * 60 * 24 * 365, 
+        maxAge: 60 * 60 * 24 * 365,
       });
 
       setCookie(undefined, "companyId", companyId, {
-        maxAge: 60 * 60 * 24 * 365, 
+        maxAge: 60 * 60 * 24 * 365,
       });
 
       if (token !== "" && token !== null && token !== undefined) {
@@ -66,9 +63,9 @@ export function AuthProvider({ children }: any) {
     }
   }
 
-  async function register({ username, password }: RegistrationRequest) {
+  async function register({ email, password }: RegistrationRequest) {
     const { error }: any = await signUp({
-      username,
+      email,
       password,
     });
 
@@ -87,7 +84,7 @@ export function AuthProvider({ children }: any) {
         isClosable: true,
       });
 
-      login({ username, password });
+      login({ email, password });
     }
   }
 

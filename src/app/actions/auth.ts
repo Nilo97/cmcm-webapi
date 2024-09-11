@@ -1,13 +1,13 @@
-const BASE_URL =  process.env.NEXT_PUBLIC_BASE_URL; 
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
-async function signIn({ username, password }: any) {
+async function signIn({ email, password }: any) {
   try {
     const res = await fetch(`${BASE_URL}/auth/signIn`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ username: username, password: password }),
+      body: JSON.stringify({ password: password, email: email }),
     });
 
     const data = await res.json();
@@ -23,14 +23,14 @@ async function signIn({ username, password }: any) {
   }
 }
 
-async function signUp({ username, password }: any) {
+async function signUp({ email, password }: any) {
   try {
     const res = await fetch(`${BASE_URL}/auth/signUp`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ username: username, password: password }),
+      body: JSON.stringify({ email: email, password: password }),
     });
 
     if (!res.ok) {
