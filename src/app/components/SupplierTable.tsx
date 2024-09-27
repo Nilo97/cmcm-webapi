@@ -106,7 +106,7 @@ const SupplierTable: React.FC<SupplierTableProps> = ({
   const renderPagination = () => {
     if (totalPages <= 1) return null;
 
-    const pagesToShow = 5; // Número de páginas para mostrar ao redor da página atual
+    const pagesToShow = 5; 
     const startPage = Math.max(0, currentPage - Math.floor(pagesToShow / 2));
     const endPage = Math.min(totalPages - 1, startPage + pagesToShow - 1);
 

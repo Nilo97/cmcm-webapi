@@ -139,7 +139,7 @@ const ProductDetailsPage = () => {
   }
 
   if (!product) {
-    return <Text>Artigo não encontrado.</Text>;
+    return <Text>Produto não encontrado.</Text>;
   }
 
   const renderPagination = () => {
@@ -250,7 +250,7 @@ const ProductDetailsPage = () => {
                 textShadow="1px 1px rgba(0, 0, 0, 0.2)"
                 color="teal.600"
               >
-                Detalhes do Artigo
+                Detalhes do Produto
               </Heading>
               <Grid
                 templateColumns={{ base: "1fr", md: "repeat(3, 1fr)" }}
@@ -266,8 +266,8 @@ const ProductDetailsPage = () => {
                     height="200"
                     style={{
                       objectFit: "cover",
-                      borderRadius: "0.375rem", // equivalente ao 'md' em Chakra UI
-                      boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)", // equivalente ao 'md' shadow
+                      borderRadius: "0.375rem", 
+                      boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
                       cursor: "pointer",
                       transition: "transform 0.3s ease",
                     }}
@@ -370,9 +370,9 @@ const ProductDetailsPage = () => {
                 {batch.map((batchItem, index) => {
                   const purchasePricePerUnit =
                     (batchItem.price + batchItem.associatedCosts) /
-                    batchItem.quantity; // Calcula o preço de compra por unidade incluindo logística
-                  const profitPerUnit = product.price - purchasePricePerUnit; // Calcula o lucro por unidade
-                  const totalProfit = profitPerUnit * batchItem.quantity; // Calcula o lucro total
+                    batchItem.quantity; 
+                  const profitPerUnit = product.price - purchasePricePerUnit;
+                  const totalProfit = profitPerUnit * batchItem.quantity;
                   const profitMargin = (profitPerUnit / product.price) * 100;
                   return (
                     <Tr key={index}>

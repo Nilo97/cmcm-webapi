@@ -92,8 +92,8 @@ const ProductRegistrationForm: React.FC = () => {
     } catch (error) {
       console.error("Error loading product:", error);
       toast({
-        title: "Erro ao carregar Artigo",
-        description: "Ocorreu um erro ao tentar carregar os dados do Artigo.",
+        title: "Erro ao carregar Produto",
+        description: "Ocorreu um erro ao tentar carregar os dados do Produto.",
         status: "error",
         duration: 5000,
         isClosable: true,
@@ -154,8 +154,8 @@ const ProductRegistrationForm: React.FC = () => {
         }
 
         toast({
-          title: "Artigo Atualizado",
-          description: "O Artigo foi atualizado com sucesso.",
+          title: "Produto Atualizado",
+          description: "O Produto foi atualizado com sucesso.",
           status: "success",
           duration: 5000,
           isClosable: true,
@@ -178,8 +178,8 @@ const ProductRegistrationForm: React.FC = () => {
         }
 
         toast({
-          title: "Artigo Registrado",
-          description: "O Artigo foi registrado com sucesso.",
+          title: "Produto Registrado",
+          description: "O Produto foi registrado com sucesso.",
           status: "success",
           duration: 5000,
           isClosable: true,
@@ -190,7 +190,7 @@ const ProductRegistrationForm: React.FC = () => {
     } catch (error) {
       console.error("Error creating/updating product:", error);
       toast({
-        title: "Erro ao salvar Artigo",
+        title: "Erro ao salvar Produto",
         description:
           error instanceof Error ? error.message : "Erro desconhecido",
         status: "error",
@@ -212,14 +212,14 @@ const ProductRegistrationForm: React.FC = () => {
             <HStack spacing="6" justify="space-between" alignItems="flex-start">
               <FormControl isInvalid={!!errors.code} flex="1 0 45%">
                 <FormLabel htmlFor="code" display="flex" alignItems="center">
-                  <FaBarcode style={{ marginRight: "8px" }} /> Código do Artigo
+                  <FaBarcode style={{ marginRight: "8px" }} /> Código do Produto
                 </FormLabel>
                 <Input
                   id="code"
                   size="lg"
-                  placeholder="Código do Artigo"
+                  placeholder="Código do Produto"
                   {...register("code", {
-                    required: "Código do Artigo é obrigatório",
+                    required: "Código do Produto é obrigatório",
                   })}
                 />
                 <FormErrorMessage>
@@ -229,14 +229,14 @@ const ProductRegistrationForm: React.FC = () => {
 
               <FormControl isInvalid={!!errors.name} flex="1 0 45%">
                 <FormLabel htmlFor="name" display="flex" alignItems="center">
-                  <FaTag style={{ marginRight: "8px" }} /> Nome do Artigo
+                  <FaTag style={{ marginRight: "8px" }} /> Nome do Produto
                 </FormLabel>
                 <Input
                   id="name"
                   size="lg"
-                  placeholder="Nome do Artigo"
+                  placeholder="Nome do Produto"
                   {...register("name", {
-                    required: "Nome do Artigo é obrigatório",
+                    required: "Nome do Produto é obrigatório",
                   })}
                 />
                 <FormErrorMessage>
@@ -256,7 +256,7 @@ const ProductRegistrationForm: React.FC = () => {
               <Textarea
                 id="description"
                 size="lg"
-                placeholder="Descrição do Artigo"
+                placeholder="Descrição do Produto"
                 {...register("description", {
                   required: "Descrição é obrigatória",
                 })}
@@ -407,8 +407,8 @@ const ProductRegistrationForm: React.FC = () => {
                 {isSubmitting
                   ? "Salvando..."
                   : productId
-                  ? "Atualizar Artigo"
-                  : "Registrar Artigo"}
+                  ? "Atualizar Produto"
+                  : "Registrar Produto"}
               </Button>
             </Box>
           </VStack>

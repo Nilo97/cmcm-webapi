@@ -27,8 +27,8 @@ import {
 } from "@chakra-ui/react";
 import { EditIcon, DeleteIcon, SearchIcon, ViewIcon } from "@chakra-ui/icons";
 import CategoryDetailsModal from "./CategoryDetails";
-import { Category } from "../types";
 import { limitText } from "../actions/util";
+import { Category } from "../actions/types";
 
 interface CategoryTableProps {
   categories: Category[];
@@ -104,7 +104,7 @@ const CategoryTable: React.FC<CategoryTableProps> = ({
   const renderPagination = () => {
     if (totalPages <= 1) return null;
 
-    const pagesToShow = 5; // Número de páginas para mostrar ao redor da página atual
+    const pagesToShow = 5; 
     const startPage = Math.max(0, currentPage - Math.floor(pagesToShow / 2));
     const endPage = Math.min(totalPages - 1, startPage + pagesToShow - 1);
 

@@ -135,10 +135,10 @@ const Dashboard = () => {
           <Flex align="center" mb="4">
             <FaBasketShopping style={{ marginRight: "8px" }} />
             <Heading as="h3" size="md">
-              Artigos
+              Produtos
             </Heading>
           </Flex>
-          <Text>Total de Artigos: {stats?.products ?? "N/A"}</Text>
+          <Text>Total de Produtos: {stats?.products ?? "N/A"}</Text>
         </Box>
         <Box p="6" bg="white" shadow="sm" borderRadius="md">
           <Flex align="center" mb="4">
@@ -202,7 +202,7 @@ const Dashboard = () => {
 
         <Box p="6" bg="white" shadow="sm" borderRadius="md">
           <Heading as="h3" size="md" mb="4">
-            Artigos com Menos Quantidades (5)
+            Produtos com Menos Quantidades (5)
           </Heading>
           <ResponsiveContainer width="100%" height={350}>
             <BarChart data={chartData}>

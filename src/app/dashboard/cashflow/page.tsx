@@ -88,7 +88,7 @@ const CashRegister = () => {
     };
 
     fetchSummary();
-    loadPaginatedCashFlows(currentPage, 10); // Buscar 10 registros por página
+    loadPaginatedCashFlows(currentPage, 10);
   }, [currentPage, toast]);
 
   const handlePageChange = (page: number) => {

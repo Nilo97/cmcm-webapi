@@ -103,7 +103,7 @@ const ProductTable: React.FC<ProductTableProps> = ({
   const renderPagination = () => {
     if (totalPages <= 1) return null;
 
-    const pagesToShow = 5; // Número de páginas para mostrar ao redor da página atual
+    const pagesToShow = 5; 
     const startPage = Math.max(0, currentPage - Math.floor(pagesToShow / 2));
     const endPage = Math.min(totalPages - 1, startPage + pagesToShow - 1);
 
@@ -185,7 +185,7 @@ const ProductTable: React.FC<ProductTableProps> = ({
             <SearchIcon color="gray.300" />
           </InputLeftElement>
           <Input
-            placeholder="Pesquisar Artigo (Nome, Código, Descrição)... "
+            placeholder="Pesquisar Produto (Nome, Código, Descrição)... "
             onChange={(e) => handleQuery(e)}
             onKeyDown={(e: any) => {
               e.key === "Enter" ? handleQuery(e) : null;
@@ -295,7 +295,7 @@ const ProductTable: React.FC<ProductTableProps> = ({
             </AlertDialogHeader>
 
             <AlertDialogBody>
-              Tem certeza que deseja excluir este Artigo?
+              Tem certeza que deseja excluir este Produto?
             </AlertDialogBody>
 
             <AlertDialogFooter>

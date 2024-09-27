@@ -30,9 +30,9 @@ const Header = () => {
   const [username, setUsername] = useState("");
 
   const [notifications, setNotifications] = useState([
-    "Notification 1",
-    "Notification 2",
-    "Notification 3",
+    "Produto Expirado",
+    "Ficaram 5 unidades de bolacha maria",
+    "Factura 1 vencida",
   ]);
 
   const { ["user"]: user } = parseCookies();
@@ -108,8 +108,8 @@ const Header = () => {
               <Avatar size="sm" name={username} />
             </MenuButton>
             <MenuList>
-              <MenuItem>Manage Account</MenuItem>
-              <MenuItem onClick={handleLogout}>Logout</MenuItem>
+              <MenuItem>Gerir conta</MenuItem>
+              <MenuItem onClick={handleLogout}>Terminar Sessão</MenuItem>
             </MenuList>
           </Menu>
         </HStack>

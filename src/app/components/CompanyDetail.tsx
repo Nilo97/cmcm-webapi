@@ -18,7 +18,7 @@ import {
   Button,
   Grid,
 } from "@chakra-ui/react";
-import { Company, CompanyResponse, User } from "../types";
+import { Company, User } from "../actions/types";
 
 interface CompanyDetailProps {
   company: Company;
@@ -46,7 +46,6 @@ const CompanyDetail: React.FC<CompanyDetailProps> = ({ company, users }) => {
           </Heading>
         </Stack>
 
-        {/* Grid para Detalhes da Empresa e Lista de Usuários */}
         <Grid templateColumns={{ base: "1fr", md: "1fr 2fr" }} gap={6}>
           <Box
             bg="white"

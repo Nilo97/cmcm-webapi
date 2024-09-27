@@ -1,5 +1,5 @@
 import { parseCookies } from "nookies";
-import { BatchResponse, Product } from "../types";
+import { BatchResponse, Product } from "./types";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 const { ["token"]: token } = parseCookies();
@@ -64,10 +64,10 @@ async function fetchProductDetails(
 }
 
 async function fetchProductSale(
-  code: string | null
+  code: string
 ): Promise<{ data: Product } | { error: string }> {
   try {
-    const url = `${BASE_URL}/api/products/sale/${code}`;
+    const url = `${BASE_URL}/api/products/sale/query/${code}`;
     const response = await fetch(url, {
       headers: {
         "Content-Type": "application/json",

@@ -17,7 +17,7 @@ import {
 import { useState, useEffect } from "react";
 import { FaCashRegister, FaSignOutAlt } from "react-icons/fa";
 import { openCashFlow, closeCashFlow } from "../actions/chashflow";
-import { CashFlowResponse } from "../types"; // Ajusta o caminho conforme necessário
+import { CashFlowResponse } from "../types";
 import { formatCurrency } from "../actions/util";
 import { CheckIcon } from "@chakra-ui/icons";
 

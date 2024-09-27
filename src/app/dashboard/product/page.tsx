@@ -55,8 +55,8 @@ const ProdutosPage: React.FC = () => {
     } catch (error) {
       console.error("Error fetching products:", error);
       toast({
-        title: "Erro ao buscar Artigos",
-        description: "Ocorreu um erro ao buscar os Artigos.",
+        title: "Erro ao buscar Produtos",
+        description: "Ocorreu um erro ao buscar os Produtos.",
         status: "error",
         duration: 5000,
         isClosable: true,
@@ -83,8 +83,8 @@ const ProdutosPage: React.FC = () => {
         throw new Error(response.error);
       }
       toast({
-        title: "Artigo Deletado",
-        description: "O Artigo foi deletado com sucesso.",
+        title: "Produto Deletado",
+        description: "O Produto foi deletado com sucesso.",
         status: "success",
         duration: 5000,
         isClosable: true,
@@ -93,8 +93,8 @@ const ProdutosPage: React.FC = () => {
     } catch (error) {
       console.error("Error deleting product:", error);
       toast({
-        title: "Erro ao deletar Artigo",
-        description: "Ocorreu um erro ao deletar o Artigo.",
+        title: "Erro ao deletar Produto",
+        description: "Ocorreu um erro ao deletar o Produto.",
         status: "error",
         duration: 5000,
         isClosable: true,
@@ -132,7 +132,7 @@ const ProdutosPage: React.FC = () => {
 
       toast({
         title: "Importação bem-sucedida",
-        description: "Os Artigos foram importados com sucesso.",
+        description: "Os Produtos foram importados com sucesso.",
         status: "success",
         duration: 5000,
         isClosable: true,
@@ -167,7 +167,7 @@ const ProdutosPage: React.FC = () => {
           textShadow="1px 1px #ccc"
           color="teal.400"
         >
-          Lista de Artigos
+          Lista de Produtos
         </Heading>
         <Flex>
           <Button
@@ -177,7 +177,7 @@ const ProdutosPage: React.FC = () => {
             leftIcon={<AddIcon />}
             onClick={() => router.push("/dashboard/product/upsert")}
           >
-            Novo Artigo
+            Novo Produto
           </Button>
           <Button
             as="label"

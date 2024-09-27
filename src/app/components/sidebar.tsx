@@ -1,4 +1,3 @@
-"use client";
 import { usePathname } from "next/navigation";
 import NextLink from "next/link";
 import {
@@ -19,7 +18,7 @@ import {
   FaMoneyBillWave,
   FaReceipt,
 } from "react-icons/fa6";
-import { FaClipboardList, FaCog, FaFileAlt } from "react-icons/fa";
+import { FaClipboardList, FaCog, FaFileAlt, FaTag } from "react-icons/fa";
 
 const links = [
   {
@@ -29,7 +28,7 @@ const links = [
   },
   {
     href: "/dashboard/product",
-    label: "Artigos",
+    label: "Produtos",
     icon: FaBasketShopping,
   },
   {
@@ -39,7 +38,7 @@ const links = [
   },
   {
     href: "/dashboard/supplier",
-    label: "Fornecedores",
+    label: "Entidades",
     icon: FaPeopleCarryBox,
   },
   {
@@ -62,6 +61,12 @@ const links = [
     label: "Despesas",
     icon: FaReceipt,
   },
+
+  {
+    href: "/dashboard/promotions",
+    label: "Promoções",
+    icon: FaTag,
+  },
   {
     href: "/dashboard/statistics",
     label: "Relatórios e Estatísticas",
@@ -72,7 +77,6 @@ const links = [
 const Sidebar = () => {
   const pathname = usePathname();
 
-  // Função para verificar se o link está ativo
   const isActive = (path: string) => {
     if (path === "/dashboard") {
       return pathname === path;

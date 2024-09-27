@@ -16,12 +16,6 @@ import {
   InputGroup,
   InputLeftElement,
   InputRightAddon,
-  Table,
-  Thead,
-  Tbody,
-  Tr,
-  Th,
-  Td,
   useBreakpointValue,
   useColorModeValue,
   Modal,
@@ -46,6 +40,7 @@ import {
 import Select from "react-select";
 import { formatCurrency } from "../actions/util";
 import Invoice from "../components/Invoice";
+import CartTable from "../components/CartTable";
 
 const SalesPage = () => {
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
@@ -134,8 +129,8 @@ const SalesPage = () => {
     console.log(selectedProduct);
     if (!selectedProduct || !selectedProduct.productId) {
       toast({
-        title: "Artigo inválido.",
-        description: "O Artigo não possui um ID válido.",
+        title: "Produto inválido.",
+        description: "O Produto não possui um ID válido.",
         status: "warning",
         duration: 5000,
         isClosable: true,
@@ -181,7 +176,7 @@ const SalesPage = () => {
       console.log(result.data);
     } else {
       toast({
-        title: "Artigo não encontrado.",
+        title: "Produto não encontrado.",
         description: result.error || "Erro desconhecido",
         status: "error",
         duration: 5000,
@@ -260,7 +255,7 @@ const SalesPage = () => {
 
       toast({
         title: "Venda concluída!",
-        description: "Os Artigos foram vendidos com sucesso.",
+        description: "Os Produtos foram vendidos com sucesso.",
         status: "success",
         duration: 5000,
         isClosable: true,
@@ -305,7 +300,7 @@ const SalesPage = () => {
                         <SearchIcon color="gray.300" />
                       </InputLeftElement>
                       <Input
-                        placeholder="Digite o código do Artigo"
+                        placeholder="Digite o código do Produto"
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                         onKeyDown={(e) => {
@@ -371,7 +366,7 @@ const SalesPage = () => {
               borderTop="2px"
               borderColor="teal.500"
               align="center"
-              justify="space-between" // Distribui os itens ao longo do eixo principal
+              justify="space-between"
             >
               <FormControl maxW="250px">
                 <FormLabel>Desconto</FormLabel>
@@ -421,48 +416,14 @@ const SalesPage = () => {
                 Carrinho
               </Text>
               {cart.length === 0 ? (
-                <Text>Seu carrinho está vazio.</Text>
+                <Text>O carrinho está vazio.</Text>
               ) : (
-                <Table variant="simple" size="sm">
-                  <Thead>
-                    <Tr>
-                      <Th>Artigo</Th>
-                      <Th>Preço</Th>
-                      <Th>Quantidade</Th>
-                      <Th>Remover</Th>
-                    </Tr>
-                  </Thead>
-                  <Tbody>
-                    {cart.map((item) => (
-                      <Tr key={item.productId}>
-                        <Td>{item.name}</Td>
-                        <Td>{formatCurrency(item.price)}</Td>
-                        <Td>
-                          <Input
-                            type="number"
-                            min="1"
-                            value={item.quantity}
-                            onChange={(e) =>
-                              handleQuantityChange(
-                                item.productId,
-                                Number(e.target.value)
-                              )
-                            }
-                          />
-                        </Td>
-                        <Td>
-                          <Button
-                            colorScheme="red"
-                            size="sm"
-                            onClick={() => handleRemoveFromCart(item.productId)}
-                          >
-                            Remover
-                          </Button>
-                        </Td>
-                      </Tr>
-                    ))}
-                  </Tbody>
-                </Table>
+                <CartTable
+                  cartItems={cart}
+                  onRemoveItem={handleRemoveFromCart}
+                  onChangeQuantity={handleQuantityChange}
+                  onChangeTax={function (id: string, newTax: string): void {}}
+                />
               )}
             </Box>
           </VStack>

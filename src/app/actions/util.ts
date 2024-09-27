@@ -64,3 +64,4 @@ export function statusColor(status: string): string {
     ? "red.500"
     : "black";
 }
+

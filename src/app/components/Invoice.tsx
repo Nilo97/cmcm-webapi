@@ -56,7 +56,6 @@ const Invoice = ({ pdfBlob }: { pdfBlob: Blob | null }) => {
     if (pdfBlob) {
       const formData = new FormData();
       formData.append("file", pdfBlob, fileName());
-      // Enviar a requisição para o backend para enviar o e-mail
       try {
         const response = await fetch("/api/send-email", {
           method: "POST",

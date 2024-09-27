@@ -1,7 +1,7 @@
 import { Box, Table, Thead, Tbody, Tr, Th, Td, Text } from "@chakra-ui/react";
 
 export const HistoryTab = () => {
-  // Dados fictícios de histórico. Normalmente, estes dados viriam de uma API ou serviço.
+
   const historyData = [
     {
       id: 1,

@@ -133,4 +133,43 @@ export interface CashFlowResponse {
   status: string;
 }
 
+export type CartItem = {
+  productId: string;
+  name: string;
+  price: number;
+  quantity: number;
+  tax?: string;
+  batchId?: string;
+};
 
+export type ProductOption = {
+  value: string;
+  label: JSX.Element;
+  product: any;
+};
+
+export interface CustomerResponse {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  customerType: CustomerType;
+  sync: boolean;
+}
+
+export enum CustomerType {
+  SINGULAR,
+  COMPANY,
+  VIP,
+  PARTNER,
+}
+
+export interface InvoiceResponse {
+  id: string;
+  paymentTerms: string;
+  sync: boolean;
+  paymentStatus: number;
+  documentDate: string;
+  createdAt: string;
+  dueDate: string;
+}

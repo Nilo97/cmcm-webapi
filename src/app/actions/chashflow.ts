@@ -45,13 +45,12 @@ export async function fetchCurrentCashFlow(): Promise<
     });
 
     if (!response.ok) {
-      const errorData = await response.json().catch(() => null); // Safely handle if error response has no body
+      const errorData = await response.json().catch(() => null); 
       const errorMessage =
         errorData?.message || "Failed to fetch current cash flow";
       throw new Error(errorMessage);
     }
 
-    // Check if response has content before parsing
     const isJson = response.headers
       .get("content-type")
       ?.includes("application/json");
@@ -135,7 +134,7 @@ export async function fetchOpenedCashFlowsSummary(): Promise<
     });
 
     if (!response.ok) {
-      const errorData = await response.json().catch(() => null); // Safely handle if error response has no body
+      const errorData = await response.json().catch(() => null);
       const errorMessage =
         errorData?.message || "Failed to fetch opened cash flows summary";
       throw new Error(errorMessage);

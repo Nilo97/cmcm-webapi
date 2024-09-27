@@ -45,7 +45,7 @@ const RegisterBatchForm: React.FC<RegisterBatchFormProps> = ({
           expirationDate: "",
           quantity: "",
           price: "",
-          associatedCosts: "", // Novo campo
+          associatedCosts: "", 
         },
       ],
     },

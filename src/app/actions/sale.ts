@@ -1,5 +1,5 @@
 import { parseCookies } from "nookies";
-import { BatchResponse, Product } from "../types";
+import { BatchResponse, Product } from "./types";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 const { ["token"]: token } = parseCookies();

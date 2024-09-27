@@ -1,4 +1,4 @@
-"use client"; // Ensure this directive is at the top for CSR
+"use client"; 
 
 import { useEffect, useState } from "react";
 import { OpeningClosingTab } from "@/app/components/OpeningClosingTab";
@@ -49,7 +49,7 @@ const CashRegister = () => {
   }, [toast]);
 
   const handleGoBack = () => {
-    router.back(); // Navega para a página anterior
+    router.back()
   };
 
   return (

@@ -20,7 +20,7 @@ import {
   FaWarehouse,
   FaMoneyCheckAlt,
   FaFileInvoice,
-  FaSignOutAlt, // Ícone de logout
+  FaSignOutAlt, 
 } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import { parseCookies, destroyCookie } from "nookies";
@@ -61,7 +61,7 @@ const StockManagementPage = () => {
         boxShadow="md"
         _hover={{ bg: "red.600", color: "white" }}
       >
-        Sair
+        Terminar Sessão
       </Button>
 
       <Center flex="1" py={8}>
@@ -91,7 +91,7 @@ const StockManagementPage = () => {
               boxShadow="lg"
               _hover={{ bg: "teal.600", shadow: "md" }}
             >
-              Vender Artigos
+              Vender Produtos
             </Button>
 
             <Button

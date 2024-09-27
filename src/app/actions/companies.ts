@@ -1,5 +1,5 @@
 import { parseCookies } from "nookies";
-import { Company } from "../types";
+import { Company } from "./types";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 const { ["token"]: token } = parseCookies();
