@@ -52,6 +52,10 @@ const Header = () => {
     router.push("/");
   };
 
+  const handleSettings = () => {
+    router.push("/dashboard/settings");
+  };
+
   return (
     <>
       <Flex
@@ -108,7 +112,7 @@ const Header = () => {
               <Avatar size="sm" name={username} />
             </MenuButton>
             <MenuList>
-              <MenuItem>Gerir conta</MenuItem>
+              <MenuItem onClick={handleSettings}>Definições</MenuItem>
               <MenuItem onClick={handleLogout}>Terminar Sessão</MenuItem>
             </MenuList>
           </Menu>

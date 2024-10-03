@@ -25,8 +25,8 @@ import {
   Highlight,
 } from "@chakra-ui/react";
 import { EditIcon, DeleteIcon, SearchIcon, ViewIcon } from "@chakra-ui/icons";
-import { Product } from "../types";
 import { formatCurrency, limitText } from "../actions/util";
+import { Product } from "../actions/types";
 
 interface ProductTableProps {
   products: Product[];
@@ -103,7 +103,7 @@ const ProductTable: React.FC<ProductTableProps> = ({
   const renderPagination = () => {
     if (totalPages <= 1) return null;
 
-    const pagesToShow = 5; 
+    const pagesToShow = 5;
     const startPage = Math.max(0, currentPage - Math.floor(pagesToShow / 2));
     const endPage = Math.min(totalPages - 1, startPage + pagesToShow - 1);
 
@@ -220,7 +220,7 @@ const ProductTable: React.FC<ProductTableProps> = ({
               </Thead>
               <Tbody>
                 {products.map((product) => (
-                  <Tr key={product.id}>
+                  <Tr key={product.productId}>
                     <Td>
                       <Highlight
                         query={query}
@@ -269,7 +269,7 @@ const ProductTable: React.FC<ProductTableProps> = ({
                         colorScheme="red"
                         leftIcon={<DeleteIcon />}
                         ml="2"
-                        onClick={() => handleDelete(product.id)}
+                        onClick={() => handleDelete(product.productId)}
                       >
                         Excluir
                       </Button>

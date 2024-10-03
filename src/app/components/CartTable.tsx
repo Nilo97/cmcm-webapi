@@ -17,9 +17,9 @@ import {
   NumberInputField,
   NumberInputStepper,
 } from "@chakra-ui/react";
-import { DeleteIcon } from "@chakra-ui/icons";
+import { DeleteIcon, MinusIcon } from "@chakra-ui/icons";
 import { formatCurrency } from "../actions/util";
-import { CartItem } from "../types";
+import { CartItem } from "../actions/types";
 
 type CartTableProps = {
   cartItems: CartItem[];
@@ -102,13 +102,13 @@ const CartTable: React.FC<CartTableProps> = ({
                 ))}
               </Select>
             </Td>
-            <Td p={1} fontSize="xs">
+
+            <Td p={1} fontSize="xs" textAlign="center" verticalAlign="middle">
               <IconButton
                 size="xs"
-                icon={<DeleteIcon />}
+                icon={<MinusIcon color="red" />}
                 aria-label="Remover item"
                 onClick={() => onRemoveItem(item.productId)}
-                colorScheme="red"
               />
             </Td>
           </Tr>

@@ -241,16 +241,19 @@ const InvoiceTable: React.FC<InvoiceTableProps> = ({
                 <Tr>
                   <Th>Criado aos</Th>
                   <Th>Cliente</Th>
-                  <Th>Data do Documento</Th>
+                  <Th>Data da Factura</Th>
+                  <Th>Data de Validade</Th>
                   <Th>Termos de Pagamento</Th>
-                  <Th>Status de Pagamento</Th>
+                  <Th>Status</Th>
                   <Th>Ações</Th>
                 </Tr>
               </Thead>
               <Tbody>
                 {invoices.map((invoice) => (
                   <Tr key={invoice.id}>
-                    <Td>{invoice.id}</Td>
+                    <Td>{formatDate(invoice.createdAt)}</Td>
+                    <Td>{invoice.customer}</Td>
+                    <Td>{formatDate(invoice.dueDate)}</Td>
                     <Td>{formatDate(invoice.documentDate)}</Td>
                     <Td>{invoice.paymentTerms}</Td>
                     <Td>{invoice.paymentStatus}</Td>

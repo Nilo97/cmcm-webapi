@@ -8,7 +8,7 @@ export interface BatchResponse {
 }
 
 export interface Product {
-  id: string;
+  productId: string;
   name: string;
   code: string;
   description: string;
@@ -168,8 +168,10 @@ export interface InvoiceResponse {
   id: string;
   paymentTerms: string;
   sync: boolean;
-  paymentStatus: number;
+  paymentStatus: string;
   documentDate: string;
   createdAt: string;
   dueDate: string;
+  customer: string;
+
 }

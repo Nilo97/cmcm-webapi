@@ -22,7 +22,7 @@ import {
   uploadProducts,
 } from "@/app/actions/product";
 import ProductTable from "@/app/components/ProductTable";
-import { Product } from "@/app/types";
+import { Product } from "@/app/actions/types";
 
 const PAGE_SIZE = 7;
 
@@ -67,7 +67,7 @@ const ProdutosPage: React.FC = () => {
   };
 
   const handleViewDetails = (product: Product) => {
-    router.push(`/dashboard/product/details?id=${product.id}`);
+    router.push(`/dashboard/product/details?id=${product.productId}`);
   };
 
   const handleSearch = (value: string) => {
@@ -105,7 +105,7 @@ const ProdutosPage: React.FC = () => {
   };
 
   const handleEdit = (product: Product) => {
-    router.push(`/dashboard/product/upsert?id=${product.id}`);
+    router.push(`/dashboard/product/upsert?id=${product.productId}`);
     setSelectedProduct(product);
   };
 

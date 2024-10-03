@@ -7,66 +7,41 @@ import {
   Link,
   Text,
   VStack,
-  Spacer,
+  useColorModeValue,
+  Divider,
 } from "@chakra-ui/react";
 import {
-  FaPeopleCarryBox,
-  FaHouseChimneyWindow,
   FaListOl,
-  FaBasketShopping,
   FaChartLine,
   FaMoneyBillWave,
   FaReceipt,
+  FaClipboardList,
+  FaFileAlt,
+  FaQuestionCircle,
+  FaTag,
+  FaUndoAlt,
+} from "react-icons/fa";
+import {
+  FaHouseChimneyWindow,
+  FaBasketShopping,
+  FaPeopleCarryBox,
 } from "react-icons/fa6";
-import { FaClipboardList, FaCog, FaFileAlt, FaTag } from "react-icons/fa";
 
 const links = [
-  {
-    href: "/dashboard",
-    label: "Geral",
-    icon: FaHouseChimneyWindow,
-  },
-  {
-    href: "/dashboard/product",
-    label: "Produtos",
-    icon: FaBasketShopping,
-  },
-  {
-    href: "/dashboard/category",
-    label: "Categorias",
-    icon: FaListOl,
-  },
-  {
-    href: "/dashboard/supplier",
-    label: "Entidades",
-    icon: FaPeopleCarryBox,
-  },
+  { href: "/dashboard", label: "Geral", icon: FaHouseChimneyWindow },
+  { href: "/dashboard/product", label: "Produtos", icon: FaBasketShopping },
+  { href: "/dashboard/category", label: "Categorias", icon: FaListOl },
+  { href: "/dashboard/supplier", label: "Entidades", icon: FaPeopleCarryBox },
   {
     href: "/dashboard/cashflow",
     label: "Fluxo de Caixa",
     icon: FaMoneyBillWave,
   },
-  {
-    href: "/dashboard/orders",
-    label: "Pedidos",
-    icon: FaClipboardList,
-  },
-  {
-    href: "/dashboard/documents",
-    label: "Documentos",
-    icon: FaFileAlt,
-  },
-  {
-    href: "/dashboard/expenses",
-    label: "Despesas",
-    icon: FaReceipt,
-  },
-
-  {
-    href: "/dashboard/promotions",
-    label: "Promoções",
-    icon: FaTag,
-  },
+  { href: "/dashboard/returns", label: "Devoluções", icon: FaUndoAlt },
+  { href: "/dashboard/orders", label: "Pedidos", icon: FaClipboardList },
+  { href: "/dashboard/expenses", label: "Despesas", icon: FaReceipt },
+  { href: "/dashboard/promotions", label: "Promoções", icon: FaTag },
+  { href: "/dashboard/documents", label: "Documentos", icon: FaFileAlt },
   {
     href: "/dashboard/statistics",
     label: "Relatórios e Estatísticas",
@@ -76,6 +51,9 @@ const links = [
 
 const Sidebar = () => {
   const pathname = usePathname();
+  const bgActive = useColorModeValue("teal.500", "teal.300");
+  const textActive = useColorModeValue("white", "black");
+  const iconColorInactive = "black";
 
   const isActive = (path: string) => {
     if (path === "/dashboard") {
@@ -86,66 +64,80 @@ const Sidebar = () => {
 
   return (
     <Box
-      w={{ base: "full", md: "250px" }}
+      w={{ base: "full", md: "300px" }}
       pos="fixed"
       h="full"
-      bg="whiteAlpha.900"
-      px="4"
-      py="6"
-      color="black"
+      bg={useColorModeValue("white", "gray.800")}
+      px="6"
+      py="8"
+      shadow="md"
       display="flex"
       flexDirection="column"
+      justifyContent="space-between"
     >
-      <VStack align="start" spacing="4" w="100%">
-        {links.map(({ href, label, icon: Icon }) => (
-          <Link
-            key={href}
-            as={NextLink}
-            w="100%"
-            href={href}
-            fontWeight="bold"
-            color={isActive(href) ? "teal.400" : "black"}
-            bg={isActive(href) ? "teal.50" : "transparent"}
-            rounded="sm"
-            px="3"
-            py="1"
-            _hover={{
-              textDecoration: "none",
-              bg: isActive(href) ? "teal.100" : "gray.100",
-            }}
-          >
-            <HStack spacing="2">
-              <Icon color={isActive(href) ? "teal.400" : "gray.500"} />
-              <Text>{label}</Text>
-            </HStack>
-          </Link>
-        ))}
-      </VStack>
-      <Spacer />
+      <Box
+        w="100%"
+        flex="1"
+        overflowY="auto" // Permite o scroll vertical
+        
+     
+      >
+        <VStack align="start" spacing="1.5" w="100%">
+          {links.map(({ href, label, icon: Icon }) => (
+            <Link
+              key={href}
+              as={NextLink}
+              href={href}
+              w="100%"
+              rounded="md"
+              fontWeight="semibold"
+              bg={isActive(href) ? bgActive : "transparent"}
+              color={isActive(href) ? textActive : "gray.700"}
+              px="4"
+              py="3"
+              transition="background 0.3s ease"
+              _hover={{
+                bg: isActive(href) ? bgActive : "gray.100",
+                color: isActive(href) ? textActive : "gray.900",
+              }}
+            >
+              <HStack spacing="3">
+                <Icon
+                  size="18px"
+                  color={isActive(href) ? textActive : iconColorInactive}
+                />
+                <Text>{label}</Text>
+              </HStack>
+            </Link>
+          ))}
+        </VStack>
+      </Box>
 
-      <Flex mb="12">
+      <Divider my="1" />
+
+      <Flex justify="flex-end" align="center" w="100%" px="6" py="4" mb="6">
         <Link
           as={NextLink}
-          href="/dashboard/settings"
-          bg={pathname === "/dashboard/settings" ? "teal.50" : "gray.50"}
-          fontWeight="bold"
-          color="black"
-          rounded="sm"
-          px="3"
-          py="1"
+          href="/dashboard/help"
           w="100%"
+          rounded="md"
+          fontWeight="semibold"
+          bg={pathname === "/dashboard/help" ? bgActive : "transparent"}
+          color={pathname === "/dashboard/help" ? textActive : "gray.700"}
+          px="4"
+          py="3"
+          transition="background 0.3s ease"
           _hover={{
-            textDecoration: "none",
-            bg: pathname === "/dashboard/settings" ? "teal.100" : "gray.100",
+            bg: pathname === "/dashboard/help" ? bgActive : "gray.100",
+            color: pathname === "/dashboard/help" ? textActive : "gray.900",
           }}
         >
-          <HStack spacing="2">
-            <FaCog
-              color={
-                pathname === "/dashboard/settings" ? "teal.400" : "gray.500"
-              }
+          <HStack spacing="3">
+            <FaQuestionCircle
+              size="18px"
+              color={pathname === "/dashboard/help" ? textActive : iconColorInactive}
             />
-            <Text>Definições</Text>
+            <Text>Ajuda e Suporte</Text>
           </HStack>
         </Link>
       </Flex>

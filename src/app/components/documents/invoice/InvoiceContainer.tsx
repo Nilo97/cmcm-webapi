@@ -5,7 +5,7 @@ import {
   Container,
   Heading,
   Button,
-  useDisclosure,
+  Box,
   Flex,
   Input as ChakraInput,
   useToast,
@@ -156,14 +156,15 @@ export const InvoiceContainer: React.FC<InvoiceContainerProps> = ({
       >
         <OverlayOne />
         <ModalContent>
-          <ModalHeader>Facturas</ModalHeader>
           <ModalCloseButton />
-          <ModalBody>
-            <InvoiceForm
-              handleSearch={handleSearch}
-              selectedProduct={selectedProduct}
-              setSelectedProduct={setSelectedProduct}
-            />
+          <ModalBody display="flex">
+            <Box w="100%" maxW={{ base: "90%", md: "1200px" }} mx="auto" p={4}>
+              <InvoiceForm
+                handleSearch={handleSearch}
+                selectedProduct={selectedProduct}
+                setSelectedProduct={setSelectedProduct}
+              />
+            </Box>
           </ModalBody>
         </ModalContent>
       </Modal>

@@ -269,7 +269,7 @@ const ProductRegistrationForm: React.FC = () => {
             <HStack spacing="6" justify="space-between" alignItems="flex-start">
               <FormControl isInvalid={!!errors.price} flex="1 0 45%">
                 <FormLabel htmlFor="price" display="flex" alignItems="center">
-                  <FaMoneyBillWave style={{ marginRight: "8px" }} /> Preço
+                  <FaMoneyBillWave style={{ marginRight: "8px" }} /> Preço de venda
                 </FormLabel>
                 <Input
                   variant="outline"

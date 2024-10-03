@@ -18,7 +18,7 @@ export default function DashboardLayout({
           <Header />
           <Flex mt="16">
             <DesktopSidebar />
-            <Box ml={{ base: 0, md: "250px" }} p="6" w="full">
+            <Box ml={{ base: 0, md: "300px" }} p="6" w="full">
               <Suspense>{children}</Suspense>
             </Box>
           </Flex>

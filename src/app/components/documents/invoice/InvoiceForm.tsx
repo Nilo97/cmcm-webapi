@@ -299,13 +299,7 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
   );
 
   return (
-    <Box
-      p={{ base: 4, md: 6 }}
-      bg="white"
-      borderRadius="md"
-      shadow="md"
-      w="full"
-    >
+    <Box p={{ base: 4, md: 6 }}>
       <Heading
         as="h2"
         fontSize={{ base: "lg", md: "xl" }}

@@ -33,10 +33,10 @@ import {
   getProductById,
   createBatch,
 } from "@/app/actions/product";
-import { Product, BatchResponse } from "@/app/types";
 import { useRouter } from "next/navigation";
 import { formatCurrency, formatDate } from "@/app/actions/util";
 import generic from "../../../../../public/generic.jpg";
+import { Product, BatchResponse } from "@/app/actions/types";
 
 const ProductDetailsPage = () => {
   const [product, setProduct] = useState<Product | null>(null);
@@ -232,7 +232,7 @@ const ProductDetailsPage = () => {
           >
             <Button
               onClick={() =>
-                router.push(`/dashboard/product/upsert?id=${product.id}`)
+                router.push(`/dashboard/product/upsert?id=${product.productId}`)
               }
               colorScheme="blue"
               position="absolute"
