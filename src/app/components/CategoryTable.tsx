@@ -51,7 +51,9 @@ const CategoryTable: React.FC<CategoryTableProps> = ({
   currentPage = 0,
   onPageChange,
 }) => {
-  const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<Category | null>(
+    null
+  );
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [query, setQuery] = useState<string>("");
 
@@ -104,7 +106,7 @@ const CategoryTable: React.FC<CategoryTableProps> = ({
   const renderPagination = () => {
     if (totalPages <= 1) return null;
 
-    const pagesToShow = 5; 
+    const pagesToShow = 5;
     const startPage = Math.max(0, currentPage - Math.floor(pagesToShow / 2));
     const endPage = Math.min(totalPages - 1, startPage + pagesToShow - 1);
 
@@ -209,7 +211,7 @@ const CategoryTable: React.FC<CategoryTableProps> = ({
             >
               <TableCaption>Provided by Mosprey Innovations</TableCaption>
               <Thead>
-                <Tr>
+                <Tr fontSize="xs">
                   <Th>Nome</Th>
                   <Th>Descrição</Th>
                   <Th>Ações</Th>

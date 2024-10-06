@@ -1,5 +1,3 @@
-"use client";
-
 import React, { useState } from "react";
 import {
   Button,
@@ -15,6 +13,7 @@ import {
   Tabs,
   Tooltip,
   Text,
+  useBreakpointValue,
 } from "@chakra-ui/react";
 import { InvoiceResponse, Product } from "@/app/actions/types";
 import { formatCurrency, truncateText } from "@/app/actions/util";
@@ -25,7 +24,7 @@ interface SaleCardProps {
   products: Product[];
   searchTerm: string;
   totalPages?: number;
-  loading?: boolean;
+  loading: boolean;
   currentPage: number;
   onPageChange?: (page: number) => void;
   addToCart: (item: any) => void;
@@ -55,6 +54,14 @@ const SaleCard: React.FC<SaleCardProps> = ({
     }
   };
 
+  const imageHeight = useBreakpointValue({
+    base: 50,
+    sm: 50,
+    md: 100,
+    lg: 150,
+    xl: 200,
+  });
+
   const renderPagination = () => {
     if (totalPages <= 1) return null;
 
@@ -67,7 +74,7 @@ const SaleCard: React.FC<SaleCardProps> = ({
     );
 
     return (
-      <Flex justify="center" mt="4">
+      <Flex justify="center">
         <Stack
           direction={{ base: "column", md: "row" }}
           spacing="2"
@@ -145,6 +152,14 @@ const SaleCard: React.FC<SaleCardProps> = ({
     return matchesCategory && matchesSearch;
   });
 
+  const gridTemplateColumns = useBreakpointValue({
+    base: "1fr",
+    sm: "repeat(2, 1fr)",
+    md: "repeat(3, 1fr)",
+    lg: "repeat(4, 1fr)",
+    xl: "repeat(5, 1fr)",
+  });
+
   return (
     <Stack spacing="4">
       {loading ? (
@@ -156,7 +171,6 @@ const SaleCard: React.FC<SaleCardProps> = ({
           <Tabs
             variant="soft-rounded"
             colorScheme="teal"
-            mb={4}
             onChange={(index) => setActiveCategory(categories[index])}
           >
             <TabList
@@ -178,7 +192,12 @@ const SaleCard: React.FC<SaleCardProps> = ({
             <TabPanels>
               {categories.map((category, index) => (
                 <TabPanel key={index}>
-                  <Flex wrap="wrap" gap={4} justify="center">
+                  <Flex
+                    wrap="wrap"
+                    gap={4}
+                    justify="center"
+                    gridTemplateColumns={gridTemplateColumns}
+                  >
                     {filteredProducts.map(
                       (product) =>
                         (activeCategory === "Todos" ||
@@ -220,7 +239,7 @@ const SaleCard: React.FC<SaleCardProps> = ({
                                 alt={product.name}
                                 objectFit="cover"
                                 width="100"
-                                height="200"
+                                height={imageHeight}
                               />
                             </Box>
 

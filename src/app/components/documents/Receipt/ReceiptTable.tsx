@@ -46,7 +46,7 @@ import {
   ViewIcon,
   ChevronDownIcon,
 } from "@chakra-ui/icons";
-import { InvoiceResponse } from "@/app/actions/types";
+import { ReceiptResponse } from "@/app/actions/types";
 import {
   formatCurrency,
   formatDate,
@@ -55,21 +55,21 @@ import {
 import { FaSignOutAlt } from "react-icons/fa";
 import { FaDollarSign } from "react-icons/fa6";
 
-interface InvoiceTableProps {
-  invoices: InvoiceResponse[];
-  onEdit: (invoice: InvoiceResponse) => void;
-  onDetails: (invoice: InvoiceResponse) => void;
+interface ReceiptTableProps {
+  receipts: ReceiptResponse[];
+  onEdit: (Receipt: ReceiptResponse) => void;
+  onDetails: (Receipt: ReceiptResponse) => void;
   onPayment: () => void;
   onSearch: (value: string) => void;
-  onPay: (invoice: InvoiceResponse) => void;
+  onPay: (Receipt: ReceiptResponse) => void;
   loading: boolean;
   totalPages?: number;
   currentPage?: number;
   onPageChange?: (page: number) => void;
 }
 
-const InvoiceTable: React.FC<InvoiceTableProps> = ({
-  invoices,
+const ReceiptTable: React.FC<ReceiptTableProps> = ({
+  receipts,
   onEdit,
   onPayment,
   onSearch,
@@ -80,8 +80,8 @@ const InvoiceTable: React.FC<InvoiceTableProps> = ({
   onDetails,
   onPay,
 }) => {
-  const [selectedInvoice, setSelectedInvoice] =
-    useState<InvoiceResponse | null>(null);
+  const [selectedReceipt, setSelectedReceipt] =
+    useState<ReceiptResponse | null>(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [query, setQuery] = useState<string>("");
 
@@ -96,8 +96,8 @@ const InvoiceTable: React.FC<InvoiceTableProps> = ({
     }
   };
 
-  const handleViewDetails = (invoice: InvoiceResponse) => {
-    setSelectedInvoice(invoice);
+  const handleViewDetails = (Receipt: ReceiptResponse) => {
+    setSelectedReceipt(Receipt);
     onOpen();
   };
 
@@ -179,7 +179,7 @@ const InvoiceTable: React.FC<InvoiceTableProps> = ({
   };
 
   const handleCloseModal = () => {
-    setSelectedInvoice(null);
+    setSelectedReceipt(null);
     onClose();
     onPayment();
   };
@@ -246,34 +246,27 @@ const InvoiceTable: React.FC<InvoiceTableProps> = ({
         <>
           <TableContainer>
             <Table variant="simple" fontSize="sm" size="xs">
-              <TableCaption>Lista de Faturas</TableCaption>
+              <TableCaption>Lista de Recibos</TableCaption>
               <Thead>
                 <Tr fontSize="xs">
-                  <Th>Data da Factura</Th>
+                  <Th>Data de Emissão</Th>
                   <Th>Documento</Th>
                   <Th>Cliente</Th>
-                  <Th>Data de Validade</Th>
+                  <Th>Desconto</Th>
+                  <Th>Imposto</Th>
                   <Th>Total</Th>
-                  <Th>Pagamento</Th>
                   <Th>Ações</Th>
                 </Tr>
               </Thead>
               <Tbody>
-                {invoices.map((invoice) => (
-                  <Tr key={invoice.id}>
-                    <Td>{formatDate(invoice.documentDate)}</Td>
-                    <Td>{invoice.reference}</Td>
-                    <Td>{invoice.customer}</Td>
-
-                    <Td>{formatDate(invoice.dueDate)}</Td>
-                    <Td>{formatCurrency(invoice.total)}</Td>
-                    <Td>
-                      <Badge
-                        colorScheme={getStatusBadgeColor(invoice.paymentStatus)}
-                      >
-                        {invoice.paymentStatus}
-                      </Badge>
-                    </Td>
+                {receipts.map((Receipt) => (
+                  <Tr key={Receipt.id}>
+                    <Td>{formatDate(Receipt.createdAt)}</Td>
+                    <Td>{Receipt.reference}</Td>
+                    <Td>{Receipt.customer}</Td>
+                    <Td>{formatCurrency(Receipt.discount)}</Td>
+                    <Td>{formatCurrency(Receipt.tax)}</Td>
+                    <Td>{formatCurrency(Receipt.total)}</Td>
 
                     <Td>
                       <Menu>
@@ -293,7 +286,7 @@ const InvoiceTable: React.FC<InvoiceTableProps> = ({
                           <MenuItem icon={<EditIcon />}>Baixar</MenuItem>
                           <MenuItem
                             icon={<ViewIcon />}
-                            onClick={() => handleViewDetails(invoice)}
+                            onClick={() => handleViewDetails(Receipt)}
                           >
                             Ver detalhes
                           </MenuItem>{" "}
@@ -308,51 +301,37 @@ const InvoiceTable: React.FC<InvoiceTableProps> = ({
 
           {renderPagination()}
 
-          {selectedInvoice && (
+          {selectedReceipt && (
             <Modal isOpen={isOpen} onClose={onClose}>
               <ModalOverlay />
               <ModalContent>
-                <ModalHeader>Detalhes da Fatura</ModalHeader>
+                <ModalHeader>Detalhes do Recibo</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
                   <VStack spacing={4} align="flex-start">
                     <Text>
-                      <strong>Documento:</strong> {selectedInvoice.reference}
+                      <strong>Documento:</strong> {selectedReceipt.reference}
                     </Text>
                     <Text>
-                      <strong>Cliente:</strong> {selectedInvoice.customer}
+                      <strong>Cliente:</strong> {selectedReceipt.customer}
                     </Text>
-                    <Text>
-                      <strong>Data da Factura:</strong>{" "}
-                      {formatDate(selectedInvoice.documentDate)}
-                    </Text>
-                    <Text>
-                      <strong>Data de Validade:</strong>{" "}
-                      {formatDate(selectedInvoice.dueDate)}
-                    </Text>
+
                     <Text>
                       <strong>Total:</strong>{" "}
-                      {formatCurrency(selectedInvoice.total)}
+                      {formatCurrency(selectedReceipt.total)}
                     </Text>
-                    <Text>
-                      <strong>Pagamento:</strong>{" "}
-                      {getStatusBadgeColor(selectedInvoice.paymentStatus)}
-                    </Text>
-                    <Text>
-                      <strong>Termos de Pagamento:</strong>{" "}
-                      {selectedInvoice.paymentTerms}
-                    </Text>
+
                     <Text>
                       <strong>Desconto:</strong>{" "}
-                      {formatCurrency(selectedInvoice.discount)}
+                      {formatCurrency(selectedReceipt.discount)}
                     </Text>
                     <Text>
                       <strong>Imposto:</strong>{" "}
-                      {formatCurrency(selectedInvoice.tax)}
+                      {formatCurrency(selectedReceipt.tax)}
                     </Text>
                     <Text>
-                      <strong>Criado em:</strong>{" "}
-                      {formatDate(selectedInvoice.createdAt)}
+                      <strong>Data de Emissão:</strong>{" "}
+                      {formatDate(selectedReceipt.createdAt)}
                     </Text>
 
                     <Text>
@@ -368,10 +347,25 @@ const InvoiceTable: React.FC<InvoiceTableProps> = ({
               </ModalContent>
             </Modal>
           )}
+
+          {/* <Modal isOpen={isOpen} onClose={onClose} size="xl">
+            <ModalOverlay />
+            <ModalContent>
+              <ModalCloseButton />
+              <ModalBody>
+                {selectedReceipt &&
+                    <PaymentComponent
+                      Receipt={selectedReceipt}
+                      onClose={handleCloseModal}
+                    />
+                  payment}
+              </ModalBody>
+            </ModalContent>
+          </Modal> */}
         </>
       )}
     </Stack>
   );
 };
 
-export default InvoiceTable;
+export default ReceiptTable;

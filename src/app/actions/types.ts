@@ -173,5 +173,20 @@ export interface InvoiceResponse {
   createdAt: string;
   dueDate: string;
   customer: string;
+  discount: number;
+  tax: number;
+  total: number;
+  reference: string;
+}
 
+
+export interface ReceiptResponse {
+  id: string;
+  sync: boolean;
+  createdAt: string;
+  customer: string;
+  discount: number;
+  tax: number;
+  total: number;
+  reference: string;
 }

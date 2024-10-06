@@ -18,6 +18,7 @@ import { InvoiceForm } from "@/app/components/documents/invoice/InvoiceForm";
 import { fetchProductSale } from "@/app/actions/product";
 import { useRouter } from "next/navigation";
 import { InvoiceContainer } from "@/app/components/documents/invoice/InvoiceContainer";
+import { ReceiptContainer } from "@/app/components/documents/Receipt/ReceiptContainer";
 
 const Document = () => {
   const [documentType, setDocumentType] = useState<DocumentType | "">("");
@@ -86,95 +87,47 @@ const Document = () => {
         <TabList
           justifyContent="center"
           mb={{ base: 3, md: 4 }}
-          flexWrap={{ base: "wrap", md: "nowrap" }}
+          flexWrap="wrap"
         >
-          <Tab
-            bg={tabBgColor}
-            _selected={{ color: "white", bg: tabSelectedColor }}
-            fontSize={tabSize}
-            p={{ base: 2, md: 3 }}
-          >
-            Recibo
-          </Tab>
-          <Tab
-            bg={tabBgColor}
-            _selected={{ color: "white", bg: tabSelectedColor }}
-            fontSize={tabSize}
-            p={{ base: 2, md: 3 }}
-          >
-            Factura
-          </Tab>
-          <Tab
-            bg={tabBgColor}
-            _selected={{ color: "white", bg: tabSelectedColor }}
-            fontSize={tabSize}
-            p={{ base: 2, md: 3 }}
-          >
-            Cotação
-          </Tab>
-          <Tab
-            bg={tabBgColor}
-            _selected={{ color: "white", bg: tabSelectedColor }}
-            fontSize={tabSize}
-            p={{ base: 2, md: 3 }}
-          >
-            Nota de Crédito
-          </Tab>
-          <Tab
-            bg={tabBgColor}
-            _selected={{ color: "white", bg: tabSelectedColor }}
-            fontSize={tabSize}
-            p={{ base: 2, md: 3 }}
-          >
-            Nota de Débito
-          </Tab>
-          <Tab
-            bg={tabBgColor}
-            _selected={{ color: "white", bg: tabSelectedColor }}
-            fontSize={tabSize}
-            p={{ base: 2, md: 3 }}
-          >
-            Guia de Remessa
-          </Tab>
-          <Tab
-            bg={tabBgColor}
-            _selected={{ color: "white", bg: tabSelectedColor }}
-            fontSize={tabSize}
-            p={{ base: 2, md: 3 }}
-          >
-            Guia de Transporte
-          </Tab>
+          {[
+            "Recibo",
+            "Factura",
+            "Cotação",
+            "Nota de Crédito",
+            "Nota de Débito",
+            "Guia de Remessa",
+            "Guia de Transporte",
+          ].map((tabLabel) => (
+            <Tab
+              key={tabLabel}
+              bg={tabBgColor}
+              _selected={{ color: "white", bg: tabSelectedColor }}
+              fontSize={tabSize}
+              p={2}
+              mx={1}
+              borderRadius="md"
+              transition="all 0.2s"
+              _hover={{ bg: tabSelectedColor, color: "white" }}
+            >
+              {tabLabel}
+            </Tab>
+          ))}
         </TabList>
 
         <TabPanels>
           <TabPanel>
-            {/* <ReceiptForm
-              register={register}
-              handleSubmit={handleSubmit}
-              onSubmit={onSubmit}
-            /> */}
+            <ReceiptContainer
+              handleSearch={handleSearch}
+              selectedProduct={selectedProduct}
+              setSelectedProduct={setSelectedProduct}
+            />
           </TabPanel>
           <TabPanel>
-            <Flex align="center" justify="center" w="full" p={4}>
-              <Box
-                w="full"
-                // maxW="container.xl" // or another suitable size like "container.lg" or a fixed value
-                p={4}
-                borderWidth={1}
-                bg="white"
-              >
-                <InvoiceContainer
-                  handleSearch={handleSearch}
-                  selectedProduct={selectedProduct}
-                  setSelectedProduct={setSelectedProduct}
-                />
-                {/* <InvoiceForm
-                  handleSearch={handleSearch}
-                  selectedProduct={selectedProduct}
-                  setSelectedProduct={setSelectedProduct}
-                /> */}
-              </Box>
-            </Flex>
+            <InvoiceContainer
+              handleSearch={handleSearch}
+              selectedProduct={selectedProduct}
+              setSelectedProduct={setSelectedProduct}
+            />
           </TabPanel>
           <TabPanel>{/* <CreditNoteForm /> */}</TabPanel>
         </TabPanels>

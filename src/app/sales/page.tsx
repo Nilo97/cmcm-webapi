@@ -10,13 +10,6 @@ import {
   Button,
   Input,
   Divider,
-  Table,
-  Thead,
-  Tbody,
-  Tr,
-  Th,
-  Td,
-  IconButton,
   VStack,
   Icon,
   InputGroup,
@@ -49,8 +42,10 @@ import SaleCard from "../components/sales/SaleCard";
 import CartTable from "../components/CartTable";
 import { createSale } from "../actions/sale";
 import Invoice from "../components/Invoice";
+import { useRouter } from "next/navigation";
+import ShoppingCart from "../components/ShoppingCartProps";
 
-const TAX_RATE = 0.17; // 17% de taxa de imposto
+const TAX_RATE = 0.16;
 const PAGE_SIZE = 8;
 
 interface Client {
@@ -89,6 +84,8 @@ const paymentOptions = [
 ];
 
 const POS: React.FC = () => {
+  const router = useRouter();
+
   const [cart, setCart] = useState<CartItem[]>([]);
 
   const [products, setProducts] = useState<Product[]>([]);
@@ -103,8 +100,10 @@ const POS: React.FC = () => {
   const bgActive = useColorModeValue("teal.500", "teal.300");
   const [clients, setClients] = useState<Client[]>([]);
   const [selectedPayment, setSelectedPayment] = useState<any>(null);
+  const [selectedCustomer, setSelectedCustomer] = useState<any>(null);
   const [discount, setDiscount] = useState<number>(0);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isSumitting, setIsSumitting] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [quantity, setQuantity] = useState<number>(1);
   const [pdfBlob, setPdfBlob] = useState<Blob | null>(null);
   const toast = useToast();
@@ -197,7 +196,8 @@ const POS: React.FC = () => {
   };
 
   const getTotalWithTax = () => {
-    return getTotal() + getTax();
+    const total = getTotal() + getTax();
+    return total - discount;
   };
 
   const handleSearch = (value: string) => {
@@ -214,7 +214,6 @@ const POS: React.FC = () => {
   }, [currentPage, searchQuery]);
 
   const fetchAllProducts = async (page: number) => {
-    setIsLoading(true);
     try {
       const data = await fetchProducts(PAGE_SIZE, page, searchQuery);
 
@@ -251,7 +250,7 @@ const POS: React.FC = () => {
       });
       return;
     }
-    setIsLoading(true);
+    setIsSumitting(true);
 
     const saleItems = cart.map((item) => ({
       productId: item.productId,
@@ -264,10 +263,11 @@ const POS: React.FC = () => {
       saleItems: saleItems,
       totalAmount: getTotalWithTax() - discount,
       paymentMethod: selectedPayment?.value,
+      customer: selectedCustomer?.value,
     };
 
     const result = await createSale(data);
-    setIsLoading(false);
+    setIsSumitting(false);
 
     if ("error" in result) {
       toast({
@@ -317,13 +317,15 @@ const POS: React.FC = () => {
           bg={bgActive}
           p={4}
           color="white"
-          borderRadius="md"
           display="flex"
           justifyContent="space-between"
           alignItems="center"
-          boxShadow="0 4px 6px rgba(0, 0, 0, 0.1)"
           maxW="full"
           width="100%"
+          position="fixed"
+          top={0}
+          left={0}
+          zIndex={1000}
         >
           <Text
             fontSize={{ base: "xl", sm: "2xl" }}
@@ -334,10 +336,10 @@ const POS: React.FC = () => {
             Terminal de Vendas (POS)
           </Text>
           <HStack spacing={{ base: 2, md: 6 }} align="center">
-            <Text fontSize="sm" color="whiteAlpha.800">
+            <Text fontSize="sm" color="whiteAlpha.800" fontWeight="bold">
               {formattedDate} {formattedTime}
             </Text>
-            <Text fontSize="sm" fontWeight="bold" color="whiteAlpha.900">
+            <Text fontSize="sm" color="whiteAlpha.900">
               Usuário: Caixa 1
             </Text>
             <Button
@@ -345,7 +347,7 @@ const POS: React.FC = () => {
               variant="solid"
               _hover={{ bg: "red.600", transform: "scale(1.05)" }}
               _active={{ bg: "red.700", transform: "scale(1)" }}
-              onClick={() => alert("Logout realizado!")}
+              onClick={() => router.push("/options")}
               size="sm"
               px={4}
             >
@@ -355,19 +357,19 @@ const POS: React.FC = () => {
         </Box>
 
         <Flex
-          mt={4}
+          mt="70px"
           height="100%"
           flex="1"
           direction={{ base: "column", md: "row" }}
         >
-          {/* Painel de Produtos */}
           <Box
             width={{ base: "100%", md: "40%" }}
             bg="white"
             p={4}
             borderRadius="md"
             boxShadow="lg"
-            mb={{ base: 4, md: 0 }}
+            height="100%"
+            overflow="hidden"
           >
             <Text fontSize="lg" fontWeight="bold" mb={4}>
               Produtos Disponíveis
@@ -406,156 +408,41 @@ const POS: React.FC = () => {
               </InputRightElement>
             </InputGroup>
 
-            <SaleCard
-              products={products}
-              searchTerm={searchTerm}
-              currentPage={currentPage}
-              addToCart={addToCart}
-              totalPages={totalPages}
-              setCurrentPage={setCurrentPage}
-            />
+            <Box overflowY="auto" maxHeight="700px">
+              <SaleCard
+                products={products}
+                searchTerm={searchTerm}
+                currentPage={currentPage}
+                addToCart={addToCart}
+                totalPages={totalPages}
+                setCurrentPage={setCurrentPage}
+                loading={isLoading}
+              />
+            </Box>
           </Box>
-
-          <Box width="60%" ml={4}>
-            <Flex direction="column" height="100%">
-              {/* Carrinho de Compras */}
-              <Box bg="white" p={4} borderRadius="md" boxShadow="md" flex="1">
-                <Text fontSize="lg" fontWeight="bold" mb={4}>
-                  Carrinho de Compras
-                </Text>
-                {cart.length === 0 ? (
-                  <Text>Pronto para processar produtos.</Text>
-                ) : (
-                  <Box overflowY="auto" maxHeight="80%">
-                    <CartTable
-                      cartItems={cart}
-                      onRemoveItem={removeFromCart}
-                      onChangeQuantity={handleQuantityChange}
-                      onChangeTax={function (id: string, newTax: string): void {
-                        throw new Error("Function not implemented.");
-                      }}
-                    />
-                  </Box>
-                )}
-              </Box>
-
-              {/* Pagamento */}
-              <Box
-                bg="gray.50"
-                p={4} // Reduzido o padding
-                borderRadius="md"
-                boxShadow="lg"
-                mt={4}
-              >
-                <HStack spacing={4} align="flex-start">
-                  <VStack spacing={2} align="stretch" flex="1">
-                    <Select
-                      placeholder="Selecione o cliente"
-                      options={[
-                        { value: "novo", label: "Cliente Instantâneo" },
-                        ...clientOptions,
-                      ]}
-                      styles={{
-                        control: (styles) => ({
-                          ...styles,
-                          backgroundColor: "white",
-                        }),
-                        option: (styles, { isSelected }) => ({
-                          ...styles,
-                          color: "black",
-                          backgroundColor: isSelected ? "#ddd" : "white",
-                        }),
-                      }}
-                    />
-
-                    <Select
-                      options={paymentOptions}
-                      formatOptionLabel={formatOptionLabel}
-                      value={selectedPayment}
-                      onChange={setSelectedPayment}
-                      placeholder="Escolha o método de pagamento"
-                    />
-                    <Input
-                      placeholder="Desconto (%)"
-                      type="number"
-                      bg="white"
-                      borderRadius="md"
-                      boxShadow="sm"
-                      value={discount}
-                      disabled={cart.length === 0}
-                      onChange={handleDiscountChange}
-                    />
-                  </VStack>
-
-                  <VStack align="end" spacing={1} flex="1">
-                    <Text
-                      fontSize="2xl"
-                      fontWeight="bold"
-                      mb={4}
-                      color="teal.600"
-                      textAlign="right"
-                    >
-                      Resumo
-                    </Text>
-                    <Text fontSize="lg" color="gray.700" textAlign="right">
-                      Subtotal: {formatCurrency(getTotal())}
-                    </Text>
-                    <Text fontSize="lg" color="gray.700" textAlign="right">
-                      Imposto (17%): {formatCurrency(getTax())}
-                    </Text>
-                    <Text
-                      fontSize="2xl"
-                      fontWeight="bold"
-                      color="teal.700"
-                      textAlign="right"
-                    >
-                      Total: {formatCurrency(getTotalWithTax())}
-                    </Text>
-                  </VStack>
-                </HStack>
-
-                <Divider my={4} borderColor="gray.300" />
-
-                <HStack spacing={4}>
-                  <Input
-                    placeholder="Digite o valor pago"
-                    value={payment}
-                    onChange={handlePaymentChange}
-                    type="number"
-                    bg="white"
-                    borderRadius="md"
-                    boxShadow="sm"
-                    _hover={{ bg: "gray.200" }}
-                    _focus={{
-                      borderColor: "teal.500",
-                      boxShadow: "0 0 0 1px teal.500",
-                    }}
-                  />
-                  <Button
-                    colorScheme="teal"
-                    width="50%"
-                    onClick={handleFinishSale}
-                    disabled={isLoading}
-                    isLoading={isLoading}
-                    _hover={{ bg: "teal.600" }}
-                    _active={{ bg: "teal.700" }}
-                  >
-                    Finalizar Venda
-                  </Button>
-                </HStack>
-
-                <Text
-                  mt={2}
-                  fontSize="lg"
-                  fontWeight="bold"
-                  color={change < 0 ? "red.500" : "green.500"}
-                  textAlign="right"
-                >
-                  Troco: {formatCurrency(change)}
-                </Text>
-              </Box>
-            </Flex>
-          </Box>
+          <ShoppingCart
+            cart={cart}
+            removeFromCart={removeFromCart}
+            handleQuantityChange={handleQuantityChange}
+            handleDiscountChange={handleDiscountChange}
+            selectedCustomer={selectedCustomer}
+            setSelectedCustomer={setSelectedCustomer}
+            paymentOptions={paymentOptions}
+            clientOptions={clientOptions}
+            selectedPayment={selectedPayment}
+            setSelectedPayment={setSelectedPayment}
+            payment={payment}
+            handlePaymentChange={handlePaymentChange}
+            handleFinishSale={handleFinishSale}
+            discount={discount}
+            getTotal={getTotal}
+            getTax={getTax}
+            getTotalWithTax={getTotalWithTax}
+            isSubmitting={isSumitting}
+            change={change}
+            formatCurrency={formatCurrency}
+            isSale={true}
+          />
         </Flex>
 
         <Modal isOpen={isOpen} onClose={onClose} size="lg">

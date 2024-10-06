@@ -22,8 +22,16 @@ export function formatCurrency(value: any) {
   return formattedValue.replace("MTn", "MT");
 }
 
-export function formatDate(dateString: string) {
+export function formatDate(dateString: string | null) {
+  if (!dateString) {
+    return "Data inválida";
+  }
+
   const date = new Date(dateString);
+
+  if (isNaN(date.getTime())) {
+    return "Data inválida";
+  }
 
   const readableDate = format(date, "dd/MM/yyyy", { locale: pt });
 
@@ -67,10 +75,25 @@ export function statusColor(status: string): string {
 
 export const truncateText = (text: string, maxLength: number): string => {
   if (text.length > maxLength) {
-    return text.substring(0, maxLength) + '...';
+    return text.substring(0, maxLength) + "...";
   }
   return text;
 };
 
+export function getStatusBadgeColor(status: string): string {
+  const statusColors: { [key: string]: string } = {
+    Pendente: "orange",
+    CONFIRMED: "blue",
+    CHECKED_IN: "green",
+    CHECKED_OUT: "gray",
+    CANCELLED: "red",
+    NO_SHOW: "purple",
+    IN_PROGRESS: "yellow",
+    COMPLETED: "teal",
+    OVERDUE: "red",
+    AWAITING_PAYMENT: "pink",
+    PRE_AUTHORIZED: "cyan",
+  };
 
-
+  return statusColors[status] || "gray";
+}

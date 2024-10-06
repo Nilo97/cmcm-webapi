@@ -1,5 +1,4 @@
 "use client";
-
 import React from "react";
 import {
   Box,
@@ -13,22 +12,24 @@ import {
   Icon,
   useColorMode,
   useBreakpointValue,
-
+  Grid,
+  GridItem,
+  Divider,
 } from "@chakra-ui/react";
 import {
   FaStore,
   FaWarehouse,
   FaMoneyCheckAlt,
   FaFileInvoice,
-  FaSignOutAlt, 
+  FaSignOutAlt,
 } from "react-icons/fa";
 import { useRouter } from "next/navigation";
-import { parseCookies, destroyCookie } from "nookies";
+import { destroyCookie } from "nookies";
 
 const StockManagementPage = () => {
   const { colorMode, toggleColorMode } = useColorMode();
   const router = useRouter();
-  const buttonSize = useBreakpointValue({ base: "md", md: "lg" });
+  const buttonSize = useBreakpointValue({ base: "lg", md: "xl" });
 
   const handleLogout = () => {
     destroyCookie({}, "token", { path: "/" });
@@ -44,109 +45,159 @@ const StockManagementPage = () => {
       direction="column"
       minHeight="100vh"
       bg={colorMode === "light" ? "gray.50" : "gray.900"}
-      p={4}
       justify="center"
+      align="center"
+      p={8}
       position="relative"
     >
+      {/* Botão de logout estilizado */}
       <Button
         position="absolute"
-        top={4}
-        right={4}
+        top={6}
+        right={6}
         colorScheme="red"
-        variant="solid"
-        size="sm"
+        size="md"
         onClick={handleLogout}
         leftIcon={<Icon as={FaSignOutAlt} />}
-        borderRadius="full"
-        boxShadow="md"
-        _hover={{ bg: "red.600", color: "white" }}
+        borderRadius="lg"
+        boxShadow="lg"
+        _hover={{ bg: "red.700" }}
       >
         Terminar Sessão
       </Button>
 
-      <Center flex="1" py={8}>
-        <VStack spacing={12} align="center">
-          <Heading
-            as="h1"
-            size="2xl"
-            color={colorMode === "light" ? "teal.600" : "teal.300"}
-            fontWeight="bold"
-            textShadow="1px 1px 2px rgba(0, 0, 0, 0.2)"
-          >
-            O que vai querer hoje?
-          </Heading>
-          <Stack
-            direction={{ base: "column", md: "row" }}
-            spacing={8}
-            align="center"
-            justify="center"
-          >
+      <VStack spacing={6} align="center">
+        <Heading
+          as="h1"
+          fontSize={{ base: "2xl", md: "4xl" }}
+          color={colorMode === "light" ? "blue.700" : "blue.300"}
+          fontWeight="extrabold"
+          textAlign="center"
+          mb="5"
+        >
+          Gerencie seu Negócio de Forma Simples
+        </Heading>
+
+        <Text
+          fontSize={{ base: "md", md: "lg" }}
+          color={colorMode === "light" ? "gray.600" : "gray.400"}
+          textAlign="center"
+          maxW="lg"
+        >
+          Escolha uma das opções abaixo para começar a organizar suas vendas e
+          seu estoque com rapidez.
+        </Text>
+
+        {/* Grade para organizar os botões em uma UI elegante */}
+        <Grid
+          templateColumns={{ base: "repeat(2, 1fr)", md: "repeat(4, 1fr)" }}
+          gap={6}
+          width="100%"
+          maxW="3xl"
+        >
+          <GridItem>
             <Button
-              size={buttonSize}
+              w="100%"
+              h="120px"
               colorScheme="teal"
               variant="solid"
-              leftIcon={<Icon as={FaStore} boxSize={6} />}
+              leftIcon={<Icon as={FaStore} boxSize={8} />}
               onClick={() => router.push("/sales")}
-              borderRadius="full"
-              boxShadow="lg"
-              _hover={{ bg: "teal.600", shadow: "md" }}
+              borderRadius="lg"
+              boxShadow="xl"
+              fontSize="lg"
+              _hover={{ bg: "teal.600" }}
+              textAlign="center"
+              justifyContent="center"
+              alignItems="center"
+              flexDirection="column"
             >
-              Vender Produtos
+              Vendas
             </Button>
+          </GridItem>
 
+          <GridItem>
             <Button
-              size={buttonSize}
+              w="100%"
+              h="120px"
               colorScheme="orange"
               variant="solid"
-              leftIcon={<Icon as={FaWarehouse} boxSize={6} />}
+              leftIcon={<Icon as={FaWarehouse} boxSize={8} />}
               onClick={() => router.push("/dashboard")}
-              borderRadius="full"
-              boxShadow="lg"
-              _hover={{ bg: "orange.600", shadow: "md" }}
+              borderRadius="lg"
+              boxShadow="xl"
+              fontSize="lg"
+              _hover={{ bg: "orange.600" }}
+              textAlign="center"
+              justifyContent="center"
+              alignItems="center"
+              flexDirection="column"
             >
-              Gerir Stock
+              Estoque
             </Button>
+          </GridItem>
 
+          <GridItem>
             <Button
-              size={buttonSize}
+              w="100%"
+              h="120px"
               colorScheme="blue"
               variant="solid"
-              leftIcon={<Icon as={FaMoneyCheckAlt} boxSize={6} />}
+              leftIcon={<Icon as={FaMoneyCheckAlt} boxSize={8} />}
               onClick={() => router.push("/cashflow")}
-              borderRadius="full"
-              boxShadow="lg"
-              _hover={{ bg: "blue.600", shadow: "md" }}
+              borderRadius="lg"
+              boxShadow="xl"
+              fontSize="lg"
+              _hover={{ bg: "blue.600" }}
+              textAlign="center"
+              justifyContent="center"
+              alignItems="center"
+              flexDirection="column"
             >
-              Ver Caixa
+              Caixa
             </Button>
+          </GridItem>
 
+          <GridItem>
             <Button
-              size={buttonSize}
+              w="100%"
+              h="120px"
               colorScheme="purple"
               variant="solid"
-              leftIcon={<Icon as={FaFileInvoice} boxSize={6} />}
+              leftIcon={<Icon as={FaFileInvoice} boxSize={8} />}
               onClick={() => router.push("/documents")}
-              borderRadius="full"
-              boxShadow="lg"
-              _hover={{ bg: "purple.600", shadow: "md" }}
+              borderRadius="lg"
+              boxShadow="xl"
+              fontSize="lg"
+              _hover={{ bg: "purple.600" }}
+              textAlign="center"
+              justifyContent="center"
+              alignItems="center"
+              flexDirection="column"
             >
-              Emitir Documentos
+              Documentos
             </Button>
-          </Stack>
-        </VStack>
-        {/* <DropzoneComponent /> */}
-      </Center>
+          </GridItem>
+        </Grid>
+      </VStack>
 
       <Box
+        as="footer"
         bg={colorMode === "light" ? "gray.200" : "gray.800"}
         py={4}
-        mt="auto"
+        width="100%"
         textAlign="center"
+        position="absolute"
+        bottom={0}
         borderTopWidth={1}
         borderColor={colorMode === "light" ? "gray.300" : "gray.700"}
       >
-        <Text color={colorMode === "light" ? "gray.600" : "gray.400"}>
-          &copy; {new Date().getFullYear()} Mosprey Innovations
+        <Text
+          fontSize="sm"
+          color={colorMode === "light" ? "gray.600" : "gray.400"}
+        >
+          &copy; {new Date().getFullYear()} Mosprey Innovations. Todos os
+          direitos reservados.
         </Text>
       </Box>
     </Flex>

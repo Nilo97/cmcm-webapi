@@ -208,7 +208,7 @@ const ProductTable: React.FC<ProductTableProps> = ({
             >
               <TableCaption>Provided by Mosprey Innovations</TableCaption>
               <Thead>
-                <Tr>
+                <Tr fontSize="xs">
                   <Th>Código</Th>
                   <Th>Nome</Th>
                   <Th>Descrição</Th>

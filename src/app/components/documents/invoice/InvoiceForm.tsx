@@ -164,6 +164,7 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
     selectedOption: SingleValue<PaymentOption>
   ) => {
     setValue("paymentTerms", selectedOption?.value || "");
+    console.log(selectedOption?.value);
   };
 
   const calculateTax = (item: CartItem) => {
@@ -208,7 +209,7 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
 
     return {
       document: documentRequest,
-      paymentTerms: formData.paymentTerms,
+      paymentTerms: formData.paymentTerms.value,
     };
   }
   const onSubmit = async (formData: any) => {
@@ -355,7 +356,6 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
                 </FormErrorMessage>
               )}
             </FormControl>
-
             {watch("selectedClient")?.value === "novo" && (
               <FormControl mb={4} isInvalid={!!errors.newClient}>
                 <FormLabel>Nome do cliente Instantâneo:</FormLabel>
@@ -382,7 +382,6 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
                 )}
               </FormControl>
             )}
-
             <FormControl
               mr={2}
               isInvalid={!!errors.paymentTerms}
@@ -397,20 +396,15 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
                 render={({ field }) => (
                   <Select
                     {...field}
-                    placeholder="Selecione os termos de pagamento"
+                    placeholder="Selecione o cliente"
                     options={paymentOptions}
-                    onChange={handlePaymentTermsChange}
                     styles={{
-                      control: (provided, state) => ({
-                        ...provided,
+                      control: (styles) => ({
+                        ...styles,
                         backgroundColor: "white",
-                        height: "40px",
-                        padding: "0 8px",
-                        minHeight: "40px",
-                        ...(state.isFocused ? { borderColor: "teal" } : {}),
                       }),
-                      option: (provided, { isSelected }) => ({
-                        ...provided,
+                      option: (styles, { isSelected }) => ({
+                        ...styles,
                         color: "black",
                         backgroundColor: isSelected ? "#ddd" : "white",
                       }),
