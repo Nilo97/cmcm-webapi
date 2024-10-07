@@ -53,7 +53,7 @@ const Document = () => {
               bg={tabBgColor}
               _selected={{ color: "white", bg: tabSelectedColor }}
             >
-              Recibo
+              Talão
             </Tab>
             <Tab
               bg={tabBgColor}

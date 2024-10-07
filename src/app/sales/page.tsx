@@ -448,7 +448,7 @@ const POS: React.FC = () => {
         <Modal isOpen={isOpen} onClose={onClose} size="lg">
           <ModalOverlay />
           <ModalContent>
-            <ModalHeader>Recibo</ModalHeader>
+            <ModalHeader>Talão</ModalHeader>
             <ModalCloseButton />
             <ModalBody>
               {pdfBlob ? <Invoice pdfBlob={pdfBlob} /> : <p>Carregando...</p>}

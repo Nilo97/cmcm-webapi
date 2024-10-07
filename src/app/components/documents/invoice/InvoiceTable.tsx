@@ -255,26 +255,36 @@ const InvoiceTable: React.FC<InvoiceTableProps> = ({
                   <Th>Data de Validade</Th>
                   <Th>Total</Th>
                   <Th>Pagamento</Th>
-                  <Th>Ações</Th>
+                  <Th>Ação</Th>
                 </Tr>
               </Thead>
               <Tbody>
-                {invoices.map((invoice) => (
-                  <Tr key={invoice.id}>
-                    <Td>{formatDate(invoice.documentDate)}</Td>
-                    <Td>{invoice.reference}</Td>
-                    <Td>{invoice.customer}</Td>
-
-                    <Td>{formatDate(invoice.dueDate)}</Td>
+                {invoices?.map((invoice) => (
+                  <Tr key={invoice?.id ?? Math.random()}>
+                    <Td>
+                      {invoice?.documentDate
+                        ? formatDate(invoice.documentDate)
+                        : "Data não disponível"}
+                    </Td>
+                    <Td>{invoice?.reference ?? "Referência não disponível"}</Td>
+                    <Td>{invoice?.customer ?? "Cliente não disponível"}</Td>
+                    <Td>
+                      {invoice?.dueDate
+                        ? formatDate(invoice.dueDate)
+                        : "Vencimento não disponível"}
+                    </Td>
                     <Td>{formatCurrency(invoice.total)}</Td>
                     <Td>
                       <Badge
-                        colorScheme={getStatusBadgeColor(invoice.paymentStatus)}
+                        colorScheme={
+                          invoice?.paymentStatus
+                            ? getStatusBadgeColor(invoice.paymentStatus)
+                            : "gray"
+                        }
                       >
-                        {invoice.paymentStatus}
+                        {invoice?.paymentStatus ?? "Desconhecido"}
                       </Badge>
                     </Td>
-
                     <Td>
                       <Menu>
                         <MenuButton
@@ -283,7 +293,7 @@ const InvoiceTable: React.FC<InvoiceTableProps> = ({
                           as={Button}
                           rightIcon={<ChevronDownIcon />}
                         >
-                          Ações
+                          Opções
                         </MenuButton>
                         <MenuList>
                           <MenuItem icon={<FaDollarSign />} onClick={() => {}}>
@@ -296,12 +306,16 @@ const InvoiceTable: React.FC<InvoiceTableProps> = ({
                             onClick={() => handleViewDetails(invoice)}
                           >
                             Ver detalhes
-                          </MenuItem>{" "}
+                          </MenuItem>
                         </MenuList>
                       </Menu>
                     </Td>
                   </Tr>
-                ))}
+                )) ?? (
+                  <Tr>
+                    <Td>Nenhuma factura disponível</Td>
+                  </Tr>
+                )}
               </Tbody>
             </Table>
           </TableContainer>

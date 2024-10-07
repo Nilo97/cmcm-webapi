@@ -213,8 +213,8 @@ const SupplierTable: React.FC<SupplierTableProps> = ({
               <Thead>
                 <Tr>
                   <Th>Nome</Th>
-                  <Th>Informações de Contato</Th>
-                  <Th>Ações</Th>
+                  <Th>InformAção de Contato</Th>
+                  <Th>Ação</Th>
                 </Tr>
               </Thead>
               <Tbody>

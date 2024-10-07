@@ -493,9 +493,9 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
         <HStack spacing={6} align="start" wrap="wrap">
           <Box flex="1" minW="300px">
             <FormControl id="observations">
-              <FormLabel>Observações</FormLabel>
+              <FormLabel>ObservAção</FormLabel>
               <Textarea
-                placeholder="Digite suas observações aqui"
+                placeholder="Digite suas observAção aqui"
                 {...register("observations")}
                 size="sm"
                 w="full"

@@ -92,7 +92,7 @@ const CompanyDetail: React.FC<CompanyDetailProps> = ({ company, users }) => {
                   <Tr>
                     <Th>usuário</Th>
                     <Th>Email</Th>
-                    <Th>Ações</Th>
+                    <Th>Ação</Th>
                   </Tr>
                 </Thead>
                 <Tbody>

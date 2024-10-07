@@ -214,7 +214,7 @@ const CategoryTable: React.FC<CategoryTableProps> = ({
                 <Tr fontSize="xs">
                   <Th>Nome</Th>
                   <Th>Descrição</Th>
-                  <Th>Ações</Th>
+                  <Th>Ação</Th>
                 </Tr>
               </Thead>
               <Tbody>

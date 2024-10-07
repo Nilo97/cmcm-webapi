@@ -246,7 +246,7 @@ const ReceiptTable: React.FC<ReceiptTableProps> = ({
         <>
           <TableContainer>
             <Table variant="simple" fontSize="sm" size="xs">
-              <TableCaption>Lista de Recibos</TableCaption>
+              <TableCaption>Lista de Talões </TableCaption>
               <Thead>
                 <Tr fontSize="xs">
                   <Th>Data de Emissão</Th>
@@ -255,19 +255,22 @@ const ReceiptTable: React.FC<ReceiptTableProps> = ({
                   <Th>Desconto</Th>
                   <Th>Imposto</Th>
                   <Th>Total</Th>
-                  <Th>Ações</Th>
+                  <Th>Ação</Th>
                 </Tr>
               </Thead>
               <Tbody>
-                {receipts.map((Receipt) => (
-                  <Tr key={Receipt.id}>
-                    <Td>{formatDate(Receipt.createdAt)}</Td>
-                    <Td>{Receipt.reference}</Td>
-                    <Td>{Receipt.customer}</Td>
-                    <Td>{formatCurrency(Receipt.discount)}</Td>
-                    <Td>{formatCurrency(Receipt.tax)}</Td>
-                    <Td>{formatCurrency(Receipt.total)}</Td>
-
+                {receipts?.map((receipt) => (
+                  <Tr key={receipt?.id ?? Math.random()}>
+                    <Td>
+                      {receipt?.createdAt
+                        ? formatDate(receipt.createdAt)
+                        : "Data não disponível"}
+                    </Td>
+                    <Td>{receipt?.reference ?? "Referência não disponível"}</Td>
+                    <Td>{receipt?.customer ?? "Cliente não disponível"}</Td>
+                    <Td>{formatCurrency(receipt.discount)}</Td>
+                    <Td>{formatCurrency(receipt.tax)}</Td>
+                    <Td>{formatCurrency(receipt.total)}</Td>
                     <Td>
                       <Menu>
                         <MenuButton
@@ -276,7 +279,7 @@ const ReceiptTable: React.FC<ReceiptTableProps> = ({
                           as={Button}
                           rightIcon={<ChevronDownIcon />}
                         >
-                          Ações
+                          Opções
                         </MenuButton>
                         <MenuList>
                           <MenuItem icon={<FaDollarSign />} onClick={() => {}}>
@@ -286,15 +289,19 @@ const ReceiptTable: React.FC<ReceiptTableProps> = ({
                           <MenuItem icon={<EditIcon />}>Baixar</MenuItem>
                           <MenuItem
                             icon={<ViewIcon />}
-                            onClick={() => handleViewDetails(Receipt)}
+                            onClick={() => handleViewDetails(receipt)}
                           >
                             Ver detalhes
-                          </MenuItem>{" "}
+                          </MenuItem>
                         </MenuList>
                       </Menu>
                     </Td>
                   </Tr>
-                ))}
+                )) ?? (
+                  <Tr>
+                    <Td>Nenhum Talão disponível</Td>
+                  </Tr>
+                )}
               </Tbody>
             </Table>
           </TableContainer>
@@ -305,7 +312,7 @@ const ReceiptTable: React.FC<ReceiptTableProps> = ({
             <Modal isOpen={isOpen} onClose={onClose}>
               <ModalOverlay />
               <ModalContent>
-                <ModalHeader>Detalhes do Recibo</ModalHeader>
+                <ModalHeader>Detalhes do Talão</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
                   <VStack spacing={4} align="flex-start">

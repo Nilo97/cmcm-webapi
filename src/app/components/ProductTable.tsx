@@ -215,7 +215,7 @@ const ProductTable: React.FC<ProductTableProps> = ({
                   <Th>Categoria</Th>
                   <Th>Preço</Th>
                   <Th>Quantidade</Th>
-                  <Th>Ações</Th>
+                  <Th>Ação</Th>
                 </Tr>
               </Thead>
               <Tbody>

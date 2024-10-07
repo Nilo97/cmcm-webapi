@@ -90,7 +90,7 @@ const Document = () => {
           flexWrap="wrap"
         >
           {[
-            "Recibo",
+            "Talão",
             "Factura",
             "Cotação",
             "Nota de Crédito",

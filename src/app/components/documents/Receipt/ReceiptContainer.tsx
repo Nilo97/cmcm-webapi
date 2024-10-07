@@ -103,7 +103,7 @@ export const ReceiptContainer: React.FC<receiptContainerProps> = ({
           mb={{ base: 4, md: 0 }}
           textShadow="1px 1px #ccc"
         >
-          Lista de Recibos
+          Lista de Talões 
         </Heading>
       </Flex>
 

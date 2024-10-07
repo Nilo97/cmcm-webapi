@@ -36,7 +36,7 @@ const Invoice = ({ pdfBlob }: { pdfBlob: Blob | null }) => {
   const fileName = (): string => {
     const randomText = Math.random().toString(36).substring(2, 10);
     const today = new Date().toISOString().split("T")[0];
-    return `recibo_${randomText}_${today}.pdf`;
+    return `Talão_${randomText}_${today}.pdf`;
   };
 
   const handleDownload = () => {
@@ -101,10 +101,10 @@ const Invoice = ({ pdfBlob }: { pdfBlob: Blob | null }) => {
           fontWeight="bold"
           color="green.800"
         >
-          O recibo está pronto!
+          O Talão está pronto!
         </Text>
         <Text color="gray.600">
-          Utilize os botões abaixo para imprimir, baixar ou enviar o recibo por
+          Utilize os botões abaixo para imprimir, baixar ou enviar o Talão por
           email.
         </Text>
       </Stack>
@@ -121,7 +121,7 @@ const Invoice = ({ pdfBlob }: { pdfBlob: Blob | null }) => {
           _hover={{ bg: "teal.600", color: "white" }}
           _disabled={{ bg: "gray.200", cursor: "not-allowed" }}
         >
-          Imprimir Recibo
+          Imprimir Talão
         </Button>
         <Button
           colorScheme="purple"
@@ -134,7 +134,7 @@ const Invoice = ({ pdfBlob }: { pdfBlob: Blob | null }) => {
           _hover={{ bg: "purple.600", color: "white" }}
           _disabled={{ bg: "gray.200", cursor: "not-allowed" }}
         >
-          Baixar Recibo
+          Baixar Talão
         </Button>
         <Button
           colorScheme="blue"
