@@ -98,8 +98,8 @@ export const ReceiptContainer: React.FC<receiptContainerProps> = ({
         mb="4"
       >
         <Heading
-          as="h1"
-          size="lg"
+          as="h3"
+          size="md"
           mb={{ base: 4, md: 0 }}
           textShadow="1px 1px #ccc"
         >

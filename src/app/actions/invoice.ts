@@ -6,7 +6,6 @@ const { ["token"]: token } = parseCookies();
 
 async function createInvoice(invoice: any) {
   try {
-    console.log(invoice);
     const response = await fetch(`${BASE_URL}/api/invoices`, {
       method: "POST",
       headers: {
@@ -68,4 +67,34 @@ async function fetchPaginatedInvoices(
   }
 }
 
-export { createInvoice, fetchPaginatedInvoices };
+async function payInvoice(
+  invoicePaymentRequest: any
+): Promise<{ message?: string; error?: string }> {
+  try {
+    const response = await fetch(`${BASE_URL}/api/invoices/pay`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(invoicePaymentRequest),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      return {
+        error: errorData?.message || "Erro ao processar o pagamento da fatura.",
+      };
+    }
+
+    const message = await response.text();
+    return {
+      message: message || "Pagamento da fatura processado com sucesso.",
+    };
+  } catch (error) {
+    console.error("Erro ao processar o pagamento da fatura:", error);
+    return { error: "Erro ao processar o pagamento da fatura." };
+  }
+}
+
+export { createInvoice, fetchPaginatedInvoices, payInvoice };

@@ -282,16 +282,12 @@ const ReceiptTable: React.FC<ReceiptTableProps> = ({
                           Opções
                         </MenuButton>
                         <MenuList>
-                          <MenuItem icon={<FaDollarSign />} onClick={() => {}}>
-                            Efectuar Pagamento
-                          </MenuItem>
-                          <MenuItem icon={<FaSignOutAlt />}>Cancelar</MenuItem>
                           <MenuItem icon={<EditIcon />}>Baixar</MenuItem>
                           <MenuItem
                             icon={<ViewIcon />}
                             onClick={() => handleViewDetails(receipt)}
                           >
-                            Ver detalhes
+                            Ver todos os detalhes
                           </MenuItem>
                         </MenuList>
                       </Menu>

@@ -83,7 +83,7 @@ export const truncateText = (text: string, maxLength: number): string => {
 export function getStatusBadgeColor(status: string): string {
   const statusColors: { [key: string]: string } = {
     Pendente: "orange",
-    CONFIRMED: "blue",
+    Concluído: "blue",
     CHECKED_IN: "green",
     CHECKED_OUT: "gray",
     CANCELLED: "red",

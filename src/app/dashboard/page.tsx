@@ -23,12 +23,12 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { FaBasketShopping, FaPeopleCarryBox } from "react-icons/fa6";
-import { GeneralStats, Product, StatsResponse } from "../types";
 import {
   fetchYearMonthStats,
   fetchStats,
   findTop5ProductsWithMinQuantity,
 } from "../actions/stats";
+import { GeneralStats, Product, StatsResponse } from "../actions/types";
 
 const colors = ["#8884d8", "#82ca9d", "#ffc658", "#ff7300", "#413ea0"];
 
@@ -89,8 +89,8 @@ const Dashboard = () => {
 
   const dataEntriesExits = yearMonthStats
     ? yearMonthStats.entries
-        .filter((entry) => entry.year === selectedYear)
-        .map((entry) => ({
+        .filter((entry: any) => entry.year === selectedYear)
+        .map((entry: any) => ({
           month: new Date(entry.year, entry.month - 1).toLocaleString(
             "default",
             {
@@ -100,7 +100,7 @@ const Dashboard = () => {
           entries: entry.count,
           exits:
             yearMonthStats.sales.find(
-              (s) => s.year === entry.year && s.month === entry.month
+              (s: any) => s.year === entry.year && s.month === entry.month
             )?.count || 0,
         }))
     : [];

@@ -9,8 +9,6 @@ import {
   HStack,
   Button,
   Input,
-  Divider,
-  VStack,
   Icon,
   InputGroup,
   InputRightElement,
@@ -28,22 +26,14 @@ import { DeleteIcon, SearchIcon } from "@chakra-ui/icons";
 import { fetchProducts } from "../actions/product";
 import { CartItem, Product } from "../actions/types";
 import { formatCurrency, truncateText } from "../actions/util";
-import Select, { SingleValue } from "react-select";
 import { fetchPaginatedCustomers } from "../actions/customer";
-import {
-  FaMoneyBillWave,
-  FaMobileAlt,
-  FaMoneyCheckAlt,
-  FaCreditCard,
-  FaRegCreditCard,
-} from "react-icons/fa";
-import { FaMoneyBillTransfer } from "react-icons/fa6";
+
 import SaleCard from "../components/sales/SaleCard";
-import CartTable from "../components/CartTable";
 import { createSale } from "../actions/sale";
 import Invoice from "../components/Invoice";
 import { useRouter } from "next/navigation";
 import ShoppingCart from "../components/ShoppingCartProps";
+import { paymentOptions } from "../actions/shared";
 
 const TAX_RATE = 0.16;
 const PAGE_SIZE = 8;
@@ -52,36 +42,6 @@ interface Client {
   id: string;
   name: string;
 }
-
-const paymentOptions = [
-  {
-    value: "CASH",
-    label: "Dinheiro",
-    icon: <FaMoneyBillWave color="green" />,
-  },
-  { value: "MPESA", label: "M-Pesa", icon: <FaMobileAlt color="red" /> },
-  {
-    value: "EMOLA",
-    label: "eMola",
-    icon: <FaMoneyCheckAlt color="orange" />,
-  },
-  { value: "CARD", label: "Cartão", icon: <FaCreditCard color="purple" /> },
-  {
-    value: "BANK_TRANSFER",
-    label: "Transferência Bancária",
-    icon: <FaMoneyBillTransfer color="teal" />,
-  },
-  {
-    value: "MKESH",
-    label: "Mkesh",
-    icon: <FaRegCreditCard color="yellow" />,
-  },
-  {
-    value: "CHEQUE",
-    label: "Cheque",
-    icon: <FaRegCreditCard color="gray" />,
-  },
-];
 
 const POS: React.FC = () => {
   const router = useRouter();
@@ -297,19 +257,6 @@ const POS: React.FC = () => {
     }
   };
 
-  const formatOptionLabel = ({
-    label,
-    icon,
-  }: {
-    label: string;
-    icon: JSX.Element;
-  }) => (
-    <Flex align="center">
-      {icon}
-      <Text ml={2}>{label}</Text>
-    </Flex>
-  );
-
   return (
     <ChakraProvider>
       <Flex height="100vh" direction="column" p={2} bg="gray.50">
@@ -427,7 +374,6 @@ const POS: React.FC = () => {
             handleDiscountChange={handleDiscountChange}
             selectedCustomer={selectedCustomer}
             setSelectedCustomer={setSelectedCustomer}
-            paymentOptions={paymentOptions}
             clientOptions={clientOptions}
             selectedPayment={selectedPayment}
             setSelectedPayment={setSelectedPayment}

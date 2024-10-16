@@ -177,8 +177,8 @@ export interface InvoiceResponse {
   tax: number;
   total: number;
   reference: string;
+  docId: string;
 }
-
 
 export interface ReceiptResponse {
   id: string;

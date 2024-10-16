@@ -54,6 +54,7 @@ import {
 } from "@/app/actions/util";
 import { FaSignOutAlt } from "react-icons/fa";
 import { FaDollarSign } from "react-icons/fa6";
+import PaymentModal from "./PaymentModal";
 
 interface InvoiceTableProps {
   invoices: InvoiceResponse[];
@@ -84,6 +85,7 @@ const InvoiceTable: React.FC<InvoiceTableProps> = ({
     useState<InvoiceResponse | null>(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [query, setQuery] = useState<string>("");
+  const [isPaymentModalOpen, setPaymentModalOpen] = useState<boolean>(false);
 
   const handleQuery = (e: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value);
@@ -99,6 +101,16 @@ const InvoiceTable: React.FC<InvoiceTableProps> = ({
   const handleViewDetails = (invoice: InvoiceResponse) => {
     setSelectedInvoice(invoice);
     onOpen();
+  };
+
+  const handlePaymentClick = (invoice: any) => {
+    setSelectedInvoice(invoice);
+    setPaymentModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setPaymentModalOpen(false);
+    setSelectedInvoice(null);
   };
 
   const renderPagination = () => {
@@ -296,16 +308,22 @@ const InvoiceTable: React.FC<InvoiceTableProps> = ({
                           Opções
                         </MenuButton>
                         <MenuList>
-                          <MenuItem icon={<FaDollarSign />} onClick={() => {}}>
-                            Efectuar Pagamento
-                          </MenuItem>
+                          {invoice?.paymentStatus !== "Concluído" && (
+                            <MenuItem
+                              icon={<FaDollarSign />}
+                              onClick={() => handlePaymentClick(invoice)}
+                            >
+                              Efectuar Pagamento
+                            </MenuItem>
+                          )}
+
                           <MenuItem icon={<FaSignOutAlt />}>Cancelar</MenuItem>
                           <MenuItem icon={<EditIcon />}>Baixar</MenuItem>
                           <MenuItem
                             icon={<ViewIcon />}
                             onClick={() => handleViewDetails(invoice)}
                           >
-                            Ver detalhes
+                            Ver todos os detalhes
                           </MenuItem>
                         </MenuList>
                       </Menu>
@@ -323,10 +341,12 @@ const InvoiceTable: React.FC<InvoiceTableProps> = ({
           {renderPagination()}
 
           {selectedInvoice && (
-            <Modal isOpen={isOpen} onClose={onClose}>
+            <Modal isOpen={isOpen} onClose={onClose} isCentered>
               <ModalOverlay />
-              <ModalContent>
-                <ModalHeader>Detalhes da Fatura</ModalHeader>
+              <ModalContent borderRadius="lg" boxShadow="lg" maxW="500px" p={4}>
+                <ModalHeader fontSize="lg" fontWeight="bold" textAlign="center">
+                  Detalhes da Fatura
+                </ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
                   <VStack spacing={4} align="flex-start">
@@ -368,19 +388,43 @@ const InvoiceTable: React.FC<InvoiceTableProps> = ({
                       <strong>Criado em:</strong>{" "}
                       {formatDate(selectedInvoice.createdAt)}
                     </Text>
-
                     <Text>
                       <strong>Criado por:</strong> User
                     </Text>
                   </VStack>
                 </ModalBody>
-                <ModalFooter>
-                  <Button colorScheme="teal.500" onClick={onClose}>
-                    Fechar
+                <ModalFooter justifyContent="center">
+                  {selectedInvoice?.paymentStatus !== "Concluído" && (
+                    <Button
+                      colorScheme="teal"
+                      mr={3}
+                      size="sm"
+                      onClick={() => handlePaymentClick(selectedInvoice)}
+                    >
+                      Efectuar Pagamento
+                    </Button>
+                  )}
+
+                  <Button
+                    colorScheme="red"
+                    variant="outline"
+                    onClick={onClose}
+                    size="sm"
+                  >
+                    Cancelar Factura
                   </Button>
                 </ModalFooter>
               </ModalContent>
             </Modal>
+          )}
+
+          {selectedInvoice && (
+            <PaymentModal
+              isOpen={isPaymentModalOpen}
+              onClose={closeModal}
+              invoice={selectedInvoice}
+              onPayment={onPayment}
+            />
           )}
         </>
       )}

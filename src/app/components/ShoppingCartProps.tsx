@@ -11,6 +11,7 @@ import {
 } from "@chakra-ui/react";
 import Select, { SingleValue } from "react-select";
 import CartTable from "./CartTable";
+import { formatOptionLabel, paymentOptions } from "../actions/shared";
 
 interface Option {
   value: string;
@@ -23,11 +24,10 @@ interface ShoppingCartProps {
   handleQuantityChange: (id: string, newQuantity: number) => void;
   handleDiscountChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   selectedCustomer: Option | null;
-  setSelectedCustomer: (value: SingleValue<Option>) => void;
-  paymentOptions: Option[];
+  setSelectedCustomer: (value: any) => void;
   clientOptions: Option[];
-  selectedPayment: Option | null;
-  setSelectedPayment: (value: SingleValue<Option>) => void;
+  selectedPayment: any | null;
+  setSelectedPayment: (value: any) => void;
   payment: number | "";
   handlePaymentChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleFinishSale: () => void;
@@ -48,7 +48,6 @@ const ShoppingCart: React.FC<ShoppingCartProps> = ({
   handleDiscountChange,
   selectedCustomer,
   setSelectedCustomer,
-  paymentOptions,
   clientOptions,
   selectedPayment,
   setSelectedPayment,
@@ -115,6 +114,7 @@ const ShoppingCart: React.FC<ShoppingCartProps> = ({
                 options={paymentOptions}
                 value={selectedPayment}
                 onChange={setSelectedPayment}
+                formatOptionLabel={formatOptionLabel}
                 placeholder="Escolha o método de pagamento"
               />
               <Input
