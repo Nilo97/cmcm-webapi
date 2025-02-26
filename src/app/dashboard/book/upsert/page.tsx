@@ -8,8 +8,6 @@ import {
   FormLabel,
   Input,
   Textarea,
-  HStack,
-  VStack,
   Select as Cselect,
   FormErrorMessage,
   useToast,
@@ -18,28 +16,30 @@ import {
   Flex,
   GridItem,
   SimpleGrid,
-  List,
-  ListItem,
+  InputGroup,
+  InputRightElement,
 } from "@chakra-ui/react";
 import { Controller, useForm } from "react-hook-form";
 import { useRouter, useSearchParams } from "next/navigation";
 import { getBookById, updateBook, createBook } from "@/app/actions/book";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { customer, CustomerResponse } from "@/app/actions/types";
+import { BrandResponse, customer, CustomerResponse } from "@/app/actions/types";
 import { fetchPaginatedCustomers, getCustomers } from "@/app/actions/customer";
 import Select, { SingleValue } from "react-select";
+import { fetchPaginatedBrands, getBrands } from "@/app/actions/brand";
+import { fetchPaginatedMotoTypes, getMotoTypes } from "@/app/actions/mototype";
+import { ArrowBackIcon } from "@chakra-ui/icons";
 
-const brands = ["Toyota", "Suzuki B", "Marca C"];
 const bicycleTypes = ["Bicicleta", "Bicicleta", "Scooter"];
 
 interface Book {
   id?: string;
   registrationNumber: string;
-  brand: string;
+  brandId: string;
   model: string;
   manufactureYear: number;
-  bicycleType: string;
+  bicycleTypeId: string;
   engineNumber: string;
   engineCapacity: string;
   frameNumber: string;
@@ -62,9 +62,13 @@ const BookRegistrationForm: React.FC = () => {
   const [bookId, setBookId] = useState<string | null>(null);
   const [manufactureYear, setManufactureYear] = useState<Date | null>(null);
   const [customers, setCustomers] = useState<CustomerResponse[]>([]);
+  const [brands, setBrands] = useState<BrandResponse[]>([]);
+  const [motoTypes, setMotoTypes] = useState<BrandResponse[]>([]);
+
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredCustomers, setFilteredCustomers] = useState(customers);
   const [showDropdown, setShowDropdown] = useState(false);
+  const [query, setQuery] = useState<string>("");
 
   useEffect(() => {
     const id = searchParams.get("id");
@@ -73,14 +77,16 @@ const BookRegistrationForm: React.FC = () => {
       loadBookData(id);
     }
 
-    fetchClients();
+    fetchClients("");
+    fetchBrands();
+    fetchMotoTypes();
   }, [searchParams]);
 
-  const fetchClients = async () => {
-    const response = await fetchPaginatedCustomers(10, 0);
+  const fetchClients = async (searchTerm: string) => {
+    const response = await fetchPaginatedCustomers(10, 0, searchTerm);
     if ("error" in response) {
       toast({
-        title: "Erro ao carregar utentes.",
+        title: "Erro ao carregar Proprietários.",
         description: response.error,
         status: "error",
         duration: 5000,
@@ -88,6 +94,36 @@ const BookRegistrationForm: React.FC = () => {
       });
     } else {
       setCustomers(response.customers);
+    }
+  };
+
+  const fetchBrands = async () => {
+    const response = await getBrands();
+    if ("error" in response) {
+      toast({
+        title: "Erro ao carregar marcas.",
+        description: response.error,
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+    } else {
+      setBrands(response);
+    }
+  };
+
+  const fetchMotoTypes = async () => {
+    const response = await getMotoTypes();
+    if ("error" in response) {
+      toast({
+        title: "Erro ao carregar tipos.",
+        description: response.error,
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+    } else {
+      setMotoTypes(response);
     }
   };
 
@@ -104,10 +140,10 @@ const BookRegistrationForm: React.FC = () => {
       }
       setCustomers(data);
     } catch (error) {
-      console.error("Error loading utentes:", error);
+      console.error("Error loading Proprietários:", error);
       toast({
-        title: "Erro ao carregar utentes",
-        description: "Ocorreu um erro ao tentar carregar as utentes.",
+        title: "Erro ao carregar Proprietários",
+        description: "Ocorreu um erro ao tentar carregar as Proprietários.",
         status: "error",
         duration: 5000,
         isClosable: true,
@@ -157,12 +193,11 @@ const BookRegistrationForm: React.FC = () => {
           isClosable: true,
         });
       }
-      // router.push("/dashboard/books");
-      // router.push("/dashboard/books");
+      router.back();
     } catch (error) {
       toast({
         title: "Erro ao salvar livrete",
-        description: "Não foi possível salvar os dados.",
+        description: `${error}`,
         status: "error",
         duration: 5000,
         isClosable: true,
@@ -177,9 +212,18 @@ const BookRegistrationForm: React.FC = () => {
       p={6}
       borderWidth={1}
       borderRadius="lg"
-      boxShadow="xl"
+      boxShadow="2xl"
+      bg="white"
     >
-      <Heading as="h2" size="xl" textAlign="center" mb={4} color="teal.500">
+      <Button
+        leftIcon={<ArrowBackIcon />}
+        colorScheme="gray"
+        mb={4}
+        onClick={() => router.back()} // Certifique-se de importar useRouter do Next.js
+      >
+        Voltar
+      </Button>
+      <Heading as="h2" size="lg" textAlign="center" mb={5} color="teal.600">
         {bookId ? "Atualizar livrete" : "Registrar livrete"}
       </Heading>
       <Divider mb={4} />
@@ -204,22 +248,22 @@ const BookRegistrationForm: React.FC = () => {
             </FormControl>
           </GridItem>
           <GridItem>
-            <FormControl isInvalid={!!errors.brand}>
+            <FormControl isInvalid={!!errors.brandId}>
               <FormLabel>Marca</FormLabel>
               <Cselect
-                {...register("brand", { required: "Campo obrigatório" })}
+                {...register("brandId", { required: "Campo obrigatório" })}
               >
                 {brands.map((brand) => (
-                  <option key={brand} value={brand}>
-                    {brand}
+                  <option key={brand.id} value={brand.id}>
+                    {brand.description}
                   </option>
                 ))}
               </Cselect>
 
-              {errors.brand && (
+              {errors.brandId && (
                 <FormErrorMessage>
-                  {typeof errors.brand === "string"
-                    ? errors.brand
+                  {typeof errors.brandId === "string"
+                    ? errors.brandId
                     : "Campo é obrigatório."}
                 </FormErrorMessage>
               )}
@@ -267,53 +311,70 @@ const BookRegistrationForm: React.FC = () => {
             </FormControl>
           </GridItem>
           <GridItem>
-            <FormControl isInvalid={!!errors.bicycleType}>
+            <FormControl isInvalid={!!errors.bicycleTypeId}>
               <FormLabel>Tipo de Velocípede</FormLabel>
               <Cselect
-                {...register("bicycleType", { required: "Campo obrigatório" })}
+                {...register("bicycleTypeId", {
+                  required: "Campo obrigatório",
+                })}
               >
-                {bicycleTypes.map((type) => (
-                  <option key={type} value={type}>
-                    {type}
+                {motoTypes.map((type) => (
+                  <option key={type.id} value={type.id}>
+                    {type.description}
                   </option>
                 ))}
               </Cselect>
 
-              {errors.bicycleType && (
+              {errors.bicycleTypeId && (
                 <FormErrorMessage>
-                  {typeof errors.bicycleType === "string"
-                    ? errors.bicycleType
+                  {typeof errors.bicycleTypeId === "string"
+                    ? errors.bicycleTypeId
                     : "Campo é obrigatório."}
                 </FormErrorMessage>
               )}
             </FormControl>
           </GridItem>
           <GridItem>
-            <FormControl mr={2} isInvalid={!!errors.customerId} id="customerId">
-              <FormLabel> Utente:</FormLabel>
+            <FormControl isInvalid={!!errors.customerId} id="customerId">
+              <FormLabel color="gray.700">Proprietário</FormLabel>
               <Controller
                 name="customerId"
                 control={control}
-                rules={{ required: "Utente é obrigatório." }}
+                rules={{ required: "Proprietário é obrigatório." }}
                 render={({ field }) => (
                   <Select
                     {...field}
-                    placeholder="Selecione o Utente"
+                    placeholder="Pesquise e selecione o Proprietário"
                     options={clientOptions}
+                    isSearchable
+                    onInputChange={(inputValue) => {
+                      setQuery(inputValue);
+                      fetchClients(inputValue);
+                    }}
                     styles={{
                       control: (styles) => ({
                         ...styles,
                         backgroundColor: "white",
+                        borderColor: errors.customerId ? "red.500" : "gray.300",
+                        ":hover": { borderColor: "teal.400" },
                       }),
                       option: (styles, { isSelected }) => ({
                         ...styles,
+                        backgroundColor: isSelected ? "teal.100" : "white",
                         color: "black",
-                        backgroundColor: isSelected ? "#ddd" : "white",
+                        ":hover": { backgroundColor: "teal.50" },
                       }),
                     }}
                   />
                 )}
               />
+              {errors.customerId && (
+                <FormErrorMessage>
+                  {typeof errors.customerId === "string"
+                    ? errors.customerId
+                    : "Campo é obrigatório."}
+                </FormErrorMessage>
+              )}
             </FormControl>
           </GridItem>
           <GridItem>
@@ -322,16 +383,35 @@ const BookRegistrationForm: React.FC = () => {
               <Input
                 {...register("engineNumber", { required: "Campo obrigatório" })}
               />
+              {errors.engineNumber && (
+                <FormErrorMessage>
+                  {typeof errors.engineNumber === "string"
+                    ? errors.engineNumber
+                    : "Campo é obrigatório."}
+                </FormErrorMessage>
+              )}
             </FormControl>
           </GridItem>
           <GridItem>
             <FormControl isInvalid={!!errors.engineCapacity}>
-              <FormLabel>Capacidade do Motor</FormLabel>
-              <Input
-                {...register("engineCapacity", {
-                  required: "Campo obrigatório",
-                })}
-              />
+              <FormLabel>Cilindrada </FormLabel>
+
+              <InputGroup size="md">
+                <Input
+                  {...register("engineCapacity", {
+                    required: "Campo obrigatório",
+                  })}
+                />
+                <InputRightElement width="4.5rem">m³</InputRightElement>
+              </InputGroup>
+
+              {errors.engineCapacity && (
+                <FormErrorMessage>
+                  {typeof errors.engineCapacity === "string"
+                    ? errors.engineCapacity
+                    : "Campo é obrigatório."}
+                </FormErrorMessage>
+              )}
             </FormControl>
           </GridItem>
           <GridItem>
@@ -340,6 +420,13 @@ const BookRegistrationForm: React.FC = () => {
               <Input
                 {...register("frameNumber", { required: "Campo obrigatório" })}
               />
+              {errors.frameNumber && (
+                <FormErrorMessage>
+                  {typeof errors.frameNumber === "string"
+                    ? errors.frameNumber
+                    : "Campo é obrigatório."}
+                </FormErrorMessage>
+              )}
             </FormControl>
           </GridItem>
           <GridItem colSpan={{ base: 1, md: 3 }}>

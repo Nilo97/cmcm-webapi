@@ -6,7 +6,7 @@ const { ["token"]: token } = parseCookies();
 
 async function fetchcustomers() {
   try {
-    const response = await fetch(`${BASE_URL}/api/customers`, {
+    const response = await fetch(`${BASE_URL}/customers`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
@@ -14,13 +14,13 @@ async function fetchcustomers() {
     });
 
     if (!response.ok) {
-      throw new Error("Falha ao buscar Utentees");
+      throw new Error("Falha ao buscar Proprietárioes");
     }
 
     const data = await response.json();
     return data;
   } catch (error: any) {
-    console.error("Erro ao buscar Utentees:", error);
+    console.error("Erro ao buscar Proprietárioes:", error);
     return { error: error.message };
   }
 }
@@ -45,13 +45,13 @@ async function fetchPaginatedcustomers(
     const data = await response.json();
 
     if (!response.ok) {
-      throw new Error(data?.message || "Falha ao buscar Utentees");
+      throw new Error(data?.message || "Falha ao buscar Proprietárioes");
     }
 
     return { customers: data.content, totalPages: data.totalPages };
   } catch (error: any) {
-    console.error("Erro ao buscar Utentees:", error);
-    return { error: error.message || "Falha ao buscar Utentees" };
+    console.error("Erro ao buscar Proprietárioes:", error);
+    return { error: error.message || "Falha ao buscar Proprietárioes" };
   }
 }
 
@@ -59,7 +59,7 @@ async function getcustomerById(
   id: string
 ): Promise<{ customer: customer } | { error: string }> {
   try {
-    const url = `${BASE_URL}/api/customers/${id}`;
+    const url = `${BASE_URL}/customers/${id}`;
     const response = await fetch(url, {
       headers: {
         "Content-Type": "application/json",
@@ -70,13 +70,13 @@ async function getcustomerById(
     const data = await response.json();
 
     if (!response.ok) {
-      throw new Error(data?.message || "Falha ao buscar Utente");
+      throw new Error(data?.message || "Falha ao buscar Proprietário");
     }
 
     return { customer: data };
   } catch (error: any) {
-    console.error("Erro ao buscar Utente:", error);
-    return { error: error.message || "Falha ao buscar Utente" };
+    console.error("Erro ao buscar Proprietário:", error);
+    return { error: error.message || "Falha ao buscar Proprietário" };
   }
 }
 
@@ -96,11 +96,11 @@ async function createcustomer(customerData: any) {
     if (response.ok) {
       return data;
     } else {
-      return { error: data?.message || "Falha ao criar Utente." };
+      return { error: data?.message || "Falha ao criar Proprietário." };
     }
   } catch (error) {
-    console.error("Erro ao criar Utente:", error);
-    return { error: "Falha ao criar Utente." };
+    console.error("Erro ao criar Proprietário:", error);
+    return { error: "Falha ao criar Proprietário." };
   }
 }
 
@@ -109,7 +109,7 @@ async function updatecustomer(
   customerData: any
 ): Promise<customer | { error: string }> {
   try {
-    const response = await fetch(`${BASE_URL}/api/customers/${customerId}`, {
+    const response = await fetch(`${BASE_URL}/customers/${customerId}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -121,13 +121,13 @@ async function updatecustomer(
     const data = await response.json();
 
     if (!response.ok) {
-      throw new Error(data?.message || "Falha ao atualizar Utente");
+      throw new Error(data?.message || "Falha ao atualizar Proprietário");
     }
 
     return data;
   } catch (error: any) {
-    console.error("Erro ao atualizar Utente:", error);
-    return { error: error.message || "Falha ao atualizar Utente" };
+    console.error("Erro ao atualizar Proprietário:", error);
+    return { error: error.message || "Falha ao atualizar Proprietário" };
   }
 }
 
@@ -135,7 +135,7 @@ async function deletecustomer(
   customerId: string
 ): Promise<{ success: boolean } | { error: string }> {
   try {
-    const response = await fetch(`${BASE_URL}/api/customers/${customerId}`, {
+    const response = await fetch(`${BASE_URL}/customers/${customerId}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
@@ -145,13 +145,13 @@ async function deletecustomer(
 
     if (!response.ok) {
       const data = await response.json();
-      throw new Error(data?.message || "Falha ao deletar Utente");
+      throw new Error(data?.message || "Falha ao deletar Proprietário");
     }
 
     return { success: true };
   } catch (error: any) {
-    console.error("Erro ao deletar Utente:", error);
-    return { error: error.message || "Falha ao deletar Utente" };
+    console.error("Erro ao deletar Proprietário:", error);
+    return { error: error.message || "Falha ao deletar Proprietário" };
   }
 }
 
@@ -162,7 +162,7 @@ async function uploadcustomers(
   formData.append("file", file);
 
   try {
-    const response = await fetch(`${BASE_URL}/api/customers/upload`, {
+    const response = await fetch(`${BASE_URL}/customers/upload`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -172,13 +172,13 @@ async function uploadcustomers(
 
     if (!response.ok) {
       const data = await response.json();
-      throw new Error(data?.message || "Falha ao enviar Utentees");
+      throw new Error(data?.message || "Falha ao enviar Proprietárioes");
     }
 
     return { success: true };
   } catch (error: any) {
-    console.error("Erro ao enviar Utentees:", error);
-    return { error: error.message || "Falha ao enviar Utentees" };
+    console.error("Erro ao enviar Proprietárioes:", error);
+    return { error: error.message || "Falha ao enviar Proprietárioes" };
   }
 }
 

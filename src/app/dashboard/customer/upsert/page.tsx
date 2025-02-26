@@ -59,7 +59,7 @@ const CustomerRegistrationForm: React.FC = () => {
       setValue("phoneNumber", data.customer.phoneNumber);
     } catch (error) {
       toast({
-        title: "Erro ao carregar utente",
+        title: "Erro ao carregar Proprietário",
         description: "Não foi possível carregar os dados.",
         status: "error",
         duration: 5000,
@@ -74,7 +74,7 @@ const CustomerRegistrationForm: React.FC = () => {
         const response = await updatecustomer(customerId, values);
         if ("error" in response) throw new Error(response.error);
         toast({
-          title: "Utente Atualizado",
+          title: "Proprietário Atualizado",
           description: "Os dados foram atualizados com sucesso.",
           status: "success",
           duration: 5000,
@@ -84,8 +84,8 @@ const CustomerRegistrationForm: React.FC = () => {
         const response = await createcustomer(values);
         if ("error" in response) throw new Error(response.error);
         toast({
-          title: "Utente Registrado",
-          description: "O utente foi registrado com sucesso.",
+          title: "Proprietário Registrado",
+          description: "O Proprietário foi registrado com sucesso.",
           status: "success",
           duration: 5000,
           isClosable: true,
@@ -94,7 +94,7 @@ const CustomerRegistrationForm: React.FC = () => {
       router.push("/dashboard/customer");
     } catch (error) {
       toast({
-        title: "Erro ao salvar utente",
+        title: "Erro ao salvar Proprietário",
         description: "Não foi possível salvar os dados.",
         status: "error",
         duration: 5000,
@@ -114,7 +114,7 @@ const CustomerRegistrationForm: React.FC = () => {
       boxShadow="xl"
     >
       <Heading as="h2" size="lg" textAlign="center" mb="4">
-        {customerId ? "Atualizar Utente" : "Registrar Utente"}
+        {customerId ? "Atualizar Proprietário" : "Registrar Proprietário"}
       </Heading>
       <Divider mb="4" />
 
@@ -124,7 +124,7 @@ const CustomerRegistrationForm: React.FC = () => {
             <FormLabel>Nome</FormLabel>
             <Input
               size="lg"
-              placeholder="Nome do Utente"
+              placeholder="Nome do Proprietário"
               {...register("name", { required: "Nome é obrigatório" })}
             />
             <FormErrorMessage>{errors.name?.message}</FormErrorMessage>
@@ -148,7 +148,7 @@ const CustomerRegistrationForm: React.FC = () => {
             <FormLabel>Endereço</FormLabel>
             <Input
               size="lg"
-              placeholder="Endereço do Utente"
+              placeholder="Endereço do Proprietário"
               {...register("address", { required: "Endereço é obrigatório" })}
             />
             <FormErrorMessage>{errors.address?.message}</FormErrorMessage>

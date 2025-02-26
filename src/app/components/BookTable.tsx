@@ -119,7 +119,7 @@ const BookTable: React.FC<BookTableProps> = ({
                 <Th>Capacidade Motor</Th>
                 {/* <Th>Nº Quadro</Th> */}
 
-                <Th>Utente</Th>
+                <Th>Proprietário</Th>
                 <Th>Ações</Th>
               </Tr>
             </Thead>
@@ -142,9 +142,9 @@ const BookTable: React.FC<BookTableProps> = ({
                       leftIcon={<ViewIcon />}
                       onClick={() => handleViewDetails(book)}
                     >
-                      Ver
+                      Ver mais detalhes
                     </Button>
-                    <Button
+                    {/* <Button
                       ml="2"
                       size="xs"
                       leftIcon={<EditIcon />}
@@ -160,7 +160,7 @@ const BookTable: React.FC<BookTableProps> = ({
                       onClick={() => handleDelete(book.id)}
                     >
                       Excluir
-                    </Button>
+                    </Button> */}
                   </Td>
                 </Tr>
               ))}

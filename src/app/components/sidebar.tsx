@@ -29,14 +29,16 @@ import {
   FaHouseChimneyWindow,
   FaBasketShopping,
   FaPeopleCarryBox,
+  FaBookBible,
+  FaBookAtlas,
 } from "react-icons/fa6";
 
 const links = [
   { href: "/dashboard", label: "Geral", icon: FaHouseChimneyWindow },
-  { href: "/dashboard/customer", label: "Utentes", icon: FaUser },
+  { href: "/dashboard/customer", label: "Proprietários", icon: FaUser },
   { href: "/dashboard/book", label: "Livretes", icon: FaBook },
-  { href: "/dashboard/multa", label: "Multas", icon: FaExclamationTriangle },
-  { href: "/dashboard/table", label: "Tabelas", icon: FaTable },
+  { href: "/dashboard/licence", label: "Licença", icon: FaBookAtlas },
+  // { href: "/dashboard/table", label: "Tabelas", icon: FaTable },
   {
     href: "/dashboard/statistics",
     label: "Relatórios e Estatísticas",

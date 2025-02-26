@@ -21,6 +21,15 @@ export interface Book {
   customerName: string;
 }
 
+
+export interface Licence {
+  id: string;
+  licenceNumber: string;
+  obs: string;
+  customerName: string;
+}
+
+
 // Enum for Brand (if needed)
 export enum Brand {
   HONDA = "HONDA",
@@ -38,8 +47,6 @@ export enum BicycleType {
   MOUNTAIN = "MOUNTAIN",
   HYBRID = "HYBRID",
 }
-
-
 
 export interface customer {
   id: string;
@@ -75,8 +82,6 @@ export interface StatsResponse {
 }
 
 export type Plan = "OFFLINE" | "ONLINE" | "COMPLETE";
-
-
 
 export enum CashFlowStatus {
   OPENED,
@@ -115,6 +120,11 @@ export interface CustomerResponse {
   phone: string;
   customerType: CustomerType;
   sync: boolean;
+}
+
+export interface BrandResponse {
+  id: string;
+  description: string;
 }
 
 export enum CustomerType {

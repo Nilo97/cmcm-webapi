@@ -39,7 +39,7 @@ const CustomerDetailsModal: React.FC<CustomerDetailsModalProps> = ({
       <ModalOverlay />
       <ModalContent borderRadius="lg" boxShadow="xl">
         <ModalHeader textAlign="center" fontSize="2xl" fontWeight="bold">
-          Detalhes do Utente
+          Detalhes do Proprietário
         </ModalHeader>
         <ModalCloseButton />
         <ModalBody pb="6">
@@ -63,18 +63,18 @@ const CustomerDetailsModal: React.FC<CustomerDetailsModalProps> = ({
                     <Icon as={FaLocationArrow} color="purple.500" />{" "}
                     <strong>Endereço:</strong> {customer.address}
                   </Text>
-                  <Text>
+                  {/* <Text>
                     <strong>Criado aos:</strong> 20/08/2024
-                  </Text>
+                  </Text> */}
                 </Stack>
               </Box>
 
               <Divider />
 
-              {/* Livretes do Utente */}
+              {/* Livretes do Proprietário */}
               <Box>
                 <Text fontSize="xl" fontWeight="bold" mb="2">
-                  <Icon as={FaBook} color="orange.500" /> Livretes do Utente
+                  <Icon as={FaBook} color="orange.500" /> Livretes do Proprietário
                 </Text>
                 {/* {customer.books && customer.books.length > 0 ? (
                   <VStack align="stretch" spacing="3">

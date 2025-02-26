@@ -38,7 +38,7 @@ async function getBookById(
   id: string | null
 ): Promise<{ book: Book } | { error: string }> {
   try {
-    const url = `${BASE_URL}/api/books/${id}`;
+    const url = `${BASE_URL}/books/${id}`;
     const response = await fetch(url, {
       headers: {
         "Content-Type": "application/json",
@@ -83,35 +83,12 @@ async function createBook(bookData: any) {
   }
 }
 
-async function createBatch(batch: any) {
-  try {
-    const response = await fetch(`${BASE_URL}/api/books/entries`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(batch),
-    });
-
-    if (!response.ok) {
-      const data = await response.json();
-      return { error: data?.message || "Failed to create book." };
-    } else {
-      return { data: "" };
-    }
-  } catch (error) {
-    console.error("Error creating book:", error);
-    return { error: "Failed to create book." };
-  }
-}
-
 async function updateBook(
   bookId: string,
   bookData: any
 ): Promise<Book | { error: string }> {
   try {
-    const response = await fetch(`${BASE_URL}/api/books/${bookId}`, {
+    const response = await fetch(`${BASE_URL}/books/${bookId}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -137,7 +114,7 @@ async function deleteBook(
   bookId: string
 ): Promise<{ success: boolean } | { error: string }> {
   try {
-    const response = await fetch(`${BASE_URL}/api/books/${bookId}`, {
+    const response = await fetch(`${BASE_URL}/books/${bookId}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
@@ -154,33 +131,6 @@ async function deleteBook(
   } catch (error: any) {
     console.error("Error deleting book:", error);
     return { error: error.message || "Failed to delete book" };
-  }
-}
-
-async function uploadBooks(
-  file: File
-): Promise<{ success: boolean } | { error: string }> {
-  const formData = new FormData();
-  formData.append("file", file);
-
-  try {
-    const response = await fetch(`${BASE_URL}/api/books/upload`, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      body: formData,
-    });
-
-    if (!response.ok) {
-      const data = await response.json();
-      throw new Error(data?.message || "Failed to upload books");
-    }
-
-    return { success: true };
-  } catch (error: any) {
-    console.error("Error uploading books:", error);
-    return { error: error.message || "Failed to upload books" };
   }
 }
 
@@ -211,7 +161,5 @@ export {
   createBook,
   updateBook,
   deleteBook,
-  uploadBooks,
   getBookById,
-  createBatch,
 };

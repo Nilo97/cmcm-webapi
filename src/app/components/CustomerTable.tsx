@@ -187,7 +187,7 @@ const CustomerTable: React.FC<CustomerTableProps> = ({
             <SearchIcon color="gray.300" />
           </InputLeftElement>
           <Input
-            placeholder="Pesquisar Utente (Nome, Contato)..."
+            placeholder="Pesquisar Proprietário (Nome, Contato)..."
             onChange={(e) => handleQuery(e)}
             onKeyDown={(e: any) => {
               e.key === "Enter" ? handleQuery(e) : null;
@@ -261,9 +261,9 @@ const CustomerTable: React.FC<CustomerTableProps> = ({
                         leftIcon={<ViewIcon />}
                         onClick={() => handleViewDetails(customer)}
                       >
-                        Ver
+                        Ver mais detalhes
                       </Button>
-                      <Button
+                      {/* <Button
                         ml="2"
                         size="xs"
                         leftIcon={<EditIcon />}
@@ -279,7 +279,7 @@ const CustomerTable: React.FC<CustomerTableProps> = ({
                         onClick={() => handleDelete(customer.id)}
                       >
                         Excluir
-                      </Button>
+                      </Button> */}
                     </Td>
                   </Tr>
                 ))}

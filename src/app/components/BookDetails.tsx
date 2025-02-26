@@ -116,7 +116,7 @@ const BookDetailsModal: React.FC<BookDetailsModalProps> = ({
                     {book.frameNumber}
                   </Text>
                   <Text>
-                    <Icon as={FaUser} color="blue.500" /> Utente:{" "}
+                    <Icon as={FaUser} color="blue.500" /> Proprietário:{" "}
                     {book.customerName}
                   </Text>
                   <Divider />

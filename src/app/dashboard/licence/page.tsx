@@ -11,23 +11,17 @@ import {
   Spinner,
 } from "@chakra-ui/react";
 import { FaUpload } from "react-icons/fa6";
-
 import { AddIcon, DownloadIcon } from "@chakra-ui/icons";
 import { useRouter } from "next/navigation";
-import {
-  fetchPaginatedcustomers,
-  deletecustomer,
-} from "@/app/actions/suppliers";
-import { customer } from "@/app/actions/types";
-import CustomerTable from "@/app/components/CustomerTable";
+import { fetchLicences, deleteLicence } from "@/app/actions/licence";
+import { Licence } from "@/app/actions/types";
+import LicenceTable from "@/app/components/LicenceTable";
 
 const PAGE_SIZE = 7;
 
-const customersPage: React.FC = () => {
-  const [customers, setcustomers] = useState<customer[]>([]);
+const LicencesPage: React.FC = () => {
+  const [licences, setLicences] = useState<Licence[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-  const [uploading, setUploading] = useState<boolean>(false);
-  const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
   const router = useRouter();
   const [currentPage, setCurrentPage] = useState<number>(0);
@@ -35,24 +29,23 @@ const customersPage: React.FC = () => {
   const [totalPages, setTotalPages] = useState<number>(1);
 
   useEffect(() => {
-    fetchAllcustomers(currentPage);
+    fetchAllLicences(currentPage);
   }, [currentPage, searchQuery]);
 
-  const fetchAllcustomers = async (page: number) => {
+  const fetchAllLicences = async (page: number) => {
     setLoading(true);
     try {
-      const data = await fetchPaginatedcustomers(PAGE_SIZE, page, searchQuery);
-
+      const data = await fetchLicences(PAGE_SIZE, page, searchQuery);
       if ("error" in data) {
         throw new Error(data.error);
       }
-      setcustomers(data.customers);
+      setLicences(data.licences);
       setTotalPages(data.totalPages);
     } catch (error) {
-      console.error("Erro ao buscar Proprietárioes:", error);
+      console.error("Erro ao buscar licenças:", error);
       toast({
-        title: "Erro ao buscar Proprietárioes",
-        description: "Ocorreu um erro ao buscar os Proprietárioes.",
+        title: "Erro ao buscar licenças",
+        description: "Ocorreu um erro ao buscar os licenças.",
         status: "error",
         duration: 5000,
         isClosable: true,
@@ -67,26 +60,26 @@ const customersPage: React.FC = () => {
     setCurrentPage(0);
   };
 
-  const handleDelete = async (customerId: string) => {
+  const handleDelete = async (licenceId: string) => {
     setLoading(true);
     try {
-      const response = await deletecustomer(customerId);
+      const response = await deleteLicence(licenceId);
       if ("error" in response) {
         throw new Error(response.error);
       }
       toast({
-        title: "Proprietário Deletado",
-        description: "O Proprietário foi deletado com sucesso.",
+        title: "licença Deletado",
+        description: "O licença foi deletado com sucesso.",
         status: "success",
         duration: 5000,
         isClosable: true,
       });
-      fetchAllcustomers(currentPage);
+      fetchAllLicences(currentPage);
     } catch (error) {
-      console.error("Erro ao deletar Proprietário:", error);
+      console.error("Erro ao deletar licença:", error);
       toast({
-        title: "Erro ao deletar Proprietário",
-        description: "Ocorreu um erro ao deletar o Proprietário.",
+        title: "Erro ao deletar licença",
+        description: "Ocorreu um erro ao deletar o licença.",
         status: "error",
         duration: 5000,
         isClosable: true,
@@ -96,8 +89,8 @@ const customersPage: React.FC = () => {
     }
   };
 
-  const handleEdit = (customer: customer) => {
-    router.push(`/dashboard/customer/upsert?id=${customer.id}`);
+  const handleEdit = (licence: Licence) => {
+    router.push(`/dashboard/licence/upsert?id=${licence.id}`);
   };
 
   const handlePageChange = (page: number) => {
@@ -112,13 +105,8 @@ const customersPage: React.FC = () => {
         align="center"
         mb="4"
       >
-        <Heading
-          as="h1"
-          size="lg"
-          mb={{ base: 4, md: 0 }}
-          textShadow="1px 1px #ccc"
-        >
-          Lista de Proprietários
+        <Heading as="h1" size="lg" textShadow="1px 1px #ccc">
+          Lista de licenças
         </Heading>
         <Flex>
           <Button
@@ -126,11 +114,10 @@ const customersPage: React.FC = () => {
             mr="2"
             size="sm"
             leftIcon={<AddIcon />}
-            onClick={() => router.push("/dashboard/customer/upsert")}
+            onClick={() => router.push("/dashboard/licence/upsert")}
           >
-            Novo Proprietário
+            Nova licença
           </Button>
-
           <Button
             size="sm"
             colorScheme="pink"
@@ -141,18 +128,25 @@ const customersPage: React.FC = () => {
           </Button>
         </Flex>
       </Flex>
-      <CustomerTable
-        customers={customers}
-        onDelete={handleDelete}
-        onEdit={handleEdit}
-        onSearch={handleSearch}
-        loading={loading}
-        totalPages={totalPages}
-        currentPage={currentPage}
-        onPageChange={handlePageChange}
-      />
+
+      {loading ? (
+        <Flex justify="center" align="center" height="200px">
+          <Spinner size="xl" />
+        </Flex>
+      ) : (
+        <LicenceTable
+          licences={licences}
+          onDelete={handleDelete}
+          onEdit={handleEdit}
+          onSearch={handleSearch}
+          loading={loading}
+          totalPages={totalPages}
+          currentPage={currentPage}
+          onPageChange={handlePageChange}
+        />
+      )}
     </Container>
   );
 };
 
-export default customersPage;
+export default LicencesPage;
