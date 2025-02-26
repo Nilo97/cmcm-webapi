@@ -13,8 +13,8 @@ async function fetchPaginatedCustomers(
 > {
   try {
     const url = query
-      ? `${BASE_URL}/api/customers/search?query=${query}&page=${page}&size=${size}`
-      : `${BASE_URL}/api/customers/paginated?page=${page}&size=${size}`;
+      ? `${BASE_URL}/customers/search?query=${query}&page=${page}&size=${size}`
+      : `${BASE_URL}/customers/paginated?page=${page}&size=${size}`;
 
     const response = await fetch(url, {
       headers: {
@@ -40,9 +40,9 @@ async function fetchPaginatedCustomers(
  * Sends a GET request to the specified endpoint.
  * @returns The response data or an error message.
  */
-async function getCustomers<T>(): Promise<T | { error: string }> {
+async function getCustomers() {
   try {
-    const response = await fetch(`${BASE_URL}}/api/customers`, {
+    const response = await fetch(`${BASE_URL}/customers`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
@@ -50,14 +50,14 @@ async function getCustomers<T>(): Promise<T | { error: string }> {
     });
 
     if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData?.message || "Failed to fetch data");
+      throw new Error("Failed to fetch customers");
     }
 
-    return (await response.json()) as T;
+    const data = await response.json();
+    return data;
   } catch (error: any) {
-    console.error(`Error fetching customers:`, error);
-    return { error: error.message || "Failed to fetch data" };
+    console.error("Error fetching customers:", error);
+    return { error: error.message };
   }
 }
 

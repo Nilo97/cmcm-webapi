@@ -67,16 +67,16 @@ const LoginForm = () => {
         <form onSubmit={handleSubmit(onSubmit, onError)}>
           <VStack spacing={4} align="stretch">
             <FormControl isInvalid={!!errors.email}>
-              <FormLabel>Email</FormLabel>
+              <FormLabel>Usuário</FormLabel>
               <Input
-                type="email"
-                placeholder="Digite seu email"
+                type="text"
+                placeholder="Digite seu user"
                 {...register("email", {
-                  required: "Email é obrigatório",
-                  pattern: {
-                    value: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
-                    message: "Email inválido",
-                  },
+                  required: "User é obrigatório",
+                  // pattern: {
+                  //   value: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
+                  //   message: "Email inválido",
+                  // },
                 })}
               />
               {errors.email && (

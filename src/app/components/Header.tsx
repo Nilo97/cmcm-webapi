@@ -29,11 +29,7 @@ const Header = () => {
   const router = useRouter();
   const [username, setUsername] = useState("");
 
-  const [notifications, setNotifications] = useState([
-    "Produto Expirado",
-    "Ficaram 5 unidades de bolacha maria",
-    "Factura 1 vencida",
-  ]);
+  const [notifications, setNotifications] = useState(["sem notificações"]);
 
   const { ["user"]: user } = parseCookies();
 
@@ -86,7 +82,7 @@ const Header = () => {
             cursor="pointer"
             onClick={() => router.push("/options")}
           >
-            Minventa
+            MuniTete
           </Text>
         </HStack>
         <HStack spacing="4">

@@ -156,7 +156,7 @@ const Dashboard = () => {
               Funcionários
             </Heading>
           </Flex>
-          <Text>Total de Fornecedores: {stats?.suppliers ?? "N/A"}</Text>
+          <Text>Total de Fornecedores: {stats?.customers ?? "N/A"}</Text>
         </Box>
       </SimpleGrid>
 

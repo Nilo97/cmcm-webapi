@@ -1,12 +1,12 @@
 import { parseCookies } from "nookies";
-import { Supplier } from "./types";
+import { customer } from "./types";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 const { ["token"]: token } = parseCookies();
 
-async function fetchSuppliers() {
+async function fetchcustomers() {
   try {
-    const response = await fetch(`${BASE_URL}/api/suppliers`, {
+    const response = await fetch(`${BASE_URL}/api/customers`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
@@ -14,27 +14,27 @@ async function fetchSuppliers() {
     });
 
     if (!response.ok) {
-      throw new Error("Falha ao buscar fornecedores");
+      throw new Error("Falha ao buscar Utentees");
     }
 
     const data = await response.json();
     return data;
   } catch (error: any) {
-    console.error("Erro ao buscar fornecedores:", error);
+    console.error("Erro ao buscar Utentees:", error);
     return { error: error.message };
   }
 }
 
-async function fetchPaginatedSuppliers(
+async function fetchPaginatedcustomers(
   size: number,
   page: number,
   query?: string
-): Promise<{ suppliers: Supplier[]; totalPages: number } | { error: string }> {
+): Promise<{ customers: customer[]; totalPages: number } | { error: string }> {
   try {
     const url =
       query !== ""
-        ? `${BASE_URL}/api/suppliers/search?query=${query}&page=${page}&size=${size}`
-        : `${BASE_URL}/api/suppliers/paginated?page=${page}&size=${size}`;
+        ? `${BASE_URL}/customers/search?query=${query}&page=${page}&size=${size}`
+        : `${BASE_URL}/customers/paginated?page=${page}&size=${size}`;
     const response = await fetch(url, {
       headers: {
         "Content-Type": "application/json",
@@ -45,21 +45,21 @@ async function fetchPaginatedSuppliers(
     const data = await response.json();
 
     if (!response.ok) {
-      throw new Error(data?.message || "Falha ao buscar fornecedores");
+      throw new Error(data?.message || "Falha ao buscar Utentees");
     }
 
-    return { suppliers: data.content, totalPages: data.totalPages };
+    return { customers: data.content, totalPages: data.totalPages };
   } catch (error: any) {
-    console.error("Erro ao buscar fornecedores:", error);
-    return { error: error.message || "Falha ao buscar fornecedores" };
+    console.error("Erro ao buscar Utentees:", error);
+    return { error: error.message || "Falha ao buscar Utentees" };
   }
 }
 
-async function getSupplierById(
+async function getcustomerById(
   id: string
-): Promise<{ supplier: Supplier } | { error: string }> {
+): Promise<{ customer: customer } | { error: string }> {
   try {
-    const url = `${BASE_URL}/api/suppliers/${id}`;
+    const url = `${BASE_URL}/api/customers/${id}`;
     const response = await fetch(url, {
       headers: {
         "Content-Type": "application/json",
@@ -70,25 +70,25 @@ async function getSupplierById(
     const data = await response.json();
 
     if (!response.ok) {
-      throw new Error(data?.message || "Falha ao buscar fornecedor");
+      throw new Error(data?.message || "Falha ao buscar Utente");
     }
 
-    return { supplier: data };
+    return { customer: data };
   } catch (error: any) {
-    console.error("Erro ao buscar fornecedor:", error);
-    return { error: error.message || "Falha ao buscar fornecedor" };
+    console.error("Erro ao buscar Utente:", error);
+    return { error: error.message || "Falha ao buscar Utente" };
   }
 }
 
-async function createSupplier(supplierData: any) {
+async function createcustomer(customerData: any) {
   try {
-    const response = await fetch(`${BASE_URL}/api/suppliers`, {
+    const response = await fetch(`${BASE_URL}/customers`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify(supplierData),
+      body: JSON.stringify(customerData),
     });
 
     const data = await response.json();
@@ -96,46 +96,46 @@ async function createSupplier(supplierData: any) {
     if (response.ok) {
       return data;
     } else {
-      return { error: data?.message || "Falha ao criar fornecedor." };
+      return { error: data?.message || "Falha ao criar Utente." };
     }
   } catch (error) {
-    console.error("Erro ao criar fornecedor:", error);
-    return { error: "Falha ao criar fornecedor." };
+    console.error("Erro ao criar Utente:", error);
+    return { error: "Falha ao criar Utente." };
   }
 }
 
-async function updateSupplier(
-  supplierId: string,
-  supplierData: any
-): Promise<Supplier | { error: string }> {
+async function updatecustomer(
+  customerId: string,
+  customerData: any
+): Promise<customer | { error: string }> {
   try {
-    const response = await fetch(`${BASE_URL}/api/suppliers/${supplierId}`, {
+    const response = await fetch(`${BASE_URL}/api/customers/${customerId}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify(supplierData),
+      body: JSON.stringify(customerData),
     });
 
     const data = await response.json();
 
     if (!response.ok) {
-      throw new Error(data?.message || "Falha ao atualizar fornecedor");
+      throw new Error(data?.message || "Falha ao atualizar Utente");
     }
 
     return data;
   } catch (error: any) {
-    console.error("Erro ao atualizar fornecedor:", error);
-    return { error: error.message || "Falha ao atualizar fornecedor" };
+    console.error("Erro ao atualizar Utente:", error);
+    return { error: error.message || "Falha ao atualizar Utente" };
   }
 }
 
-async function deleteSupplier(
-  supplierId: string
+async function deletecustomer(
+  customerId: string
 ): Promise<{ success: boolean } | { error: string }> {
   try {
-    const response = await fetch(`${BASE_URL}/api/suppliers/${supplierId}`, {
+    const response = await fetch(`${BASE_URL}/api/customers/${customerId}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
@@ -145,24 +145,24 @@ async function deleteSupplier(
 
     if (!response.ok) {
       const data = await response.json();
-      throw new Error(data?.message || "Falha ao deletar fornecedor");
+      throw new Error(data?.message || "Falha ao deletar Utente");
     }
 
     return { success: true };
   } catch (error: any) {
-    console.error("Erro ao deletar fornecedor:", error);
-    return { error: error.message || "Falha ao deletar fornecedor" };
+    console.error("Erro ao deletar Utente:", error);
+    return { error: error.message || "Falha ao deletar Utente" };
   }
 }
 
-async function uploadSuppliers(
+async function uploadcustomers(
   file: File
 ): Promise<{ success: boolean } | { error: string }> {
   const formData = new FormData();
   formData.append("file", file);
 
   try {
-    const response = await fetch(`${BASE_URL}/api/suppliers/upload`, {
+    const response = await fetch(`${BASE_URL}/api/customers/upload`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -172,22 +172,22 @@ async function uploadSuppliers(
 
     if (!response.ok) {
       const data = await response.json();
-      throw new Error(data?.message || "Falha ao enviar fornecedores");
+      throw new Error(data?.message || "Falha ao enviar Utentees");
     }
 
     return { success: true };
   } catch (error: any) {
-    console.error("Erro ao enviar fornecedores:", error);
-    return { error: error.message || "Falha ao enviar fornecedores" };
+    console.error("Erro ao enviar Utentees:", error);
+    return { error: error.message || "Falha ao enviar Utentees" };
   }
 }
 
 export {
-  fetchPaginatedSuppliers,
-  fetchSuppliers,
-  createSupplier,
-  updateSupplier,
-  deleteSupplier,
-  uploadSuppliers,
-  getSupplierById,
+  fetchPaginatedcustomers,
+  fetchcustomers,
+  createcustomer,
+  updatecustomer,
+  deletecustomer,
+  uploadcustomers,
+  getcustomerById,
 };

@@ -1,5 +1,5 @@
 export interface BatchResponse {
-  supplierName: string;
+  customerName: string;
   entryDate: string;
   expirationDate: string;
   quantity: number;
@@ -7,46 +7,46 @@ export interface BatchResponse {
   associatedCosts: number;
 }
 
-export interface Product {
-  productId: string;
-  name: string;
-  code: string;
-  description: string;
-  price: number;
-  quantity: number;
-  categoryName: string;
-  categoryId: string;
-  initialQuantity: number;
-  minimumQuantity: number;
-  expirationDate: string;
-  perishable: boolean;
-  image?: string;
+export interface Book {
+  id: string;
+  registrationNumber: string;
+  brand: Brand;
+  model: string;
+  manufactureYear: number;
+  bicycleType: BicycleType;
+  engineNumber: string;
+  engineCapacity: string; // BigDecimal converted to string
+  frameNumber: string;
+  observations: string;
+  customerName: string;
 }
 
-export interface Company {
+// Enum for Brand (if needed)
+export enum Brand {
+  HONDA = "HONDA",
+  YAMAHA = "YAMAHA",
+  HARLEY_DAVIDSON = "HARLEY_DAVIDSON",
+  SUZUKI = "SUZUKI",
+  KAWASAKI = "KAWASAKI",
+  TOYOTA = "TOYOTA",
+  BMW = "BMW",
+}
+
+// Enum for BicycleType (if needed)
+export enum BicycleType {
+  ROAD = "ROAD",
+  MOUNTAIN = "MOUNTAIN",
+  HYBRID = "HYBRID",
+}
+
+
+
+export interface customer {
   id: string;
   name: string;
+  documentNumber: string;
   address: string;
-  email: string;
-  phone: number;
-  NUIT: number;
-  plan: string;
-  invoice: string | null;
-  quotation: string | null;
-  logo: string | null;
-  users: User[];
-}
-
-export interface Category {
-  id: string;
-  name: string;
-  description: string;
-}
-
-export interface Supplier {
-  id: string;
-  name: string;
-  contactInfo: string;
+  phoneNumber: string;
 }
 
 export interface User {
@@ -60,37 +60,8 @@ export interface User {
 export type GeneralStats = {
   products: number;
   categories: number;
-  suppliers: number;
+  customers: number;
 };
-
-export interface PaginatedProducts {
-  totalPages: number;
-  totalElements: number;
-  size: number;
-  content: Product[];
-  number: number;
-  sort: {
-    empty: boolean;
-    unsorted: boolean;
-    sorted: boolean;
-  };
-  numberOfElements: number;
-  pageable: {
-    pageNumber: number;
-    pageSize: number;
-    sort: {
-      empty: boolean;
-      unsorted: boolean;
-      sorted: boolean;
-    };
-    offset: number;
-    unpaged: boolean;
-    paged: boolean;
-  };
-  first: boolean;
-  last: boolean;
-  empty: boolean;
-}
 
 export interface YearMonthStatCountResponse {
   year: number;
@@ -105,18 +76,7 @@ export interface StatsResponse {
 
 export type Plan = "OFFLINE" | "ONLINE" | "COMPLETE";
 
-export interface CompanyResponse {
-  id: string;
-  logo: string;
-  name: string;
-  address: string;
-  email: string;
-  phone: number;
-  NUIT: number;
-  plan: Plan;
-  invoice: string;
-  quotation: string;
-}
+
 
 export enum CashFlowStatus {
   OPENED,

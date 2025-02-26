@@ -7,8 +7,8 @@ import DesktopSidebar from "./components/DesktopSidebar";
 import { Suspense } from "react";
 
 export const metadata: Metadata = {
-  title: "Minventa",
-  description: "Stock Management System",
+  title: "Livretes",
+  description: "Livretes Management System",
 };
 
 export default function RootLayout({

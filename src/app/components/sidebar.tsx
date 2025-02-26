@@ -20,6 +20,10 @@ import {
   FaQuestionCircle,
   FaTag,
   FaUndoAlt,
+  FaBook,
+  FaExclamationTriangle,
+  FaUser,
+  FaTable,
 } from "react-icons/fa";
 import {
   FaHouseChimneyWindow,
@@ -29,19 +33,10 @@ import {
 
 const links = [
   { href: "/dashboard", label: "Geral", icon: FaHouseChimneyWindow },
-  { href: "/dashboard/product", label: "Produtos", icon: FaBasketShopping },
-  { href: "/dashboard/category", label: "Categorias", icon: FaListOl },
-  { href: "/dashboard/supplier", label: "Entidades", icon: FaPeopleCarryBox },
-  {
-    href: "/dashboard/cashflow",
-    label: "Fluxo de Caixa",
-    icon: FaMoneyBillWave,
-  },
-  { href: "/dashboard/returns", label: "Devoluções", icon: FaUndoAlt },
-  { href: "/dashboard/orders", label: "Pedidos", icon: FaClipboardList },
-  { href: "/dashboard/expenses", label: "Despesas", icon: FaReceipt },
-  { href: "/dashboard/promotions", label: "Promoções", icon: FaTag },
-  { href: "/dashboard/documents", label: "Documentos", icon: FaFileAlt },
+  { href: "/dashboard/customer", label: "Utentes", icon: FaUser },
+  { href: "/dashboard/book", label: "Livretes", icon: FaBook },
+  { href: "/dashboard/multa", label: "Multas", icon: FaExclamationTriangle },
+  { href: "/dashboard/table", label: "Tabelas", icon: FaTable },
   {
     href: "/dashboard/statistics",
     label: "Relatórios e Estatísticas",
@@ -79,8 +74,6 @@ const Sidebar = () => {
         w="100%"
         flex="1"
         overflowY="auto" // Permite o scroll vertical
-        
-     
       >
         <VStack align="start" spacing="1.5" w="100%">
           {links.map(({ href, label, icon: Icon }) => (
@@ -135,7 +128,9 @@ const Sidebar = () => {
           <HStack spacing="3">
             <FaQuestionCircle
               size="18px"
-              color={pathname === "/dashboard/help" ? textActive : iconColorInactive}
+              color={
+                pathname === "/dashboard/help" ? textActive : iconColorInactive
+              }
             />
             <Text>Ajuda e Suporte</Text>
           </HStack>
