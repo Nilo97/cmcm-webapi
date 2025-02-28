@@ -231,7 +231,7 @@ const BookRegistrationForm: React.FC = () => {
         <SimpleGrid columns={{ base: 1, md: 3 }} spacingX={4} spacingY={2}>
           <GridItem>
             <FormControl isInvalid={!!errors.registrationNumber}>
-              <FormLabel>Número de Registro</FormLabel>
+              <FormLabel>Número de Matricula</FormLabel>
               <Input
                 {...register("registrationNumber", {
                   required: "Campo obrigatório",

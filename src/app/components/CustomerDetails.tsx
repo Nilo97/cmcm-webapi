@@ -188,7 +188,7 @@ const CustomerDetailsModal: React.FC<CustomerDetailsModalProps> = ({
                   <Table variant="simple">
                     <Thead>
                       <Tr>
-                        <Th>Nº Registro</Th>
+                        <Th>Nº Matricula</Th>
                         <Th>Marca</Th>
                         <Th>Modelo</Th> <Th>Baixar</Th>
                       </Tr>

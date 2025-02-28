@@ -91,7 +91,7 @@ const BookTable: React.FC<BookTableProps> = ({
             <SearchIcon color="gray.300" />
           </InputLeftElement>
           <Input
-            placeholder="Pesquisar Livrete (Registro, Marca, Modelo)..."
+            placeholder="Pesquisar Livrete (Matricula, Marca, Modelo)..."
             onChange={(e) => {
               setQuery(e.target.value);
               onSearch(e.target.value);
@@ -110,7 +110,7 @@ const BookTable: React.FC<BookTableProps> = ({
             <TableCaption>Provided by Prifuturo Consultoria</TableCaption>
             <Thead>
               <Tr>
-                <Th>Nº de Registro</Th>
+                <Th>Nº de Matricula</Th>
                 <Th>Marca</Th>
                 <Th>Modelo</Th>
                 <Th>Ano</Th>

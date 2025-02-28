@@ -84,7 +84,7 @@ const BookDetailsModal: React.FC<BookDetailsModalProps> = ({
               <Box p="4" borderRadius="md" bg="gray.50">
                 <Stack spacing="3">
                   <Text>
-                    <Icon as={FaHashtag} color="blue.500" /> Nº Registro:{" "}
+                    <Icon as={FaHashtag} color="blue.500" /> Nº Matricula:{" "}
                     {book.registrationNumber}
                   </Text>
                   <Text>
