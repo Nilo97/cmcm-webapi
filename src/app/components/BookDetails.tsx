@@ -30,7 +30,6 @@ import {
   FaDownload,
 } from "react-icons/fa";
 import jsPDF from "jspdf";
-import "jspdf-autotable";
 import { Book } from "../actions/types";
 import { useState } from "react";
 import { downloadBook } from "../actions/book";
