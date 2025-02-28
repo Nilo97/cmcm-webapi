@@ -136,6 +136,7 @@ const BookDetailsModal: React.FC<BookDetailsModalProps> = ({
               colorScheme="blue"
               onClick={handleDownload}
               isLoading={isDownloading}
+              loadingText="baixando..."
             >
               Baixar Livrete
             </Button>

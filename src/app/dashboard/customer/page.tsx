@@ -26,8 +26,7 @@ const PAGE_SIZE = 7;
 const customersPage: React.FC = () => {
   const [customers, setcustomers] = useState<customer[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-  const [uploading, setUploading] = useState<boolean>(false);
-  const { isOpen, onOpen, onClose } = useDisclosure();
+
   const toast = useToast();
   const router = useRouter();
   const [currentPage, setCurrentPage] = useState<number>(0);
@@ -131,14 +130,15 @@ const customersPage: React.FC = () => {
             Novo Proprietário
           </Button>
 
-          <Button
+          {/* <Button
             size="sm"
             colorScheme="pink"
             leftIcon={<DownloadIcon />}
             onClick={() => console.log("Exportar clicado")}
+            disabled
           >
             Exportar
-          </Button>
+          </Button> */}
         </Flex>
       </Flex>
       <CustomerTable

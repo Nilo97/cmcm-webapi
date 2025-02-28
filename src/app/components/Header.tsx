@@ -80,7 +80,7 @@ const Header = () => {
             fontSize="2xl"
             fontWeight="bold"
             cursor="pointer"
-            onClick={() => router.push("/options")}
+            onClick={() => router.push("/dashboard")}
           >
             MuniTete
           </Text>
@@ -108,7 +108,7 @@ const Header = () => {
               <Avatar size="sm" name={username} />
             </MenuButton>
             <MenuList>
-              <MenuItem onClick={handleSettings}>Definições</MenuItem>
+              {/* <MenuItem onClick={handleSettings}>Definições</MenuItem> */}
               <MenuItem onClick={handleLogout}>Terminar Sessão</MenuItem>
             </MenuList>
           </Menu>

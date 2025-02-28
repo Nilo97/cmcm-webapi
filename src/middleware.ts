@@ -8,10 +8,10 @@ export function middleware(request: NextRequest) {
 
   if (token) {
   } else {
-    return NextResponse.redirect(new URL("/options", request.url));
+    return NextResponse.redirect(new URL("/dashboard", request.url));
   }
 }
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/options", "/sales", "/cashflow"],
+  matcher: ["/dashboard/:path*", "/dashboard", "/sales", "/cashflow"],
 };

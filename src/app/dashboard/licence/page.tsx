@@ -33,7 +33,7 @@ const LicencesPage: React.FC = () => {
   }, [currentPage, searchQuery]);
 
   const fetchAllLicences = async (page: number) => {
-    setLoading(true);
+    // setLoading(true);
     try {
       const data = await fetchLicences(PAGE_SIZE, page, searchQuery);
       if ("error" in data) {
@@ -118,14 +118,15 @@ const LicencesPage: React.FC = () => {
           >
             Nova licença
           </Button>
-          <Button
+          {/* <Button
             size="sm"
             colorScheme="pink"
             leftIcon={<DownloadIcon />}
             onClick={() => console.log("Exportar clicado")}
+            disabled
           >
             Exportar
-          </Button>
+          </Button> */}
         </Flex>
       </Flex>
 

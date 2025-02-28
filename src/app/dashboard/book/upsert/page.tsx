@@ -381,6 +381,7 @@ const BookRegistrationForm: React.FC = () => {
             <FormControl isInvalid={!!errors.engineNumber}>
               <FormLabel>Número do Motor</FormLabel>
               <Input
+                type="number"
                 {...register("engineNumber", { required: "Campo obrigatório" })}
               />
               {errors.engineNumber && (
@@ -398,6 +399,7 @@ const BookRegistrationForm: React.FC = () => {
 
               <InputGroup size="md">
                 <Input
+                  type="number"
                   {...register("engineCapacity", {
                     required: "Campo obrigatório",
                   })}
@@ -418,6 +420,7 @@ const BookRegistrationForm: React.FC = () => {
             <FormControl isInvalid={!!errors.frameNumber}>
               <FormLabel>Número do Quadro</FormLabel>
               <Input
+                type="number"
                 {...register("frameNumber", { required: "Campo obrigatório" })}
               />
               {errors.frameNumber && (

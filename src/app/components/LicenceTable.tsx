@@ -17,6 +17,7 @@ import {
   InputGroup,
   InputLeftElement,
   Spinner,
+  Highlight,
 } from "@chakra-ui/react";
 import { DownloadIcon, SearchIcon, ViewIcon } from "@chakra-ui/icons";
 import { limitText } from "../actions/util";
@@ -121,14 +122,19 @@ const LicenceTable: React.FC<LicenceTableProps> = ({
               <Tr>
                 <Th>Nº de licença</Th>
                 <Th>Proprietário</Th>
-                <Th>Obs</Th>
+                <Th>Observações</Th>
                 <Th>Ações</Th>
               </Tr>
             </Thead>
             <Tbody>
               {licences.map((licence) => (
                 <Tr key={licence.id}>
-                  <Td>{limitText(licence.licenceNumber, 20)}</Td>
+                  <Highlight
+                    query={query || ""}
+                    styles={{ px: "1", py: "1", bg: "orange.100" }}
+                  >
+                    {limitText(licence.licenceNumber, 20)}
+                  </Highlight>
                   <Td>{licence.customerName}</Td>
                   <Td>{limitText(licence.obs, 20)}</Td>
 
@@ -137,6 +143,7 @@ const LicenceTable: React.FC<LicenceTableProps> = ({
                       size="xs"
                       leftIcon={<DownloadIcon />}
                       onClick={() => handleDownload(licence)}
+                      disabled={isDownloading}
                     >
                       Baixar
                     </Button>

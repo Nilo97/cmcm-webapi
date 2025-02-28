@@ -33,7 +33,7 @@ const BooksPage: React.FC = () => {
   }, [currentPage, searchQuery]);
 
   const fetchAllBooks = async (page: number) => {
-    setLoading(true);
+    // setLoading(true);
     try {
       const data = await fetchBooks(PAGE_SIZE, page, searchQuery);
       if ("error" in data) {
@@ -118,14 +118,15 @@ const BooksPage: React.FC = () => {
           >
             Novo Livrete
           </Button>
-          <Button
+          {/* <Button
             size="sm"
             colorScheme="pink"
             leftIcon={<DownloadIcon />}
             onClick={() => console.log("Exportar clicado")}
+            disabled
           >
             Exportar
-          </Button>
+          </Button> */}
         </Flex>
       </Flex>
 

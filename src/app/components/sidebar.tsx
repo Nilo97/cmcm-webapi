@@ -34,16 +34,16 @@ import {
 } from "react-icons/fa6";
 
 const links = [
-  { href: "/dashboard", label: "Geral", icon: FaHouseChimneyWindow },
+  // { href: "/dashboard", label: "Geral", icon: FaHouseChimneyWindow },
   { href: "/dashboard/customer", label: "Proprietários", icon: FaUser },
   { href: "/dashboard/book", label: "Livretes", icon: FaBook },
   { href: "/dashboard/licence", label: "Licença", icon: FaBookAtlas },
   // { href: "/dashboard/table", label: "Tabelas", icon: FaTable },
-  {
-    href: "/dashboard/statistics",
-    label: "Relatórios e Estatísticas",
-    icon: FaChartLine,
-  },
+  // {
+  //   href: "/dashboard/statistics",
+  //   label: "Relatórios e Estatísticas",
+  //   icon: FaChartLine,
+  // },
 ];
 
 const Sidebar = () => {
@@ -110,7 +110,7 @@ const Sidebar = () => {
 
       <Divider my="1" />
 
-      <Flex justify="flex-end" align="center" w="100%" px="6" py="4" mb="6">
+      {/* <Flex justify="flex-end" align="center" w="100%" px="6" py="4" mb="6">
         <Link
           as={NextLink}
           href="/dashboard/help"
@@ -137,7 +137,7 @@ const Sidebar = () => {
             <Text>Ajuda e Suporte</Text>
           </HStack>
         </Link>
-      </Flex>
+      </Flex> */}
     </Box>
   );
 };

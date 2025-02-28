@@ -34,6 +34,31 @@ async function fetchBooks(
   }
 }
 
+async function fetchBooksByCustomer(
+  customerId: string
+): Promise<{ books: Book[] } | { error: string }> {
+  try {
+    const url = `${BASE_URL}/books/customer/${customerId}`;
+    const response = await fetch(url, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data?.message || "Failed to fetch books");
+    }
+
+    return { books: data }; // Retorna a lista de livros diretamente
+  } catch (error: any) {
+    console.error("Error fetching books by customer:", error);
+    return { error: error.message || "Failed to fetch books" };
+  }
+}
+
 async function getBookById(
   id: string | null
 ): Promise<{ book: Book } | { error: string }> {
@@ -161,5 +186,6 @@ export {
   createBook,
   updateBook,
   deleteBook,
+  fetchBooksByCustomer,
   getBookById,
 };

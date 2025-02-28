@@ -126,16 +126,42 @@ const BookTable: React.FC<BookTableProps> = ({
             <Tbody>
               {books.map((book) => (
                 <Tr key={book.id}>
-                  <Td>{limitText(book.registrationNumber, 20)}</Td>
+                  <Td>
+                    <Highlight
+                      query={query || ""}
+                      styles={{ px: "1", py: "1", bg: "orange.100" }}
+                    >
+                      {limitText(book.registrationNumber, 20)}
+                    </Highlight>
+                  </Td>
                   <Td>{book.brand}</Td>
-                  <Td>{limitText(book.model, 20)}</Td>
+                  <Td>
+                    <Highlight
+                      query={query || ""}
+                      styles={{ px: "1", py: "1", bg: "orange.100" }}
+                    >
+                      {limitText(book.model, 20)}
+                    </Highlight>
+                  </Td>
                   <Td>{book.manufactureYear}</Td>
                   <Td>{book.bicycleType}</Td>
-                  <Td>{limitText(book.engineNumber, 20)}</Td>
+                  <Td>
+                    <Highlight
+                      query={query || ""}
+                      styles={{ px: "1", py: "1", bg: "orange.100" }}
+                    >
+                      {limitText(book.engineNumber, 20)}
+                    </Highlight>
+                  </Td>
                   <Td>{book.engineCapacity}</Td>
-                  {/* <Td>{limitText(book.frameNumber, 20)}</Td> */}
-                  {/* <Td>{limitText(book.observations, 30)}</Td> */}
-                  <Td>{limitText(book.customerName, 20)}</Td>
+                  <Td>
+                    <Highlight
+                      query={query || ""}
+                      styles={{ px: "1", py: "1", bg: "orange.100" }}
+                    >
+                      {limitText(book.customerName, 20)}
+                    </Highlight>
+                  </Td>
                   <Td>
                     <Button
                       size="xs"

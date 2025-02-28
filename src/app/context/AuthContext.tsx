@@ -58,7 +58,7 @@ export function AuthProvider({ children }: any) {
 
       if (token !== "" && token !== null && token !== undefined) {
         setAuthenticated(true);
-        router.push("/options");
+        router.push("/dashboard/book");
       }
     }
   }
