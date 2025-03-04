@@ -116,7 +116,6 @@ const BookTable: React.FC<BookTableProps> = ({
                 <Th>Ano</Th>
                 <Th>Tipo</Th>
                 <Th>Nº Motor</Th>
-                <Th>Capacidade Motor</Th>
                 {/* <Th>Nº Quadro</Th> */}
 
                 <Th>Proprietário</Th>
@@ -153,7 +152,6 @@ const BookTable: React.FC<BookTableProps> = ({
                       {limitText(book.engineNumber, 20)}
                     </Highlight>
                   </Td>
-                  <Td>{book.engineCapacity}</Td>
                   <Td>
                     <Highlight
                       query={query || ""}

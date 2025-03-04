@@ -15,6 +15,7 @@ import {
   VStack,
   Icon,
   Flex,
+  useToast,
 } from "@chakra-ui/react";
 import {
   FaHashtag,
@@ -28,32 +29,38 @@ import {
   FaInfoCircle,
   FaUser,
   FaDownload,
+  FaExchangeAlt,
   FaCar,
   FaFileInvoice,
   FaPalette,
 } from "react-icons/fa";
 import jsPDF from "jspdf";
-import { Book } from "../actions/types";
+import { Licence } from "../actions/types";
 import { useState } from "react";
-import { downloadBook } from "../actions/book";
+import { convertToBook, downloadLicence } from "../actions/licence";
+import { FaPersonMilitaryToPerson, FaPlateWheat } from "react-icons/fa6";
 
-interface BookDetailsModalProps {
+interface LicenceDetailsModalProps {
   isOpen: boolean;
+  isConverting: boolean;
   onClose: () => void;
-  book: Book | null;
+  handleConvert: (licence: Licence) => void;
+  licence: Licence | null;
 }
 
-const BookDetailsModal: React.FC<BookDetailsModalProps> = ({
+const LicenceDetailsModal: React.FC<LicenceDetailsModalProps> = ({
   isOpen,
   onClose,
-  book,
+  handleConvert,
+  licence,
+  isConverting,
 }) => {
   const [isDownloading, setIsDownloading] = useState(false);
 
   const handleDownload = async () => {
-    if (!book) return;
+    if (!licence) return;
     setIsDownloading(true);
-    const result = await downloadBook(book.id);
+    const result = await downloadLicence(licence.id);
 
     if ("error" in result) {
       console.error("Download failed:", result.error);
@@ -63,7 +70,7 @@ const BookDetailsModal: React.FC<BookDetailsModalProps> = ({
       );
       const link = document.createElement("a");
       link.href = url;
-      link.setAttribute("download", `${book.registrationNumber}.zip`); // Changed to .zip
+      link.setAttribute("download", `${licence.registrationNumber}.zip`); // Changed to .zip
       document.body.appendChild(link);
       link.click();
       link.remove();
@@ -78,66 +85,71 @@ const BookDetailsModal: React.FC<BookDetailsModalProps> = ({
       <ModalOverlay />
       <ModalContent borderRadius="lg" boxShadow="xl">
         <ModalHeader textAlign="center" fontSize="2xl" fontWeight="bold">
-          Detalhes do Livrete
+          Detalhes da Licença
         </ModalHeader>
         <ModalCloseButton />
         <ModalBody pb="6">
-          {book && (
+          {licence && (
             <VStack spacing="5" align="stretch">
               <Box p="4" borderRadius="md" bg="gray.50">
                 <Stack spacing="3">
                   <Text>
-                    <Icon as={FaHashtag} color="blue.500" /> Nº de Matricula:{" "}
-                    {book.registrationNumber}
+                    <Icon as={FaHashtag} color="blue.500" /> Nº de licença :{" "}
+                    {licence.licenceNumber}
+                  </Text>
+
+                  <Text>
+                    <Icon as={FaPersonMilitaryToPerson} color="blue.500" /> Nº
+                    de Matricula: {licence.registrationNumber}
                   </Text>
                   <Text>
-                    <Icon as={FaTag} color="green.500" /> Marca: {book.brand}
+                    <Icon as={FaTag} color="green.500" /> Marca: {licence.brand}
                   </Text>
                   <Text>
                     <Icon as={FaClipboardList} color="purple.500" /> Modelo:{" "}
-                    {book.model}
+                    {licence.model}
                   </Text>
                   <Text>
                     <Icon as={FaCalendar} color="orange.500" /> Ano:{" "}
-                    {book.manufactureYear}
+                    {licence.manufactureYear}
                   </Text>
                   <Text>
                     <Icon as={FaBicycle} color="teal.500" /> Tipo:{" "}
-                    {book.bicycleType}
+                    {licence.bicycleType}
                   </Text>
                   <Text>
                     <Icon as={FaCog} color="blue.600" /> Nº de Motor:{" "}
-                    {book.engineNumber}
+                    {licence.engineNumber}
                   </Text>
                   <Text>
                     <Icon as={FaCogs} color="red.500" /> Capacidade Motor:{" "}
-                    {book.engineCapacity}
+                    {licence.engineCapacity}
                   </Text>
                   <Text>
                     <Icon as={FaBarcode} color="gray.600" /> Nº de Quadro:{" "}
-                    {book.frameNumber}
+                    {licence.frameNumber}
                   </Text>
                   <Text>
                     <Icon as={FaUser} color="blue.500" /> Proprietário:{" "}
-                    {book.customerName}
+                    {licence.customerName}
                   </Text>
-                  <Divider />
+
                   <Text>
                     <Icon as={FaFileInvoice} color="green.500" /> Factura:{" "}
-                    {book.invoice || "Não disponível"}
+                    {licence.invoice || "Não disponível"}
                   </Text>
                   <Text>
                     <Icon as={FaPalette} color="red.500" /> Cor:{" "}
-                    {book.color || "Não especificada"}
+                    {licence.color || "Não especificada"}
                   </Text>
                   <Text>
                     <Icon as={FaCar} color="purple.500" /> Circulação:{" "}
-                    {book.circulation || "Desconhecida"}
+                    {licence.circulation || "Desconhecida"}
                   </Text>
                   <Divider />
                   <Text>
                     <Icon as={FaInfoCircle} color="yellow.600" /> Observações:{" "}
-                    {book.observations || "Nenhuma"}
+                    {licence.observations || "Nenhuma"}
                   </Text>
                   <Divider />
                 </Stack>
@@ -147,20 +159,38 @@ const BookDetailsModal: React.FC<BookDetailsModalProps> = ({
         </ModalBody>
         <ModalFooter>
           <Flex justify="center" w="full">
-            <Button
-              leftIcon={<FaDownload />}
-              colorScheme="blue"
-              onClick={handleDownload}
-              isLoading={isDownloading}
-              loadingText="baixando..."
-            >
-              Baixar Livrete
-            </Button>
+            <Box display="flex" gap={4}>
+              <Button
+                leftIcon={<FaDownload />}
+                colorScheme="teal"
+                onClick={handleDownload}
+                isLoading={isDownloading}
+                loadingText="Baixando..."
+              >
+                Baixar Licença
+              </Button>
+
+              <Button
+                leftIcon={<FaExchangeAlt />}
+                colorScheme="orange"
+                onClick={() => {
+                  if (licence != null) {
+                    handleConvert(licence);
+                    onClose();
+                  }
+                }}
+                isLoading={isConverting}
+                loadingText="Convertendo..."
+              >
+                Converter em Livrete
+              </Button>
+            </Box>
           </Flex>
+          ;
         </ModalFooter>
       </ModalContent>
     </Modal>
   );
 };
 
-export default BookDetailsModal;
+export default LicenceDetailsModal;

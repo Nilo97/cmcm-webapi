@@ -33,7 +33,8 @@ const BooksPage: React.FC = () => {
   }, [currentPage, searchQuery]);
 
   const fetchAllBooks = async (page: number) => {
-    // setLoading(true);
+    setLoading(true);
+
     try {
       const data = await fetchBooks(PAGE_SIZE, page, searchQuery);
       if ("error" in data) {
@@ -130,22 +131,16 @@ const BooksPage: React.FC = () => {
         </Flex>
       </Flex>
 
-      {loading ? (
-        <Flex justify="center" align="center" height="200px">
-          <Spinner size="xl" />
-        </Flex>
-      ) : (
-        <BookTable
-          books={books}
-          onDelete={handleDelete}
-          onEdit={handleEdit}
-          onSearch={handleSearch}
-          loading={loading}
-          totalPages={totalPages}
-          currentPage={currentPage}
-          onPageChange={handlePageChange}
-        />
-      )}
+      <BookTable
+        books={books}
+        onDelete={handleDelete}
+        onEdit={handleEdit}
+        onSearch={handleSearch}
+        loading={loading}
+        totalPages={totalPages}
+        currentPage={currentPage}
+        onPageChange={handlePageChange}
+      />
     </Container>
   );
 };

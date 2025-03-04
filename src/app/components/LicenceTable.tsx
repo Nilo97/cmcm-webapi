@@ -18,12 +18,14 @@ import {
   InputLeftElement,
   Spinner,
   Highlight,
+  useToast,
 } from "@chakra-ui/react";
 import { DownloadIcon, SearchIcon, ViewIcon } from "@chakra-ui/icons";
 import { limitText } from "../actions/util";
 import { Licence } from "../actions/types";
 import CustomerDetailsModal from "./CustomerDetails";
-import { downloadLicence } from "../actions/licence";
+import { convertToBook, downloadLicence } from "../actions/licence";
+import LicenceDetailsModal from "./LicenceDetails";
 
 interface LicenceTableProps {
   licences: Licence[];
@@ -34,6 +36,8 @@ interface LicenceTableProps {
   totalPages?: number;
   currentPage?: number;
   onPageChange?: (page: number) => void;
+  isConverting: boolean;
+  handleConvert: (licence: Licence) => void;
 }
 
 const LicenceTable: React.FC<LicenceTableProps> = ({
@@ -45,6 +49,8 @@ const LicenceTable: React.FC<LicenceTableProps> = ({
   totalPages = 0,
   currentPage = 0,
   onPageChange,
+  handleConvert,
+  isConverting,
 }) => {
   const [selectedLicence, setSelectedLicence] = useState<Licence | null>(null);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -55,34 +61,15 @@ const LicenceTable: React.FC<LicenceTableProps> = ({
   const [licenceIdToDelete, setLicenceIdToDelete] = useState<string | null>(
     null
   );
-  const [isDownloading, setIsDownloading] = useState(false);
 
   const handleViewDetails = (licence: Licence) => {
     setSelectedLicence(licence);
     setIsModalOpen(true);
   };
 
-  const handleDownload = async (licence: Licence) => {
-    if (!licence) return;
-    setIsDownloading(true);
-    const result = await downloadLicence(licence.id);
-
-    if ("error" in result) {
-      console.error("Download failed:", result.error);
-    } else {
-      const url = window.URL.createObjectURL(
-        new Blob([result], { type: "application/zip" })
-      );
-      const link = document.createElement("a");
-      link.href = url;
-      link.setAttribute("download", `${licence.licenceNumber}.zip`); // Changed to .zip
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
-      window.URL.revokeObjectURL(url);
-    }
-
-    setIsDownloading(false);
+  const handleCloseModal = () => {
+    setSelectedLicence(null);
+    setIsModalOpen(false);
   };
 
   const handleConfirmDelete = () => {
@@ -121,31 +108,68 @@ const LicenceTable: React.FC<LicenceTableProps> = ({
             <Thead>
               <Tr>
                 <Th>Nº de licença</Th>
+                <Th>Nº de Matricula</Th>
+                <Th>Marca</Th>
+                <Th>Modelo</Th>
+                <Th>Tipo</Th>
+                <Th>Nº Motor</Th>
                 <Th>Proprietário</Th>
-                <Th>Observações</Th>
                 <Th>Ações</Th>
               </Tr>
             </Thead>
             <Tbody>
               {licences.map((licence) => (
                 <Tr key={licence.id}>
-                  <Highlight
-                    query={query || ""}
-                    styles={{ px: "1", py: "1", bg: "orange.100" }}
-                  >
-                    {limitText(licence.licenceNumber, 20)}
-                  </Highlight>
-                  <Td>{licence.customerName}</Td>
-                  <Td>{limitText(licence.obs, 20)}</Td>
+                  <Td>
+                    <Highlight
+                      query={query || ""}
+                      styles={{ px: "1", py: "1", bg: "orange.100" }}
+                    >
+                      {limitText(licence.licenceNumber, 20)}
+                    </Highlight>
+                  </Td>
+                  <Td>
+                    <Highlight
+                      query={query || ""}
+                      styles={{ px: "1", py: "1", bg: "orange.100" }}
+                    >
+                      {limitText(licence.registrationNumber, 20)}
+                    </Highlight>
+                  </Td>
+                  <Td>{licence.brand}</Td>
+                  <Td>
+                    <Highlight
+                      query={query || ""}
+                      styles={{ px: "1", py: "1", bg: "orange.100" }}
+                    >
+                      {limitText(licence.model, 20)}
+                    </Highlight>
+                  </Td>
+                  <Td>{licence.bicycleType}</Td>
+                  <Td>
+                    <Highlight
+                      query={query || ""}
+                      styles={{ px: "1", py: "1", bg: "orange.100" }}
+                    >
+                      {limitText(licence.engineNumber, 20)}
+                    </Highlight>
+                  </Td>
+                  <Td>
+                    <Highlight
+                      query={query || ""}
+                      styles={{ px: "1", py: "1", bg: "orange.100" }}
+                    >
+                      {limitText(licence.customerName, 20)}
+                    </Highlight>
+                  </Td>
 
                   <Td>
                     <Button
                       size="xs"
-                      leftIcon={<DownloadIcon />}
-                      onClick={() => handleDownload(licence)}
-                      disabled={isDownloading}
+                      leftIcon={<ViewIcon />}
+                      onClick={() => handleViewDetails(licence)}
                     >
-                      Baixar
+                      Ver mais detalhes
                     </Button>
                   </Td>
                 </Tr>
@@ -154,6 +178,13 @@ const LicenceTable: React.FC<LicenceTableProps> = ({
           </Table>
         </TableContainer>
       )}
+      <LicenceDetailsModal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        licence={selectedLicence}
+        isConverting={isConverting}
+        handleConvert={handleConvert}
+      />
     </Stack>
   );
 };

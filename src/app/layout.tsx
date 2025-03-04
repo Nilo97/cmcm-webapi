@@ -7,7 +7,7 @@ import DesktopSidebar from "./components/DesktopSidebar";
 import { Suspense } from "react";
 
 export const metadata: Metadata = {
-  title: "Livretes",
+  title: "SIGA",
   description: "Livretes Management System",
 };
 

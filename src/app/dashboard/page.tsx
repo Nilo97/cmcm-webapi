@@ -11,7 +11,8 @@ const Dashboard = () => {
       <Flex align="center" mb="4">
         <FaBasketShopping style={{ marginRight: "8px" }} />
         <Heading as="h3" size="md">
-          Produtos
+          Impressão de livretes e licenças, por favor, use o menu para ir à
+          sessão pretendida.{" "}
         </Heading>
       </Flex>
     </>

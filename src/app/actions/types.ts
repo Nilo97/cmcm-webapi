@@ -19,14 +19,28 @@ export interface Book {
   frameNumber: string;
   observations: string;
   customerName: string;
+  invoice:string;
+  color:string;
+  circulation:string;
 }
 
 
 export interface Licence {
   id: string;
   licenceNumber: string;
-  obs: string;
+  registrationNumber: string;
+  brand: Brand;
+  model: string;
+  manufactureYear: number;
+  bicycleType: BicycleType;
+  engineNumber: string;
+  engineCapacity: string; // BigDecimal converted to string
+  frameNumber: string;
+  observations: string;
   customerName: string;
+  invoice:string;
+  color:string;
+  circulation:string;
 }
 
 

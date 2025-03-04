@@ -82,7 +82,7 @@ const Header = () => {
             cursor="pointer"
             onClick={() => router.push("/dashboard")}
           >
-            MuniTete
+            SIGA
           </Text>
         </HStack>
         <HStack spacing="4">

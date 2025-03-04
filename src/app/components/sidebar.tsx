@@ -36,8 +36,8 @@ import {
 const links = [
   // { href: "/dashboard", label: "Geral", icon: FaHouseChimneyWindow },
   { href: "/dashboard/customer", label: "Proprietários", icon: FaUser },
+  { href: "/dashboard/licence", label: "Licenças", icon: FaBookAtlas },
   { href: "/dashboard/book", label: "Livretes", icon: FaBook },
-  { href: "/dashboard/licence", label: "Licença", icon: FaBookAtlas },
   // { href: "/dashboard/table", label: "Tabelas", icon: FaTable },
   // {
   //   href: "/dashboard/statistics",

@@ -30,6 +30,9 @@ import { BrandResponse, customer, CustomerResponse } from "@/app/actions/types";
 import { fetchPaginatedCustomers, getCustomers } from "@/app/actions/customer";
 import Select, { SingleValue } from "react-select";
 import { ArrowBackIcon } from "@chakra-ui/icons";
+import Form from "@/app/components/Form";
+import { getBrands } from "@/app/actions/brand";
+import { getMotoTypes } from "@/app/actions/mototype";
 
 const bicycleTypes = ["Bicicleta", "Bicicleta", "Scooter"];
 
@@ -61,6 +64,8 @@ const LicenceRegistrationForm: React.FC = () => {
   const toast = useToast();
   const [LicenceId, setLicenceId] = useState<string | null>(null);
   const [customers, setCustomers] = useState<CustomerResponse[]>([]);
+  const [brands, setBrands] = useState<BrandResponse[]>([]);
+  const [motoTypes, setMotoTypes] = useState<BrandResponse[]>([]);
 
   const [query, setQuery] = useState<string>("");
 
@@ -71,7 +76,39 @@ const LicenceRegistrationForm: React.FC = () => {
       loadLicenceData(id);
     }
     fetchClients("");
+    fetchBrands();
+    fetchMotoTypes();
   }, [searchParams]);
+
+  const fetchBrands = async () => {
+    const response = await getBrands();
+    if ("error" in response) {
+      toast({
+        title: "Erro ao carregar marcas.",
+        description: response.error,
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+    } else {
+      setBrands(response);
+    }
+  };
+
+  const fetchMotoTypes = async () => {
+    const response = await getMotoTypes();
+    if ("error" in response) {
+      toast({
+        title: "Erro ao carregar tipos.",
+        description: response.error,
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+    } else {
+      setMotoTypes(response);
+    }
+  };
 
   const fetchClients = async (searchTerm: string) => {
     const response = await fetchPaginatedCustomers(10, 0, searchTerm);
@@ -92,25 +129,6 @@ const LicenceRegistrationForm: React.FC = () => {
     value: client.id,
     label: client.name,
   }));
-
-  const loadCustomers = async () => {
-    try {
-      const data = await getCustomers();
-      if ("error" in data) {
-        throw new Error(data.error);
-      }
-      setCustomers(data);
-    } catch (error) {
-      console.error("Error loading Proprietários:", error);
-      toast({
-        title: "Erro ao carregar Proprietários",
-        description: "Ocorreu um erro ao tentar carregar as Proprietários.",
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-      });
-    }
-  };
 
   const loadLicenceData = async (id: string) => {
     try {
@@ -147,7 +165,7 @@ const LicenceRegistrationForm: React.FC = () => {
         const response = await createLicence(values);
         if ("error" in response) throw new Error(response.error);
         toast({
-          title: "licença Registrado",
+          title: "licença Registrada",
           description: "O licença foi registrado com sucesso.",
           status: "success",
           duration: 5000,
@@ -158,7 +176,7 @@ const LicenceRegistrationForm: React.FC = () => {
     } catch (error) {
       toast({
         title: "Erro ao salvar licença",
-        description: "Não foi possível salvar os dados.",
+        description: `${error}`,
         status: "error",
         duration: 5000,
         isClosable: true,
@@ -169,19 +187,18 @@ const LicenceRegistrationForm: React.FC = () => {
   return (
     <Box
       mx="auto"
-      mt={6}
-      p={8}
+      mt={2}
+      p={6}
       borderWidth={1}
-      borderRadius="xl"
+      borderRadius="lg"
       boxShadow="2xl"
       bg="white"
-      maxW="3xl"
     >
       <Button
         leftIcon={<ArrowBackIcon />}
         colorScheme="gray"
         mb={4}
-        onClick={() => router.back()} // Certifique-se de importar useRouter do Next.js
+        onClick={() => router.back()} 
       >
         Voltar
       </Button>
@@ -189,86 +206,24 @@ const LicenceRegistrationForm: React.FC = () => {
       <Heading as="h2" size="lg" textAlign="center" mb={5} color="teal.600">
         {LicenceId ? "Atualizar Licença" : "Registrar Licença"}
       </Heading>
-      <Divider mb={6} />
 
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <SimpleGrid columns={{ base: 1, md: 3 }} spacing={5}>
-          <GridItem colSpan={{ base: 1, md: 3 }}>
-            <FormControl isInvalid={!!errors.customerId} id="customerId">
-              <FormLabel fontWeight="bold" color="gray.700">
-                Proprietário
-              </FormLabel>
-              <Controller
-                name="customerId"
-                control={control}
-                rules={{ required: "Proprietário é obrigatório." }}
-                render={({ field }) => (
-                  <Select
-                    {...field}
-                    placeholder="Pesquise e selecione o Proprietário"
-                    options={clientOptions}
-                    isSearchable
-                    onInputChange={(inputValue) => {
-                      setQuery(inputValue);
-                      fetchClients(inputValue);
-                    }}
-                    styles={{
-                      control: (styles) => ({
-                        ...styles,
-                        backgroundColor: "white",
-                        borderColor: errors.customerId ? "red.500" : "gray.300",
-                        ":hover": { borderColor: "teal.400" },
-                      }),
-                      option: (styles, { isSelected }) => ({
-                        ...styles,
-                        backgroundColor: isSelected ? "teal.100" : "white",
-                        color: "black",
-                        ":hover": { backgroundColor: "teal.50" },
-                      }),
-                    }}
-                  />
-                )}
-              />
-              {errors.customerId && (
-                <FormErrorMessage>
-                  {typeof errors.customerId === "string"
-                    ? errors.customerId
-                    : "Campo é obrigatório."}
-                </FormErrorMessage>
-              )}
-            </FormControl>
-          </GridItem>
+      <Divider mb={1} />
 
-          <GridItem colSpan={{ base: 1, md: 3 }}>
-            <FormControl isInvalid={!!errors.obs}>
-              <FormLabel fontWeight="bold" color="gray.700">
-                Observações
-              </FormLabel>
-              <Textarea
-                {...register("obs")}
-                placeholder="Adicione informações adicionais..."
-                borderColor="gray.300"
-                _hover={{ borderColor: "teal.400" }}
-                focusBorderColor="teal.500"
-              />
-            </FormControl>
-          </GridItem>
-        </SimpleGrid>
-
-        <Flex justify="center" mt={8}>
-          <Button
-            type="submit"
-            colorScheme="teal"
-            isLoading={isSubmitting}
-            size="lg"
-            px={10}
-            _hover={{ bg: "teal.600" }}
-            transition="0.3s"
-          >
-            {LicenceId ? "Atualizar" : "Registrar"}
-          </Button>
-        </Flex>
-      </form>
+      <Form
+        register={register}
+        handleSubmit={handleSubmit}
+        onSubmit={onSubmit}
+        errors={errors}
+        control={control}
+        brands={brands}
+        motoTypes={motoTypes}
+        clientOptions={clientOptions}
+        setQuery={setQuery}
+        fetchClients={fetchClients}
+        setValue={setValue}
+        isSubmitting={isSubmitting}
+        bookId={LicenceId}
+      />
     </Box>
   );
 };

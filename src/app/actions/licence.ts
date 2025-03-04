@@ -154,6 +154,29 @@ async function downloadLicence(id: string): Promise<Blob | { error: string }> {
     return { error: error.message || "Failed to download licence" };
   }
 }
+async function convertToBook(
+  id: string
+): Promise<{ success: boolean } | { error: string }> {
+  try {
+    const response = await fetch(`${BASE_URL}/licences/${id}/convert`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      const data = await response.json();
+      throw new Error(data?.message || "Failed to convert licence");
+    }
+
+    return { success: true };
+  } catch (error: any) {
+    console.error("Error converting licence:", error);
+    return { error: error.message || "Failed to convert licence" };
+  }
+}
 
 async function fetchlicenceByCustomer(
   customerId: string
@@ -188,4 +211,5 @@ export {
   deleteLicence,
   getLicenceById,
   fetchlicenceByCustomer,
+  convertToBook,
 };

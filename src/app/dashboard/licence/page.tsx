@@ -13,7 +13,11 @@ import {
 import { FaUpload } from "react-icons/fa6";
 import { AddIcon, DownloadIcon } from "@chakra-ui/icons";
 import { useRouter } from "next/navigation";
-import { fetchLicences, deleteLicence } from "@/app/actions/licence";
+import {
+  fetchLicences,
+  deleteLicence,
+  convertToBook,
+} from "@/app/actions/licence";
 import { Licence } from "@/app/actions/types";
 import LicenceTable from "@/app/components/LicenceTable";
 
@@ -27,13 +31,13 @@ const LicencesPage: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<number>(0);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [totalPages, setTotalPages] = useState<number>(1);
-
+  const [isConverting, setIsConverting] = useState(false);
   useEffect(() => {
     fetchAllLicences(currentPage);
-  }, [currentPage, searchQuery]);
+  }, [currentPage, searchQuery, isConverting]);
 
   const fetchAllLicences = async (page: number) => {
-    // setLoading(true);
+    setLoading(true);
     try {
       const data = await fetchLicences(PAGE_SIZE, page, searchQuery);
       if ("error" in data) {
@@ -53,6 +57,27 @@ const LicencesPage: React.FC = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleConvert = async (licence: Licence) => {
+    if (!licence) return;
+    setIsConverting(true);
+
+    const result = await convertToBook(licence.id);
+
+    if ("error" in result) {
+      console.error("Conversion failed:", result.error);
+    } else {
+      toast({
+        title: "Licença convertida",
+        description: "A Licença foi convertida com sucesso.",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+      });
+    }
+
+    setIsConverting(false);
   };
 
   const handleSearch = (value: string) => {
@@ -130,22 +155,18 @@ const LicencesPage: React.FC = () => {
         </Flex>
       </Flex>
 
-      {loading ? (
-        <Flex justify="center" align="center" height="200px">
-          <Spinner size="xl" />
-        </Flex>
-      ) : (
-        <LicenceTable
-          licences={licences}
-          onDelete={handleDelete}
-          onEdit={handleEdit}
-          onSearch={handleSearch}
-          loading={loading}
-          totalPages={totalPages}
-          currentPage={currentPage}
-          onPageChange={handlePageChange}
-        />
-      )}
+      <LicenceTable
+        licences={licences}
+        onDelete={handleDelete}
+        onEdit={handleEdit}
+        onSearch={handleSearch}
+        loading={loading}
+        totalPages={totalPages}
+        currentPage={currentPage}
+        onPageChange={handlePageChange}
+        isConverting={isConverting}
+        handleConvert={handleConvert}
+      />
     </Container>
   );
 };
