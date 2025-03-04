@@ -248,7 +248,7 @@ const CustomerDetailsModal: React.FC<CustomerDetailsModalProps> = ({
                       {licences.map((licence) => (
                         <Tr key={licence.id}>
                           <Td>{licence.licenceNumber}</Td>
-                          <Td>{licence.obs}</Td>
+                          <Td>{licence.bicycleType}</Td>
                           <Td>-</Td>
                           <Td>
                             <Button
