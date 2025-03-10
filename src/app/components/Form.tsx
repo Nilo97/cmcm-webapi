@@ -62,10 +62,9 @@ const Form: React.FC<FormProps> = ({
           <FormControl isInvalid={!!errors.registrationNumber}>
             <FormLabel>Matricula</FormLabel>
             <Input
-              placeholder="Digite a matrícula"
-              {...register("registrationNumber", {
-                required: "Campo obrigatório",
-              })}
+              disabled
+              placeholder="Gerada Automaticamente"
+              {...register("registrationNumber", {})}
             />
             <FormErrorMessage>
               {errors.registrationNumber?.message}
