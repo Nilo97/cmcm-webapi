@@ -96,7 +96,6 @@ const Form: React.FC<FormProps> = ({
             <FormErrorMessage>{errors.model?.message}</FormErrorMessage>
           </FormControl>
         </GridItem>
-
         <GridItem>
           <FormControl isInvalid={!!errors.manufactureYear}>
             <FormLabel>Ano de Fabricação</FormLabel>
@@ -106,13 +105,10 @@ const Form: React.FC<FormProps> = ({
               render={({ field }) => (
                 <DatePicker
                   {...field}
-                  selected={field.value}
+                  selected={field.value ? new Date(field.value, 0, 1) : null} // Pass just the year as a Date object
                   onChange={(date) => {
                     if (date) {
-                      setValue(
-                        "manufactureYear",
-                        new Date(date.getFullYear(), 0, 1)
-                      ); // Set it as a full date
+                      setValue("manufactureYear", date.getFullYear()); // Only store the year
                     }
                   }}
                   showYearPicker
@@ -126,7 +122,6 @@ const Form: React.FC<FormProps> = ({
             </FormErrorMessage>
           </FormControl>
         </GridItem>
-
         <GridItem>
           <FormControl isInvalid={!!errors.bicycleTypeId}>
             <FormLabel>Tipo de Velocípede</FormLabel>
