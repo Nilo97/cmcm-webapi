@@ -109,7 +109,10 @@ const Form: React.FC<FormProps> = ({
                   selected={field.value}
                   onChange={(date) => {
                     if (date) {
-                      setValue("manufactureYear", date.getFullYear());
+                      setValue(
+                        "manufactureYear",
+                        new Date(date.getFullYear(), 0, 1)
+                      ); // Set it as a full date
                     }
                   }}
                   showYearPicker
